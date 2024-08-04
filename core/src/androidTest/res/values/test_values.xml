@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="HONEYCOMB_API_KEY">key</string>
+    <string name="STRING">some string</string>
+    <string name="EMPTY_STRING"></string>
+    <string name="BLANK_STRING">     </string>
+    <integer name="NUMBER">5000</integer>
+    <bool name="BOOL">true</bool>
+</resources>
