@@ -441,7 +441,7 @@ data class HoneycombOptions(
             val metricsHeaders =
                 getHeaders(
                     metricsApiKey ?: defaultApiKey(),
-                    metricsDataset ?: dataset,
+                    metricsDataset,
                     headers,
                     this.metricsHeaders,
                 )

@@ -87,6 +87,9 @@ class HoneycombOptionsUnitTest {
         assertEquals(OtlpProtocol.HTTP_PROTOBUF, options.tracesProtocol)
         assertEquals(OtlpProtocol.HTTP_PROTOBUF, options.metricsProtocol)
         assertEquals(OtlpProtocol.HTTP_PROTOBUF, options.logsProtocol)
+
+        assertEquals(1, options.sampleRate)
+        assertFalse(options.debug)
     }
 
     @Test
@@ -275,6 +278,9 @@ class HoneycombOptionsUnitTest {
         assertEquals(OtlpProtocol.HTTP_JSON, options.tracesProtocol)
         assertEquals(OtlpProtocol.HTTP_JSON, options.metricsProtocol)
         assertEquals(OtlpProtocol.HTTP_JSON, options.logsProtocol)
+
+        assertEquals(42, options.sampleRate)
+        assertTrue(options.debug)
     }
 
     @Test
@@ -356,6 +362,9 @@ class HoneycombOptionsUnitTest {
         assertEquals(OtlpProtocol.HTTP_JSON, options.tracesProtocol)
         assertEquals(OtlpProtocol.HTTP_JSON, options.metricsProtocol)
         assertEquals(OtlpProtocol.HTTP_JSON, options.logsProtocol)
+
+        assertEquals(42, options.sampleRate)
+        assertTrue(options.debug)
     }
 
     @Test
@@ -427,6 +436,9 @@ class HoneycombOptionsUnitTest {
         assertEquals(OtlpProtocol.HTTP_JSON, options.tracesProtocol)
         assertEquals(OtlpProtocol.HTTP_JSON, options.metricsProtocol)
         assertEquals(OtlpProtocol.HTTP_JSON, options.logsProtocol)
+
+        assertEquals(42, options.sampleRate)
+        assertTrue(options.debug)
     }
 
     @Test
