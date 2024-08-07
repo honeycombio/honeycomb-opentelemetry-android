@@ -87,6 +87,9 @@ class HoneycombOptionsUnitTest {
         assertEquals(OtlpProtocol.HTTP_PROTOBUF, options.tracesProtocol)
         assertEquals(OtlpProtocol.HTTP_PROTOBUF, options.metricsProtocol)
         assertEquals(OtlpProtocol.HTTP_PROTOBUF, options.logsProtocol)
+
+        assertEquals(1, options.sampleRate)
+        assertFalse(options.debug)
     }
 
     @Test
@@ -198,9 +201,9 @@ class HoneycombOptionsUnitTest {
             "HONEYCOMB_API_KEY" to "key",
             "HONEYCOMB_DATASET" to "dataset",
             "HONEYCOMB_METRICS_DATASET" to "metrics",
-            "HONEYCOMB_TRACES_APIKEY" to "traces_key",
-            "HONEYCOMB_METRICS_APIKEY" to "metrics_key",
-            "HONEYCOMB_LOGS_APIKEY" to "logs_key",
+            "HONEYCOMB_TRACES_APIKEY" to "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "HONEYCOMB_METRICS_APIKEY" to "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "HONEYCOMB_LOGS_APIKEY" to "cccccccccccccccccccccccccccccccc",
             "HONEYCOMB_TRACES_ENDPOINT" to "http://traces.example.com:1234",
             "HONEYCOMB_METRICS_ENDPOINT" to "http://metrics.example.com:1234",
             "HONEYCOMB_LOGS_ENDPOINT" to "http://logs.example.com:1234",
@@ -247,7 +250,7 @@ class HoneycombOptionsUnitTest {
             mapOf(
                 "header" to "ttt",
                 "x-honeycomb-dataset" to "dataset",
-                "x-honeycomb-team" to "traces_key",
+                "x-honeycomb-team" to "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
             ), options.tracesHeaders
         )
@@ -255,7 +258,7 @@ class HoneycombOptionsUnitTest {
             mapOf(
                 "header" to "mmm",
                 "x-honeycomb-dataset" to "metrics",
-                "x-honeycomb-team" to "metrics_key",
+                "x-honeycomb-team" to "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
             ), options.metricsHeaders
         )
@@ -263,7 +266,7 @@ class HoneycombOptionsUnitTest {
             mapOf(
                 "header" to "lll",
                 "x-honeycomb-dataset" to "dataset",
-                "x-honeycomb-team" to "logs_key",
+                "x-honeycomb-team" to "cccccccccccccccccccccccccccccccc",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
             ), options.logsHeaders
         )
@@ -275,6 +278,9 @@ class HoneycombOptionsUnitTest {
         assertEquals(OtlpProtocol.HTTP_JSON, options.tracesProtocol)
         assertEquals(OtlpProtocol.HTTP_JSON, options.metricsProtocol)
         assertEquals(OtlpProtocol.HTTP_JSON, options.logsProtocol)
+
+        assertEquals(42, options.sampleRate)
+        assertTrue(options.debug)
     }
 
     @Test
@@ -282,9 +288,9 @@ class HoneycombOptionsUnitTest {
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
             .setDataset("dataset")
             .setMetricsDataset("metrics")
-            .setTracesApiKey("traces_key")
-            .setMetricsApiKey("metrics_key")
-            .setLogsApiKey("logs_key")
+            .setTracesApiKey("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            .setMetricsApiKey("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+            .setLogsApiKey("cccccccccccccccccccccccccccccccc")
             .setTracesApiEndpoint("http://traces.example.com:1234")
             .setMetricsApiEndpoint("http://metrics.example.com:1234")
             .setLogsApiEndpoint("http://logs.example.com:1234")
@@ -328,7 +334,7 @@ class HoneycombOptionsUnitTest {
             mapOf(
                 "header" to "ttt",
                 "x-honeycomb-dataset" to "dataset",
-                "x-honeycomb-team" to "traces_key",
+                "x-honeycomb-team" to "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
             ), options.tracesHeaders
         )
@@ -336,7 +342,7 @@ class HoneycombOptionsUnitTest {
             mapOf(
                 "header" to "mmm",
                 "x-honeycomb-dataset" to "metrics",
-                "x-honeycomb-team" to "metrics_key",
+                "x-honeycomb-team" to "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
             ), options.metricsHeaders
         )
@@ -344,7 +350,7 @@ class HoneycombOptionsUnitTest {
             mapOf(
                 "header" to "lll",
                 "x-honeycomb-dataset" to "dataset",
-                "x-honeycomb-team" to "logs_key",
+                "x-honeycomb-team" to "cccccccccccccccccccccccccccccccc",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
             ), options.logsHeaders
         )
@@ -356,6 +362,9 @@ class HoneycombOptionsUnitTest {
         assertEquals(OtlpProtocol.HTTP_JSON, options.tracesProtocol)
         assertEquals(OtlpProtocol.HTTP_JSON, options.metricsProtocol)
         assertEquals(OtlpProtocol.HTTP_JSON, options.logsProtocol)
+
+        assertEquals(42, options.sampleRate)
+        assertTrue(options.debug)
     }
 
     @Test
@@ -363,7 +372,7 @@ class HoneycombOptionsUnitTest {
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
             .setDataset("dataset")
             .setMetricsDataset("metrics")
-            .setApiKey("key")
+            .setApiKey("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
             .setApiEndpoint("http://api.example.com:1234")
             .setSampleRate(42)
             .setDebug(true)
@@ -399,7 +408,7 @@ class HoneycombOptionsUnitTest {
             mapOf(
                 "header" to "hhh",
                 "x-honeycomb-dataset" to "dataset",
-                "x-honeycomb-team" to "key",
+                "x-honeycomb-team" to "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
             ), options.tracesHeaders
         )
@@ -407,7 +416,7 @@ class HoneycombOptionsUnitTest {
             mapOf(
                 "header" to "hhh",
                 "x-honeycomb-dataset" to "metrics",
-                "x-honeycomb-team" to "key",
+                "x-honeycomb-team" to "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
             ), options.metricsHeaders
         )
@@ -415,7 +424,7 @@ class HoneycombOptionsUnitTest {
             mapOf(
                 "header" to "hhh",
                 "x-honeycomb-dataset" to "dataset",
-                "x-honeycomb-team" to "key",
+                "x-honeycomb-team" to "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
             ), options.logsHeaders
         )
@@ -427,6 +436,106 @@ class HoneycombOptionsUnitTest {
         assertEquals(OtlpProtocol.HTTP_JSON, options.tracesProtocol)
         assertEquals(OtlpProtocol.HTTP_JSON, options.metricsProtocol)
         assertEquals(OtlpProtocol.HTTP_JSON, options.logsProtocol)
+
+        assertEquals(42, options.sampleRate)
+        assertTrue(options.debug)
+    }
+
+    @Test
+    fun classicKey_causesDatasetHeader() {
+        val key = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
+            .setDataset("dataset")
+            .setMetricsDataset("metrics")
+            .setApiKey(key)
+            .build()
+
+        val otlpVersion = io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION
+        assertEquals(
+            mapOf(
+                "x-honeycomb-dataset" to "dataset",
+                "x-honeycomb-team" to key,
+                "x-otlp-version" to otlpVersion,
+            ), options.tracesHeaders
+        )
+        assertEquals(
+            mapOf(
+                "x-honeycomb-dataset" to "metrics",
+                "x-honeycomb-team" to key,
+                "x-otlp-version" to otlpVersion,
+            ), options.metricsHeaders
+        )
+        assertEquals(
+            mapOf(
+                "x-honeycomb-dataset" to "dataset",
+                "x-honeycomb-team" to key,
+                "x-otlp-version" to otlpVersion,
+            ), options.logsHeaders
+        )
+    }
+
+    @Test
+    fun ingestClassicKey_causesDatasetHeader() {
+        val key = "hcaic_7890123456789012345678901234567890123456789012345678901234"
+        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
+            .setDataset("dataset")
+            .setMetricsDataset("metrics")
+            .setApiKey(key)
+            .build()
+
+        val otlpVersion = io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION
+        assertEquals(
+            mapOf(
+                "x-honeycomb-dataset" to "dataset",
+                "x-honeycomb-team" to key,
+                "x-otlp-version" to otlpVersion,
+            ), options.tracesHeaders
+        )
+        assertEquals(
+            mapOf(
+                "x-honeycomb-dataset" to "metrics",
+                "x-honeycomb-team" to key,
+                "x-otlp-version" to otlpVersion,
+            ), options.metricsHeaders
+        )
+        assertEquals(
+            mapOf(
+                "x-honeycomb-dataset" to "dataset",
+                "x-honeycomb-team" to key,
+                "x-otlp-version" to otlpVersion,
+            ), options.logsHeaders
+        )
+    }
+
+    @Test
+    fun newKey_precludesDatasetHeader() {
+        val key = "not_classic"
+        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
+            .setDataset("dataset")
+            .setMetricsDataset("metrics")
+            .setApiKey(key)
+            .build()
+
+        val otlpVersion = io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION
+        assertEquals(
+            mapOf(
+                "x-honeycomb-team" to key,
+                "x-otlp-version" to otlpVersion,
+            ), options.tracesHeaders
+        )
+        assertEquals(
+            mapOf(
+                "x-honeycomb-dataset" to "metrics",
+                "x-honeycomb-team" to key,
+                "x-otlp-version" to otlpVersion,
+            ), options.metricsHeaders
+        )
+        assertEquals(
+            mapOf(
+                "x-honeycomb-team" to key,
+                "x-otlp-version" to otlpVersion,
+            ), options.logsHeaders
+        )
     }
 
     @Test

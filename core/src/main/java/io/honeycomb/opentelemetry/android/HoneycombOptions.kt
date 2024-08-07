@@ -71,6 +71,21 @@ enum class OtlpProtocol {
     }
 }
 
+private val CLASSIC_KEY_REGEX = Regex("[a-f0-9]*")
+private val INGEST_CLASSIC_KEY_REGEX = Regex("hc[a-z]ic_[a-z0-9]*")
+
+/**
+ * Returns whether the passed in API key is classic or not.
+ */
+private fun isClassicKey(key: String): Boolean {
+    return when (key.length) {
+        0 -> false
+        32 -> CLASSIC_KEY_REGEX.matches(key)
+        64 -> INGEST_CLASSIC_KEY_REGEX.matches(key)
+        else -> false
+    }
+}
+
 /**
  * Gets the endpoint to use for a particular signal.
  *
@@ -431,24 +446,28 @@ data class HoneycombOptions(
                 Build.VERSION.RELEASE ?: "unknown"
             )
 
+            val tracesApiKey = this.tracesApiKey ?: defaultApiKey()
+            val metricsApiKey = this.metricsApiKey ?: defaultApiKey()
+            val logsApiKey = this.logsApiKey ?: defaultApiKey()
+
             val tracesHeaders =
                 getHeaders(
-                    tracesApiKey ?: defaultApiKey(),
-                    dataset,
+                    tracesApiKey,
+                    if (isClassicKey(tracesApiKey)) dataset else null,
                     headers,
                     this.tracesHeaders,
                 )
             val metricsHeaders =
                 getHeaders(
-                    metricsApiKey ?: defaultApiKey(),
-                    metricsDataset ?: dataset,
+                    metricsApiKey,
+                    metricsDataset,
                     headers,
                     this.metricsHeaders,
                 )
             val logsHeaders =
                 getHeaders(
-                    logsApiKey ?: defaultApiKey(),
-                    dataset,
+                    logsApiKey,
+                    if (isClassicKey(tracesApiKey)) dataset else null,
                     headers,
                     this.logsHeaders,
                 )
@@ -473,9 +492,9 @@ data class HoneycombOptions(
             )
 
             return HoneycombOptions(
-                tracesApiKey ?: defaultApiKey(),
-                metricsApiKey ?: defaultApiKey(),
-                logsApiKey ?: defaultApiKey(),
+                tracesApiKey,
+                metricsApiKey,
+                logsApiKey,
                 dataset,
                 metricsDataset,
                 tracesEndpoint,
