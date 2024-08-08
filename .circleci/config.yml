@@ -1,0 +1,26 @@
+
+version: 2.1
+
+orbs:
+  gradle: circleci/gradle@3.0.0
+
+matrix_executors: &matrix_executors
+  parameters:
+    executor:
+      - name: gradle/default
+        tag: "8.7"
+
+workflows:
+  unit-tests:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
+          filters:
+            branches:
+              only:
+                - main
+    jobs:
+      - gradle/test:
+          matrix:
+            <<: *matrix_executors
+
