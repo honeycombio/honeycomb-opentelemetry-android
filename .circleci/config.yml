@@ -1,17 +1,33 @@
 
-version: 2.1
+version: '2.1'
 
 orbs:
-  gradle: circleci/gradle@3.0.0
+  android: circleci/android@2.5
 
-matrix_executors: &matrix_executors
-  parameters:
+jobs:
+  unit-test:
     executor:
-      - name: gradle/default
-        tag: "8.7"
+      name: android/android-machine
+      resource-class: large
+      tag: default
+    steps:
+      - checkout
+      - android/restore-gradle-cache
+      - android/run-tests:
+          test-command: ./gradlew testDebug
+      - android/save-gradle-cache
+  android-test:
+    executor:
+      name: android/android-machine
+      resource-class: large
+      tag: default
+    steps:
+      - checkout
+      - android/start-emulator-and-run-tests:
+          system-image: system-images;android-30;google_apis;x86
 
 workflows:
-  unit-tests:
+  test:
     triggers:
       - schedule:
           cron: "0 0 * * *"
@@ -20,7 +36,7 @@ workflows:
               only:
                 - main
     jobs:
-      - gradle/test:
-          matrix:
-            <<: *matrix_executors
+      - unit-test
+      - android-test
+
 
