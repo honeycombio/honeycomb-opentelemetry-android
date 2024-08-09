@@ -25,6 +25,12 @@ jobs:
       - checkout
       - android/start-emulator-and-run-tests:
           system-image: system-images;android-30;google_apis;x86
+  collector-test:
+    docker:
+      - image: cimg/android:2024.08
+    steps:
+      - checkout
+      - run: ./gradlew test
 
 workflows:
   test:
@@ -38,5 +44,6 @@ workflows:
     jobs:
       - unit-test
       - android-test
+      - collector-test
 
 
