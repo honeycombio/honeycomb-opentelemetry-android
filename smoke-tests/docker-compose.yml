@@ -1,0 +1,18 @@
+services:
+  collector:
+    image: otel/opentelemetry-collector:0.92.0
+    command: ['--config=/etc/otel-collector-config.yaml']
+    volumes:
+      - './collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml'
+      - './collector:/var/lib'
+    ports:
+      - '4318:4318'
+
+  android-tests:
+    platform: 'linux/amd64'
+    build:
+      context: ..
+      dockerfile: ./smoke-tests/Dockerfile
+    image: hny/android-test:local
+    ports:
+      - '1234:1234'

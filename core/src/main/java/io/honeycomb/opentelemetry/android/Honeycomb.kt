@@ -40,51 +40,49 @@ class Honeycomb {
         /**
          * Automatically configures OpenTelemetryRum based on values stored in the app's resources.
          */
-        fun configure(app: Application) {
-            val config = HoneycombOptions.Builder(app).build()
-
-            val traceExporter = if (config.tracesProtocol == OtlpProtocol.GRPC) {
+        fun configure(app: Application, options: HoneycombOptions) {
+            val traceExporter = if (options.tracesProtocol == OtlpProtocol.GRPC) {
                 OtlpGrpcSpanExporter.builder()
-                    .setEndpoint(config.tracesEndpoint)
-                    .setTimeout(config.tracesTimeout.toJavaDuration())
-                    .setHeaders { config.tracesHeaders }
+                    .setEndpoint(options.tracesEndpoint)
+                    .setTimeout(options.tracesTimeout.toJavaDuration())
+                    .setHeaders { options.tracesHeaders }
                     .build()
             } else {
                 OtlpHttpSpanExporter.builder()
-                    .setEndpoint(config.tracesEndpoint)
-                    .setTimeout(config.tracesTimeout.toJavaDuration())
-                    .setHeaders { config.tracesHeaders }
+                    .setEndpoint(options.tracesEndpoint)
+                    .setTimeout(options.tracesTimeout.toJavaDuration())
+                    .setHeaders { options.tracesHeaders }
                     .build()
             }
-            val metricsExporter = if (config.metricsProtocol == OtlpProtocol.GRPC) {
+            val metricsExporter = if (options.metricsProtocol == OtlpProtocol.GRPC) {
                 OtlpGrpcMetricExporter.builder()
-                    .setEndpoint(config.metricsEndpoint)
-                    .setTimeout(config.metricsTimeout.toJavaDuration())
-                    .setHeaders { config.metricsHeaders }
+                    .setEndpoint(options.metricsEndpoint)
+                    .setTimeout(options.metricsTimeout.toJavaDuration())
+                    .setHeaders { options.metricsHeaders }
                     .build()
             } else {
                 OtlpHttpMetricExporter.builder()
-                    .setEndpoint(config.metricsEndpoint)
-                    .setTimeout(config.metricsTimeout.toJavaDuration())
-                    .setHeaders { config.metricsHeaders }
+                    .setEndpoint(options.metricsEndpoint)
+                    .setTimeout(options.metricsTimeout.toJavaDuration())
+                    .setHeaders { options.metricsHeaders }
                     .build()
             }
-            val logsExporter = if (config.logsProtocol == OtlpProtocol.GRPC) {
+            val logsExporter = if (options.logsProtocol == OtlpProtocol.GRPC) {
                 OtlpGrpcLogRecordExporter.builder()
-                    .setEndpoint(config.logsEndpoint)
-                    .setTimeout(config.logsTimeout.toJavaDuration())
-                    .setHeaders { config.logsHeaders }
+                    .setEndpoint(options.logsEndpoint)
+                    .setTimeout(options.logsTimeout.toJavaDuration())
+                    .setHeaders { options.logsHeaders }
                     .build()
             } else {
                 OtlpHttpLogRecordExporter.builder()
-                    .setEndpoint(config.logsEndpoint)
-                    .setTimeout(config.logsTimeout.toJavaDuration())
-                    .setHeaders { config.logsHeaders }
+                    .setEndpoint(options.logsEndpoint)
+                    .setTimeout(options.logsTimeout.toJavaDuration())
+                    .setHeaders { options.logsHeaders }
                     .build()
             }
 
             val resource =
-                Resource.builder().putAll(createAttributes(config.resourceAttributes)).build()
+                Resource.builder().putAll(createAttributes(options.resourceAttributes)).build()
             val rumConfig = OtelRumConfig()
             val otelRum = OpenTelemetryRum.builder(app, rumConfig)
                 .setResource(resource)

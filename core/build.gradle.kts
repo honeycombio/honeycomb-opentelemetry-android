@@ -48,7 +48,19 @@ dependencies {
     implementation(libs.opentelemetry.exporter.otlp)
 
     testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
+
+/*
+tasks.withType<Test> {
+    useJUnitPlatform()
+    testLogging {
+        showStackTraces = true
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+    }
+}
+*/

@@ -1,0 +1,30 @@
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+        cors:
+          allowed_origins:
+            - 'http://localhost:3000'
+            - 'http://localhost:1234'
+
+processors:
+  batch:
+
+exporters:
+  file:
+    path: /var/lib/data.json
+  logging:
+    verbosity: detailed
+  # otlp:
+  #   endpoint: 'api.honeycomb.io:443'
+  #   headers:
+  #     'x-honeycomb-team': 'your-key-here'
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [file, logging]
+      # exporters: [file, logging, otlp]
