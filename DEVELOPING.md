@@ -25,7 +25,7 @@ brew install bats-core
 brew install jq
 ```
 
-Smoke tests can be run with `make` targets (the latter works better in CI).
+Smoke tests can be run with `make` targets.
 
 ```sh
 cd smoke-tests
@@ -33,7 +33,6 @@ make smoke
 ```
 
 The results of both the tests themselves and the telemetry collected by the collector are in a file `data.json` in the `smoke-tests/collector/` directory.
-These artifacts are also uploaded to Circle when run in CI.
 
 After smoke tests are done, tear down docker containers:
 
