@@ -14,9 +14,18 @@ smoke-docker: collector/data.json
 	@echo "+++ Spinning up the smokers."
 	@echo ""
 	docker-compose up --build collector --detach
-	docker-compose up --build android-tests
 
-#npx cypress run --browser chrome
+android-emulator: collector/data.json
+	@echo ""
+	@echo "+++ Setting up Android environment."
+	@echo ""
+	bash ./setup-android-env.sh
+
+android-tests: collector/data.json
+	@echo ""
+	@echo "+++ Running Android tests."
+	@echo ""
+	cd .. && ./gradlew pixel8api35debugAndroidTest --rerun
 
 smoke-bats: collector/data.json
 	@echo ""
@@ -24,7 +33,7 @@ smoke-bats: collector/data.json
 	@echo ""
 	bats ./smoke-e2e.bats --report-formatter junit --output ./
 
-smoke: smoke-docker smoke-cypress smoke-bats
+smoke: smoke-docker android-emulator android-tests smoke-bats
 
 unsmoke:
 	@echo ""

@@ -40,7 +40,7 @@ class Honeycomb {
         /**
          * Automatically configures OpenTelemetryRum based on values stored in the app's resources.
          */
-        fun configure(app: Application, options: HoneycombOptions) {
+        fun configure(app: Application, options: HoneycombOptions): OpenTelemetryRum {
             val traceExporter = if (options.tracesProtocol == OtlpProtocol.GRPC) {
                 OtlpGrpcSpanExporter.builder()
                     .setEndpoint(options.tracesEndpoint)
@@ -102,6 +102,8 @@ class Honeycomb {
                 .build()
 
             GlobalOpenTelemetry.set(otelRum.openTelemetry)
+
+            return otelRum
         }
     }
 }

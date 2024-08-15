@@ -10,9 +10,6 @@ import org.junit.runner.RunWith
 import org.junit.Assert.*
 import kotlin.time.Duration.Companion.seconds
 
-/**
- * Instrumented test, which will execute on an Android device.
- */
 @RunWith(AndroidJUnit4::class)
 class HoneycombOptionsInstrumentedTest {
     @Test

@@ -35,6 +35,17 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    testOptions {
+        managedDevices {
+            localDevices {
+                create("pixel8api35") {
+                    device = "Pixel 8"
+                    apiLevel = 35
+                    systemImageSource = "google"
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -53,14 +64,7 @@ dependencies {
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.opentelemetry.api)
+    androidTestImplementation(libs.opentelemetry.sdk)
+    androidTestImplementation(libs.opentelemetry.android.agent)
 }
-
-/*
-tasks.withType<Test> {
-    useJUnitPlatform()
-    testLogging {
-        showStackTraces = true
-        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
-    }
-}
-*/

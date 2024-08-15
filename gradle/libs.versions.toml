@@ -8,9 +8,8 @@ junitVersion = "1.2.1"
 kotlin = "1.9.0"
 mockitoCore = "4.11.0"
 mockitoKotlin = "4.1.0"
-opentelemetry = "1.40.0"
+opentelemetry = "1.38.0"
 opentelemetryAndroid = "0.6.0-alpha"
-
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
