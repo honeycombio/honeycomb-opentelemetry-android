@@ -1,39 +1,49 @@
+
+build:
+	./gradlew build
+
+test:
+	./gradlew test
+
+clean: clean-smoke-tests
+	./gradlew clean
+
 #: cleans up smoke test output
 clean-smoke-tests:
-	rm -rf ./collector/data.json
-	rm -rf ./collector/data-results/*.json
-	rm -rf ./report.*
+	rm -rf ./smoke-tests/collector/data.json
+	rm -rf ./smoke-tests/collector/data-results/*.json
+	rm -rf ./smoke-tests/report.*
 
-collector/data.json:
+smoke-tests/collector/data.json:
 	@echo ""
 	@echo "+++ Zhuzhing smoke test's Collector data.json"
 	@touch $@ && chmod o+w $@
 
-smoke-docker: collector/data.json
+smoke-docker: smoke-tests/collector/data.json
 	@echo ""
 	@echo "+++ Spinning up the smokers."
 	@echo ""
 	docker-compose up --build collector --detach
 
-android-emulator: collector/data.json
+android-emulator:
 	@echo ""
 	@echo "+++ Setting up Android environment."
 	@echo ""
 	bash ./setup-android-env.sh
 
-android-tests: collector/data.json
+android-test: android-emulator
 	@echo ""
 	@echo "+++ Running Android tests."
 	@echo ""
-	cd .. && ./gradlew pixel8api35debugAndroidTest --rerun
+	./gradlew pixel8api35debugAndroidTest --rerun
 
-smoke-bats: collector/data.json
+smoke-bats: smoke-tests/collector/data.json
 	@echo ""
 	@echo "+++ Running bats smoke tests."
 	@echo ""
-	bats ./smoke-e2e.bats --report-formatter junit --output ./
+	cd smoke-tests && bats ./smoke-e2e.bats --report-formatter junit --output ./
 
-smoke: smoke-docker android-emulator android-tests smoke-bats
+smoke: smoke-docker android-test smoke-bats
 
 unsmoke:
 	@echo ""

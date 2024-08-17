@@ -6,7 +6,8 @@ UNAME=$(uname -o)
 if [[ "$UNAME" == "Darwin" ]]; then
     ABI="arm64-v8a"
 else
-    ABI="x86_64"
+    # ABI="x86_64"
+    ABI="arm64-v8a"
 fi
 SYSTEM_IMAGE="system-images;android-35;google_apis;$ABI"
 DEVICE_NAME="Pixel_8_API_35"
@@ -45,4 +46,3 @@ sdkmanager --list
 echo "Installing $SYSTEM_IMAGE"
 bash -c 'yes || true' | sdkmanager --verbose --install "$SYSTEM_IMAGE"
 sdkmanager --update
-
