@@ -18,6 +18,7 @@ class HoneycombSmokeTest {
             val options = HoneycombOptions.builder(app)
                 .setApiKey("test-key")
                 .setApiEndpoint("http://10.0.2.2:4318")
+                .setServiceName("android-test")
                 .build()
 
             Honeycomb.configure(app, options)
