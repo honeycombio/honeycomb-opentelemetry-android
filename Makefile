@@ -23,7 +23,7 @@ smoke-docker: smoke-tests/collector/data.json
 	@echo ""
 	@echo "+++ Spinning up the smokers."
 	@echo ""
-	docker-compose up --build collector --detach
+	docker compose up --build collector --detach
 
 android-emulator:
 	@echo ""
@@ -49,4 +49,4 @@ unsmoke:
 	@echo ""
 	@echo "+++ Spinning down the smokers."
 	@echo ""
-	docker-compose down --volumes
+	docker compose down --volumes
