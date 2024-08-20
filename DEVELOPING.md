@@ -47,7 +47,6 @@ brew install jq
 Smoke tests can be run with `make` targets.
 
 ```sh
-cd smoke-tests
 make smoke
 ```
 
