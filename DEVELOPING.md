@@ -36,7 +36,6 @@ export ANDROID_HOME="$HOME/Library/Android/sdk"
 To install Command-line Tools go to Tools > SDK Manager > Android SDK > SDK Tools.
 
 
-
 Install `bats-core` and `jq` for local testing:
 
 ```sh
