@@ -35,6 +35,17 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    testOptions {
+        managedDevices {
+            localDevices {
+                create("pixel8api35") {
+                    device = "Pixel 8"
+                    apiLevel = 35
+                    systemImageSource = "google"
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -48,7 +59,12 @@ dependencies {
     implementation(libs.opentelemetry.exporter.otlp)
 
     testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.opentelemetry.api)
+    androidTestImplementation(libs.opentelemetry.sdk)
+    androidTestImplementation(libs.opentelemetry.android.agent)
 }

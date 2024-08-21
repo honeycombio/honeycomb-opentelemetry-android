@@ -6,9 +6,10 @@ espressoCore = "3.6.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 kotlin = "1.9.0"
-opentelemetry = "1.40.0"
+mockitoCore = "4.11.0"
+mockitoKotlin = "4.1.0"
+opentelemetry = "1.38.0"
 opentelemetryAndroid = "0.6.0-alpha"
-
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -16,6 +17,8 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarLibs" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 opentelemetry-android-agent = { module = "io.opentelemetry.android:android-agent", version.ref = "opentelemetryAndroid" }
 opentelemetry-api = { module = "io.opentelemetry:opentelemetry-api", version.ref = "opentelemetry"  }
 opentelemetry-sdk = { module = "io.opentelemetry:opentelemetry-sdk", version.ref = "opentelemetry"  }
