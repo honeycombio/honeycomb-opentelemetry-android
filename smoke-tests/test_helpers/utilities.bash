@@ -6,6 +6,12 @@ span_names_for() {
 	spans_from_scope_named $1 | jq '.name'
 }
 
+# Unique span names for a given scope
+# Arguments: $1 - scope name
+unique_span_names_for() {
+	span_names_for $1 | sort | uniq
+}
+
 # Attributes for a given scope
 # Arguments: $1 - scope name
 span_attributes_for() {

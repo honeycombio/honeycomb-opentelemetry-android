@@ -53,10 +53,15 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.instrumentation.activity)
+    implementation(libs.instrumentation.anr)
+    implementation(libs.instrumentation.crash)
+    implementation(libs.instrumentation.slowrendering)
     implementation(libs.opentelemetry.android.agent)
     implementation(libs.opentelemetry.api)
     implementation(libs.opentelemetry.sdk)
     implementation(libs.opentelemetry.exporter.otlp)
+    implementation(libs.opentelemetry.instrumentation.api)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)

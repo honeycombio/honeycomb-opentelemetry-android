@@ -3,7 +3,15 @@ package io.honeycomb.opentelemetry.android
 import android.app.Application
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.config.OtelRumConfig
+import io.opentelemetry.android.instrumentation.activity.ActivityLifecycleInstrumentation
+import io.opentelemetry.android.instrumentation.activity.startup.AppStartupTimer
+import io.opentelemetry.android.instrumentation.anr.AnrDetector
+import io.opentelemetry.android.instrumentation.anr.AnrInstrumentation
+import io.opentelemetry.android.instrumentation.common.ScreenNameExtractor
+import io.opentelemetry.android.instrumentation.crash.CrashReporterInstrumentation
+import io.opentelemetry.android.instrumentation.slowrendering.SlowRenderingInstrumentation
 import io.opentelemetry.api.GlobalOpenTelemetry
+import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.exporter.otlp.http.logs.OtlpHttpLogRecordExporter
 import io.opentelemetry.exporter.otlp.http.metrics.OtlpHttpMetricExporter
@@ -11,6 +19,7 @@ import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter
 import io.opentelemetry.exporter.otlp.logs.OtlpGrpcLogRecordExporter
 import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter
+import io.opentelemetry.instrumentation.api.instrumenter.AttributesExtractor
 import io.opentelemetry.sdk.logs.export.SimpleLogRecordProcessor
 import io.opentelemetry.sdk.metrics.export.PeriodicMetricReader
 import io.opentelemetry.sdk.resources.Resource
@@ -34,6 +43,8 @@ private fun createAttributes(dict: Map<String, String>): Attributes {
 // * LoggingSpanExporter.
 // * LoggingMetricExporter.
 // * Debug logging.
+//
+// TODO: Add options for enabling/disabling specific instrumentation.
 
 class Honeycomb {
     companion object {
@@ -84,6 +95,17 @@ class Honeycomb {
             val resource =
                 Resource.builder().putAll(createAttributes(options.resourceAttributes)).build()
             val rumConfig = OtelRumConfig()
+
+            val anrInstrumentation = AnrInstrumentation()
+            val crashInstrumentation = CrashReporterInstrumentation()
+            val lifecycleInstrumentation = ActivityLifecycleInstrumentation()
+            val slowRenderingInstrumentation = SlowRenderingInstrumentation()
+
+            // Normally, uncaught exception traces have no name, so add one.
+            crashInstrumentation.addAttributesExtractor(
+                AttributesExtractor.constant(
+                    AttributeKey.stringKey("name"), "UncaughtException"))
+
             val otelRum = OpenTelemetryRum.builder(app, rumConfig)
                 .setResource(resource)
                 .addSpanExporterCustomizer {
@@ -99,9 +121,13 @@ class Honeycomb {
                     builder.setResource(resource)
                     builder.addLogRecordProcessor(SimpleLogRecordProcessor.create(logsExporter))
                 }
+                .addInstrumentation(anrInstrumentation)
+                .addInstrumentation(crashInstrumentation)
+                .addInstrumentation(lifecycleInstrumentation)
+                .addInstrumentation(slowRenderingInstrumentation)
                 .build()
 
-            GlobalOpenTelemetry.set(otelRum.openTelemetry)
+            // GlobalOpenTelemetry.set(otelRum.openTelemetry)
 
             return otelRum
         }
