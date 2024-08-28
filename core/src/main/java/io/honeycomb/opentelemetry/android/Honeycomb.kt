@@ -127,8 +127,6 @@ class Honeycomb {
                 .addInstrumentation(slowRenderingInstrumentation)
                 .build()
 
-            // GlobalOpenTelemetry.set(otelRum.openTelemetry)
-
             return otelRum
         }
     }
