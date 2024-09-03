@@ -1,23 +1,25 @@
 plugins {
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 
 android {
-    namespace = "io.honeycomb.opentelemetry.android"
+    namespace = "io.honeycomb.opentelemetry.android.example"
     compileSdk = 34
 
     defaultConfig {
+        applicationId = "io.honeycomb.opentelemetry.android.example"
         minSdk = 21
-
-        buildConfigField("String","HONEYCOMB_DISTRO_VERSION","\"0.0.1-alpha\"")
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
-    buildFeatures {
-        buildConfig = true
-    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -46,30 +48,44 @@ android {
             }
         }
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
 
 dependencies {
     // This is required by opentelemetry-android.
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.instrumentation.activity)
-    implementation(libs.instrumentation.anr)
-    implementation(libs.instrumentation.crash)
-    implementation(libs.instrumentation.slowrendering)
     implementation(libs.opentelemetry.android.agent)
     implementation(libs.opentelemetry.api)
     implementation(libs.opentelemetry.sdk)
-    implementation(libs.opentelemetry.exporter.otlp)
-    implementation(libs.opentelemetry.instrumentation.api)
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(project(":core"))
 
     testImplementation(libs.junit)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.kotlin)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.opentelemetry.api)
-    androidTestImplementation(libs.opentelemetry.sdk)
-    androidTestImplementation(libs.opentelemetry.android.agent)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }
