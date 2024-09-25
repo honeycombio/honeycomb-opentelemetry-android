@@ -25,6 +25,32 @@ jobs:
       - checkout
       - android/start-emulator-and-run-tests:
           system-image: system-images;android-30;google_apis;x86
+  release-build:
+    executor:
+      name: android/android-machine
+      resource-class: large
+      tag: default
+    steps:
+      - checkout
+      - android/restore-gradle-cache
+      - android/restore-build-cache
+      - run:
+          name: Assemble release build
+          command: ./gradlew assembleRelease
+      - store_artifacts:
+          path: core/build/outputs/aar
+  publish_maven:
+    executor:
+      name: android/android-machine
+      resource-class: large
+      tag: default
+    steps:
+      - checkout
+      - gradle/with_cache:
+          steps:
+            - run:
+                name: "Publish Artifacts to Maven"
+                command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
 
 workflows:
   test:

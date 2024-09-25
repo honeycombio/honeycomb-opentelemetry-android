@@ -1,4 +1,5 @@
 plugins {
+    `maven-publish`
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
 }
@@ -9,6 +10,9 @@ android {
 
     defaultConfig {
         minSdk = 21
+        aarMetadata {
+            minCompileSdk = 21
+        }
 
         buildConfigField("String","HONEYCOMB_DISTRO_VERSION","\"0.0.1-alpha\"")
 
@@ -72,4 +76,18 @@ dependencies {
     androidTestImplementation(libs.opentelemetry.api)
     androidTestImplementation(libs.opentelemetry.sdk)
     androidTestImplementation(libs.opentelemetry.android.agent)
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            groupId = "io.honeycomb.android"
+            artifactId = "honeycomb-opentelemetry-android"
+            version = "0.0.1-alpha"
+
+            afterEvaluate {
+                from(components["release"])
+            }
+        }
+    }
 }
