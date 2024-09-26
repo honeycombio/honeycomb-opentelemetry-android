@@ -64,11 +64,18 @@ filters_tags_only: &filters_tags_only
     branches:
       ignore: /.*/
 
+filters_always: &filters_always
+  filters:
+    tags:
+      only: /.*/
+
 workflows:
   build:
     jobs:
-      - unit_test
-      - android_test
+      - unit_test:
+          <<: *filters_always
+      - android_test:
+          <<: *filters_always
       - publish_maven:
           <<: *filters_tags_only
           context:
@@ -76,7 +83,7 @@ workflows:
           requires:
             - unit_test
             - android_test
-  test:
+  nightly:
     triggers:
       - schedule:
           cron: "0 0 * * *"
@@ -87,4 +94,5 @@ workflows:
     jobs:
       - unit_test
       - android_test
+
 
