@@ -5,7 +5,7 @@ orbs:
   android: circleci/android@2.5
 
 jobs:
-  unit-test:
+  unit_test:
     executor:
       name: android/android-machine
       resource-class: large
@@ -16,7 +16,7 @@ jobs:
       - android/run-tests:
           test-command: ./gradlew testDebug
       - android/save-gradle-cache
-  android-test:
+  android_test:
     executor:
       name: android/android-machine
       resource-class: large
@@ -25,7 +25,7 @@ jobs:
       - checkout
       - android/start-emulator-and-run-tests:
           system-image: system-images;android-30;google_apis;x86
-  release-build:
+  release_build:
     executor:
       name: android/android-machine
       resource-class: large
@@ -46,13 +46,35 @@ jobs:
       tag: default
     steps:
       - checkout
-      - gradle/with_cache:
-          steps:
-            - run:
-                name: "Publish Artifacts to Maven"
-                command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+      - run:
+          name: "Publish Artifacts to Maven"
+          command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+
+filters_main_only: &filters_main_only
+  filters:
+    tags:
+      only: /.*/
+    branches:
+      only: main
+
+filters_tags_only: &filters_tags_only
+  filters:
+    tags:
+      only: /^v.*/
+    branches:
+      ignore: /.*/
 
 workflows:
+  build:
+    jobs:
+      - android_test
+      # - release-build
+      - publish_maven:
+          <<: *filters_tags_only
+          context:
+            - java_beeline
+          requires:
+            - android_test
   test:
     triggers:
       - schedule:
@@ -62,6 +84,6 @@ workflows:
               only:
                 - main
     jobs:
-      - unit-test
-      - android-test
+      - unit_test
+      - android_test
 
