@@ -67,13 +67,14 @@ filters_tags_only: &filters_tags_only
 workflows:
   build:
     jobs:
+      - unit_test
       - android_test
-      # - release-build
       - publish_maven:
           <<: *filters_tags_only
           context:
             - java_beeline
           requires:
+            - unit_test
             - android_test
   test:
     triggers:
