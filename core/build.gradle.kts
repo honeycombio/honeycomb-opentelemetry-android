@@ -1,5 +1,8 @@
+import java.util.Base64
+
 plugins {
     `maven-publish`
+    `signing`
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
 }
@@ -80,7 +83,7 @@ dependencies {
 
 publishing {
     publications {
-        register<MavenPublication>("release") {
+        val maven = create<MavenPublication>("release") {
             groupId = "io.honeycomb.android"
             artifactId = "honeycomb-opentelemetry-android"
             version = "0.0.1-alpha"
@@ -88,6 +91,46 @@ publishing {
             afterEvaluate {
                 from(components["release"])
             }
+
+            pom {
+                name = "Honeycomb OpenTelemetry Distribution for Android"
+                url = "https://github.com/honeycombio/honeycomb-opentelemetry-android"
+                description = "Honeycomb SDK for configuring OpenTelemetry instrumentation"
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "Honeycomb"
+                        name = "Honeycomb"
+                        email = "support@honeycomb.io"
+                        organization = "Honeycomb"
+                        organizationUrl = "https://honeycomb.io"
+                    }
+                }
+                scm {
+                    url = "https://github.com/honeycombio/honeycomb-opentelemetry-android"
+                    connection = "scm:git:git@github.com:honeycombio/honeycomb-opentelemetry-android.git"
+                    developerConnection = "scm:git:git@github.com:honeycombio/honeycomb-opentelemetry-android.git"
+                }
+            }
+        }
+
+        signing {
+            val base64key = System.getenv("GPG_BASE64")
+            val pw = System.getenv("GPG_PASSPHRASE")
+            val key = if (base64key != null && base64key != "") {
+                String(Base64.getDecoder().decode(base64key)).trim()
+            } else {
+                ""
+            }
+
+
+            useInMemoryPgpKeys(key, pw)
+            sign(maven)
         }
     }
 }
