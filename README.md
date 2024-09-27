@@ -5,15 +5,50 @@
 
 Honeycomb wrapper for [OpenTelemetry](https://opentelemetry.io) on Android.
 
-**STATUS: this library is EXPERIMENTAL.** Data shapes are stable and safe for production. We are actively seeking feedback to ensure usability.
+**STATUS: this library is EXPERIMENTAL.** Data shapes are unstable and not safe for production. We are actively seeking feedback to ensure usability.
 
 ## Getting started
 
-TODO
+Add the following dependencies to your `build.gradle.kts`:
+```
+dependencies {
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.1-alpha")
+}
+```
 
-## Common Attributes
+To configure the SDK in your Application class:
+```
+import io.honeycomb.opentelemetry.android.Honeycomb
+import io.honeycomb.opentelemetry.android.HoneycombOptions
+import io.opentelemetry.android.OpenTelemetryRum
 
-TODO
+class ExampleApp: Application() {
+    var otelRum: OpenTelemetryRum? = null
+
+    override fun onCreate() {
+        super.onCreate()
+
+        val options = HoneycombOptions.builder(this)
+            .setApiKey("YOUR-API-KEY")
+            .setServiceName("YOUR-SERVICE-NAME")
+            .build()
+
+        otelRum = Honeycomb.configure(this, options)
+    }
+}
+```
+
+To manually send a span:
+```
+    val app = application as ExampleApp
+    val otelRum = app.otelRum
+    val otel = otelRum?.openTelemetryA
+
+    val tracer = otel?.getTracer("YOUR-INSTRUMENTATION-NAME")
+    val span = tracer?.spanBuilder("YOUR-SPAN-NAME")?.startSpan()
+
+    span?.end()
+```
 
 ## Auto-instrumentation
 
