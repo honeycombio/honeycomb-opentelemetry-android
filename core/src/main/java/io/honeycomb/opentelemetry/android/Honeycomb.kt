@@ -24,6 +24,7 @@ import io.opentelemetry.instrumentation.api.instrumenter.AttributesExtractor
 import io.opentelemetry.sdk.logs.export.SimpleLogRecordProcessor
 import io.opentelemetry.sdk.metrics.export.PeriodicMetricReader
 import io.opentelemetry.sdk.resources.Resource
+import io.opentelemetry.sdk.trace.export.BatchSpanProcessor
 import kotlin.time.toJavaDuration
 
 /** Creates an Attributes object from a String->String Map. */
@@ -40,7 +41,6 @@ private fun createAttributes(dict: Map<String, String>): Attributes {
 //
 // * DeterministicSampler.
 // * BaggageSpanProcessor.
-// * BatchSpanProcessor.
 // * LoggingSpanExporter.
 // * LoggingMetricExporter.
 // * Debug logging.
@@ -107,10 +107,16 @@ class Honeycomb {
                 AttributesExtractor.constant(
                     AttributeKey.stringKey("name"), "UncaughtException"))
 
+            val batchSpanProcessor = BatchSpanProcessor.builder(traceExporter).build();
+
             val otelRumBuilder = OpenTelemetryRum.builder(app, rumConfig)
                 .setResource(resource)
                 .addSpanExporterCustomizer {
                     traceExporter
+                }
+                .addTracerProviderCustomizer { builder, _ ->
+                    builder.setResource(resource)
+                    builder.addSpanProcessor(batchSpanProcessor)
                 }
                 .addMeterProviderCustomizer { builder, _ ->
                     builder.setResource(resource)
