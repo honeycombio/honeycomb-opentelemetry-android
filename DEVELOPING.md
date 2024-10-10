@@ -33,6 +33,12 @@ After installing Android Studio, set `ANDROID_HOME` to the location of your Andr
 export ANDROID_HOME="$HOME/Library/Android/sdk"
 ```
 
+If you don't already have Java, no need to install it separately: Android Studio includes it.
+
+```sh
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+```
+
 To install Command-line Tools go to Tools > SDK Manager > Android SDK > SDK Tools.
 
 

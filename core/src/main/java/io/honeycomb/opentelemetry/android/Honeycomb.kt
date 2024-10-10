@@ -13,6 +13,7 @@ import io.opentelemetry.android.instrumentation.slowrendering.SlowRenderingInstr
 import io.opentelemetry.api.GlobalOpenTelemetry
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
+import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingSpanExporter
 import io.opentelemetry.exporter.otlp.http.logs.OtlpHttpLogRecordExporter
 import io.opentelemetry.exporter.otlp.http.metrics.OtlpHttpMetricExporter
 import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter
@@ -106,7 +107,7 @@ class Honeycomb {
                 AttributesExtractor.constant(
                     AttributeKey.stringKey("name"), "UncaughtException"))
 
-            val otelRum = OpenTelemetryRum.builder(app, rumConfig)
+            val otelRumBuilder = OpenTelemetryRum.builder(app, rumConfig)
                 .setResource(resource)
                 .addSpanExporterCustomizer {
                     traceExporter
@@ -125,9 +126,12 @@ class Honeycomb {
                 .addInstrumentation(crashInstrumentation)
                 .addInstrumentation(lifecycleInstrumentation)
                 .addInstrumentation(slowRenderingInstrumentation)
-                .build()
 
-            return otelRum
+            if (options.debug) {
+                otelRumBuilder.addSpanExporterCustomizer { OtlpJsonLoggingSpanExporter.create() }
+            }
+
+            return otelRumBuilder.build()
         }
     }
 }
