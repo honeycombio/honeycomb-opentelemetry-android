@@ -27,10 +27,16 @@ Tests are run using `bats-core` and `jq`, bash tools to make assertions against 
 
 **Android SDK Setup**
 
-After installing Android Studio, set `ANDROID_HOME` to the location of your Android SDK, which is usually something like `$HOME/Library/Android/sdk`.
+After installing Android Studio, set `ANDROID_HOME` to the location of your Android SDK, which is usually something like `$HOME/Library/Android/sdk`. 
 
 ```sh
 export ANDROID_HOME="$HOME/Library/Android/sdk"
+```
+
+If you don't already have Java, no need to install it separately: Android Studio includes it.
+
+```sh
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 ```
 
 To install Command-line Tools go to Tools > SDK Manager > Android SDK > SDK Tools.
