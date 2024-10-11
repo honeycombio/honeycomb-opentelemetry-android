@@ -30,6 +30,18 @@ spans_from_scope_named() {
 	spans_received | jq ".scopeSpans[] | select(.scope.name == \"$1\").spans[]"
 }
 
+# Metrics for a given scope
+# Arguments: $1 - scope name
+metrics_from_scope_named() {
+	spans_received | jq ".scopeMetrics[] | select(.scope.name == \"$1\").metrics[]"
+}
+
+# Metric names for a given scope
+# Arguments: $1 - scope name
+metric_names_for() {
+	metrics_from_scope_named $1 | jq '.name'
+}
+
 # All spans received
 spans_received() {
 	jq ".resourceSpans[]?" ./collector/data.json

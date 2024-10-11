@@ -76,9 +76,9 @@ private fun onSendSpan(otelRum: OpenTelemetryRum?) {
 private fun onSendMetrics(otelRum: OpenTelemetryRum?) {
     val otel = otelRum?.openTelemetry
     val meter = otel?.getMeter("@honeycombio/smoke-test")
-    var counter = meter?.counterBuilder("smoke-test.random.int")?.build()
+    var counter = meter?.counterBuilder("smoke-test.int.metric")?.build()
 
-    counter?.add(Math.random().toLong())
+    counter?.add(1)
 }
 
 private fun onANR() {
