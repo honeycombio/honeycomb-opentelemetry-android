@@ -44,6 +44,11 @@ class HoneycombSmokeTest {
     }
 
     @Test
+    fun metric_works() {
+        rule.onNodeWithText("Send Metric").performClick()
+    }
+
+    @Test
     fun anrDetection_works() {
         rule.onNodeWithText("Become Unresponsive (ANR)").performClick()
     }

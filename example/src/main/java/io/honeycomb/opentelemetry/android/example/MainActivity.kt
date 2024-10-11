@@ -182,7 +182,7 @@ fun Playground(otel: OpenTelemetryRum?, modifier: Modifier = Modifier) {
         }
         Button(onClick = { onSendMetrics(otel) }) {
             Text(
-                text = "Send Random Metric",
+                text = "Send Metric",
             )
         }
         Button(onClick = { onANR() }) {
