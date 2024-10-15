@@ -30,10 +30,19 @@ spans_from_scope_named() {
 	spans_received | jq ".scopeSpans[] | select(.scope.name == \"$1\").spans[]"
 }
 
+# All spans received
+spans_received() {
+	jq ".resourceSpans[]?" ./collector/data.json
+}
+
+metrics_received() {
+  jq ".resourceMetrics[]?" ./collector/data.json
+}
+
 # Metrics for a given scope
 # Arguments: $1 - scope name
 metrics_from_scope_named() {
-	spans_received | jq ".scopeMetrics[] | select(.scope.name == \"$1\").metrics[]"
+	metrics_received | jq ".scopeMetrics[] | select(.scope.name == \"$1\").metrics[]"
 }
 
 # Metric names for a given scope
@@ -42,10 +51,6 @@ metric_names_for() {
 	metrics_from_scope_named $1 | jq '.name'
 }
 
-# All spans received
-spans_received() {
-	jq ".resourceSpans[]?" ./collector/data.json
-}
 
 # ASSERTION HELPERS
 

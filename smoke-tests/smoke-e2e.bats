@@ -19,7 +19,7 @@ teardown_file() {
 
 @test "SDK can send metrics" {
   result=$(metric_names_for ${SMOKE_TEST_SCOPE})
-  assert_equal "$result" '"smoke-test.int.metric"'
+  assert_equal "$result" '"smoke-test.metric.int"'
 }
 
 @test "SDK detects ANRs" {
