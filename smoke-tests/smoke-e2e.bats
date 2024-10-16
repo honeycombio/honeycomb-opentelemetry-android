@@ -17,6 +17,11 @@ teardown_file() {
   assert_equal "$result" '"test-span"'
 }
 
+@test "SDK can send metrics" {
+  result=$(metric_names_for ${SMOKE_TEST_SCOPE})
+  assert_equal "$result" '"smoke-test.metric.int"'
+}
+
 @test "SDK detects ANRs" {
   result=$(unique_span_names_for "io.opentelemetry.anr")
   assert_equal "$result" '"ANR"'

@@ -35,6 +35,23 @@ spans_received() {
 	jq ".resourceSpans[]?" ./collector/data.json
 }
 
+metrics_received() {
+  jq ".resourceMetrics[]?" ./collector/data.json
+}
+
+# Metrics for a given scope
+# Arguments: $1 - scope name
+metrics_from_scope_named() {
+	metrics_received | jq ".scopeMetrics[] | select(.scope.name == \"$1\").metrics[]"
+}
+
+# Metric names for a given scope
+# Arguments: $1 - scope name
+metric_names_for() {
+	metrics_from_scope_named $1 | jq '.name'
+}
+
+
 # ASSERTION HELPERS
 
 # Fail and display details if the expected and actual values do not

@@ -73,6 +73,14 @@ private fun onSendSpan(otelRum: OpenTelemetryRum?) {
     span?.end()
 }
 
+private fun onSendMetrics(otelRum: OpenTelemetryRum?) {
+    val otel = otelRum?.openTelemetry
+    val meter = otel?.getMeter("@honeycombio/smoke-test")
+    val counter = meter?.counterBuilder("smoke-test.metric.int")?.build()
+
+    counter?.add(1)
+}
+
 private fun onANR() {
     // Occupy the main thread long enough for Android to think the app is unresponsive.
     Thread.sleep(10000)
@@ -170,6 +178,11 @@ fun Playground(otel: OpenTelemetryRum?, modifier: Modifier = Modifier) {
         Button(onClick = { onSendSpan(otel) }) {
             Text(
                 text = "Send Span",
+            )
+        }
+        Button(onClick = { onSendMetrics(otel) }) {
+            Text(
+                text = "Send Metric",
             )
         }
         Button(onClick = { onANR() }) {

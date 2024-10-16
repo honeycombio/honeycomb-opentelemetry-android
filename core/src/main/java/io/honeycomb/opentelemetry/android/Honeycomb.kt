@@ -14,6 +14,7 @@ import io.opentelemetry.api.GlobalOpenTelemetry
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingSpanExporter
+import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingMetricExporter
 import io.opentelemetry.exporter.otlp.http.logs.OtlpHttpLogRecordExporter
 import io.opentelemetry.exporter.otlp.http.metrics.OtlpHttpMetricExporter
 import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter
@@ -129,6 +130,11 @@ class Honeycomb {
 
             if (options.debug) {
                 otelRumBuilder.addSpanExporterCustomizer { OtlpJsonLoggingSpanExporter.create() }
+                otelRumBuilder.addMeterProviderCustomizer{ builder, _ ->
+                    builder.registerMetricReader(
+                        PeriodicMetricReader.builder(OtlpJsonLoggingMetricExporter.create()).build()
+                    )
+                }
             }
 
             return otelRumBuilder.build()
