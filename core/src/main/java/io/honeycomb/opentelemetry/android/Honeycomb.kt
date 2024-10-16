@@ -107,7 +107,7 @@ class Honeycomb {
                 AttributesExtractor.constant(
                     AttributeKey.stringKey("name"), "UncaughtException"))
 
-            val batchSpanProcessor = BatchSpanProcessor.builder(traceExporter).setExporterTimeout(options.tracesTimeout.toJavaDuration()).build();
+            val batchSpanProcessor = BatchSpanProcessor.builder(traceExporter).build()
 
             val otelRumBuilder = OpenTelemetryRum.builder(app, rumConfig)
                 .setResource(resource)
