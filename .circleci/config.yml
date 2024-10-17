@@ -23,6 +23,12 @@ jobs:
       tag: default
     steps:
       - checkout
+      - bats/install
+      - run:
+          name: What's the BATS?
+          command: |
+            which bats
+            bats --version
       - run:
           name: "Start Collector"
           command: make smoke-docker
