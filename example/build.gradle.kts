@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("net.bytebuddy.byte-buddy-gradle-plugin") version("1.15.5")
 }
 
 android {
@@ -88,4 +89,8 @@ dependencies {
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.okhttp)
+    implementation("io.opentelemetry.android:okhttp-3.0-library:0.7.0-alpha")
+    byteBuddy("io.opentelemetry.android:okhttp-3.0-agent:0.7.0-alpha")
 }

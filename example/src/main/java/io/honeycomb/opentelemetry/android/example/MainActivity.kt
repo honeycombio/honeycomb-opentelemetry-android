@@ -1,6 +1,7 @@
 package io.honeycomb.opentelemetry.android.example
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -40,6 +41,15 @@ import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetr
 import io.opentelemetry.android.OpenTelemetryRum
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.Headers
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import java.io.IOException
+
+val TAG = "mhaddara"
 
 /**
  * An activity with various UI elements that cause telemetry to be emitted.
@@ -79,6 +89,26 @@ private fun onSendMetrics(otelRum: OpenTelemetryRum?) {
     val counter = meter?.counterBuilder("smoke-test.metric.int")?.build()
 
     counter?.add(1)
+}
+
+private fun onSendNetworkRequest(otelRum: OpenTelemetryRum?) {
+    Log.w(TAG, "making network request")
+
+    val client = OkHttpClient.Builder().build()
+    val request = Request.Builder()
+        .url("https://icanhazdadjoke.com/")
+        .headers(Headers.headersOf("content-type", "application/json", "accept", "application/json"))
+        .build()
+    val callback = object : Callback {
+        override fun onFailure(call: Call, e: IOException) {
+            Log.w(TAG, "OkHttp error response: $e")
+        }
+        override fun onResponse(call: Call, response: Response) {
+            Log.w(TAG, "OkHttp response: ${response.code}: ${response.message}, ${response.body?.string()}")
+            response.close()
+        }
+    }
+    client.newCall(request).enqueue(callback)
 }
 
 private fun onANR() {
@@ -193,6 +223,11 @@ fun Playground(otel: OpenTelemetryRum?, modifier: Modifier = Modifier) {
         Button(onClick = { onCrash() }) {
             Text(
                 text = "Crash",
+            )
+        }
+        Button(onClick = { onSendNetworkRequest(otel) }) {
+            Text(
+                text = "Make a Network Request",
             )
         }
     }
