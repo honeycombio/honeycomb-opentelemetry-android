@@ -24,6 +24,15 @@ jobs:
       tag: default
     steps:
       - checkout
+      - android/start-emulator-and-run-tests:
+          system-image: system-images;android-30;google_apis;x86
+  smoke_test:
+    executor:
+      name: android/android-machine
+      resource-class: large
+      tag: default
+    steps:
+      - checkout
       - bats/install
       - run:
           name: What's the BATS?
@@ -37,6 +46,7 @@ jobs:
             make smoke-docker
       - android/start-emulator-and-run-tests:
           system-image: system-images;android-30;google_apis;x86
+          test_command: ./gradlew :example:pixel8api35debugAndroidTest --rerun
       - run:
           name: "Run Smoke Tests"
           command: make smoke-bats
@@ -91,6 +101,8 @@ workflows:
           <<: *filters_always
       - android_test:
           <<: *filters_always
+      - smoke_test:
+          <<: *filters_always
       - publish_maven:
           <<: *filters_tags_only
           context:
@@ -98,6 +110,7 @@ workflows:
           requires:
             - unit_test
             - android_test
+            - smoke_test
   nightly:
     triggers:
       - schedule:
@@ -109,5 +122,4 @@ workflows:
     jobs:
       - unit_test
       - android_test
-
-
+      - smoke_test
