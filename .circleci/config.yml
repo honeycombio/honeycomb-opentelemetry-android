@@ -23,8 +23,14 @@ jobs:
       tag: default
     steps:
       - checkout
+      - run:
+          name: "Start Collector"
+          command: make smoke-docker
       - android/start-emulator-and-run-tests:
           system-image: system-images;android-30;google_apis;x86
+      - run:
+          name: "Run Smoke Tests"
+          command: make smoke-bats
   release_build:
     executor:
       name: android/android-machine
