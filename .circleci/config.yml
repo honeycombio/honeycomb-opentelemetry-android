@@ -46,7 +46,7 @@ jobs:
             make smoke-docker
       - android/start-emulator-and-run-tests:
           system-image: system-images;android-30;google_apis;x86
-          test_command: ./gradlew :example:pixel8api35debugAndroidTest --rerun
+          test-command: ./gradlew :example:pixel8api35debugAndroidTest --rerun
       - run:
           name: "Run Smoke Tests"
           command: make smoke-bats
