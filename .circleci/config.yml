@@ -32,7 +32,9 @@ jobs:
             bats --version
       - run:
           name: "Start Collector"
-          command: make smoke-docker
+          command: |
+            make clean-smoke-tests
+            make smoke-docker
       - android/start-emulator-and-run-tests:
           system-image: system-images;android-30;google_apis;x86
       - run:
