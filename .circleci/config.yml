@@ -3,6 +3,7 @@ version: '2.1'
 
 orbs:
   android: circleci/android@2.5
+  bats: circleci/bats@1.0.0
 
 jobs:
   unit_test:
