@@ -41,12 +41,10 @@ jobs:
             bats --version
       - run:
           name: "Start Collector"
-          command: |
-            make clean-smoke-tests
-            make smoke-docker
+          command: make smoke-docker
       - android/start-emulator-and-run-tests:
           system-image: system-images;android-30;google_apis;x86
-          test-command: ./gradlew :example:pixel8api35debugAndroidTest --rerun
+          test-command: ./gradlew :example:connectedDebugAndroidTest
       - run:
           name: "Run Smoke Tests"
           command: make smoke-bats
