@@ -13,7 +13,7 @@ teardown_file() {
 }
 
 @test "SDK can send spans" {
-  result=$(span_names_for ${SMOKE_TEST_SCOPE})
+  result=$(unique_span_names_for ${SMOKE_TEST_SCOPE})
   assert_equal "$result" '"test-span"'
 }
 
