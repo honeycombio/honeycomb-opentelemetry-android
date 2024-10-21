@@ -1,7 +1,6 @@
 package io.honeycomb.opentelemetry.android.example
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -72,8 +71,6 @@ private fun onSendSpan(otelRum: OpenTelemetryRum?) {
     val span = tracer?.spanBuilder("test-span")?.startSpan()
     Thread.sleep(50)
     span?.end()
-
-    Log.w("MHADDARA", "Sending span")
 }
 
 private fun onSendMetrics(otelRum: OpenTelemetryRum?) {
