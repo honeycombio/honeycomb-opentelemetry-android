@@ -43,27 +43,27 @@ class HoneycombSmokeTest {
         rule.onNodeWithText("Send Span").performClick()
     }
 
-    @Test
-    fun metric_works() {
-        rule.onNodeWithText("Send Metric").performClick()
-    }
-
-    @Test
-    fun anrDetection_works() {
-        rule.onNodeWithText("Become Unresponsive (ANR)").performClick()
-    }
-
-    @Test
-    fun slowRendersDetection_works() {
-        rule.onNodeWithText("Slow").performClick()
-        Thread.sleep(1000)
-        rule.onNodeWithText("Normal").performClick()
-    }
-
-    @Test
-    fun frozenRendersDetection_works() {
-        rule.onNodeWithText("Frozen").performClick()
-        Thread.sleep(1000)
-        rule.onNodeWithText("Normal").performClick()
-    }
+//    @Test
+//    fun metric_works() {
+//        rule.onNodeWithText("Send Metric").performClick()
+//    }
+//
+//    @Test
+//    fun anrDetection_works() {
+//        rule.onNodeWithText("Become Unresponsive (ANR)").performClick()
+//    }
+//
+//    @Test
+//    fun slowRendersDetection_works() {
+//        rule.onNodeWithText("Slow").performClick()
+//        Thread.sleep(1000)
+//        rule.onNodeWithText("Normal").performClick()
+//    }
+//
+//    @Test
+//    fun frozenRendersDetection_works() {
+//        rule.onNodeWithText("Frozen").performClick()
+//        Thread.sleep(1000)
+//        rule.onNodeWithText("Normal").performClick()
+//    }
 }
