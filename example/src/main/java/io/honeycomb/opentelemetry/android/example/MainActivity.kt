@@ -73,7 +73,7 @@ private fun onSendSpan(otelRum: OpenTelemetryRum?) {
     Thread.sleep(50)
     span?.end()
 
-    Log.w("MHADDARA - SPAN", "Sending span")
+    Log.w("MHADDARA", "Sending span")
 }
 
 private fun onSendMetrics(otelRum: OpenTelemetryRum?) {
