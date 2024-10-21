@@ -19,7 +19,7 @@ class ExampleApp: Application() {
             .setApiEndpoint("http://10.0.2.2:4318")
             .setServiceName("android-test")
             .setMetricsDataset("android-test-metrics")
-            .setDebug(false)
+            .setDebug(true)
             .build()
 
         otelRum = Honeycomb.configure(this, options)
