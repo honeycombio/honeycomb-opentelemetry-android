@@ -88,9 +88,6 @@ class Honeycomb {
 
             return OpenTelemetryRum.builder(app, rumConfig)
                 .setResource(resource)
-                .addSpanExporterCustomizer {
-                    traceExporter
-                }
                 .addTracerProviderCustomizer { builder, _ ->
                     builder.setResource(resource)
                     builder.addSpanProcessor(batchSpanProcessor)
