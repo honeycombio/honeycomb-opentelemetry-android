@@ -45,6 +45,7 @@ jobs:
       - android/start-emulator-and-run-tests:
           system-image: system-images;android-30;google_apis;x86
           test-command: ./gradlew :example:connectedDebugAndroidTest
+          max-tries: 1
       - run:
           name: "Run Smoke Tests"
           command: make smoke-bats
