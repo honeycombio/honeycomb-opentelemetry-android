@@ -3,6 +3,7 @@ version: '2.1'
 
 orbs:
   android: circleci/android@2.5
+  bats: circleci/bats@1.0.0
 
 jobs:
   unit_test:
@@ -25,6 +26,29 @@ jobs:
       - checkout
       - android/start-emulator-and-run-tests:
           system-image: system-images;android-30;google_apis;x86
+  smoke_test:
+    executor:
+      name: android/android-machine
+      resource-class: large
+      tag: default
+    steps:
+      - checkout
+      - bats/install
+      - run:
+          name: What's the BATS?
+          command: |
+            which bats
+            bats --version
+      - run:
+          name: "Start Collector"
+          command: make smoke-docker
+      - android/start-emulator-and-run-tests:
+          system-image: system-images;android-30;google_apis;x86
+          test-command: ./gradlew :example:connectedDebugAndroidTest
+          max-tries: 1
+      - run:
+          name: "Run Smoke Tests"
+          command: make smoke-bats
   release_build:
     executor:
       name: android/android-machine
@@ -76,6 +100,8 @@ workflows:
           <<: *filters_always
       - android_test:
           <<: *filters_always
+      - smoke_test:
+          <<: *filters_always
       - publish_maven:
           <<: *filters_tags_only
           context:
@@ -83,6 +109,7 @@ workflows:
           requires:
             - unit_test
             - android_test
+            - smoke_test
   nightly:
     triggers:
       - schedule:
@@ -94,5 +121,4 @@ workflows:
     jobs:
       - unit_test
       - android_test
-
-
+      - smoke_test
