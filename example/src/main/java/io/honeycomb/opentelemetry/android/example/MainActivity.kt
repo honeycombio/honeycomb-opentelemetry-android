@@ -49,7 +49,7 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
-val TAG = "mhaddara"
+val TAG = "example-app"
 
 /**
  * An activity with various UI elements that cause telemetry to be emitted.
