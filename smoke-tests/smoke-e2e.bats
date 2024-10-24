@@ -33,3 +33,8 @@ teardown_file() {
 "slowRenders"'
 }
 
+@test "Network auto-instrumentation sends spans" {
+  result=$(span_names_for "io.opentelemetry.okhttp-3.0")
+  assert_equal "$result" '"GET"'
+}
+

@@ -119,3 +119,9 @@ A trace is emitted whenever a frame is rendered too slowly, according to Android
 * attributes:
   * `activity.name` - the fully-qualified name of the activity, such as `"io.honeycomb.opentelemetry.android.example/.MainActivity"`
 
+### Network Instrumentation
+Network instrumentation is not included by default but can be configured on top of this distro. We test with the following OpenTelemetry instrumentation packages:
+
+* [`io.opentelemetry.android:okhttp-3.0`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/okhttp/okhttp-3.0)
+
+Configuration of each of these packages is described in their respective READMEs.
