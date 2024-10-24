@@ -40,7 +40,7 @@ jobs:
             which bats
             bats --version
       - run:
-          name: "Start Collector"
+          name: "Start Collector & Mock Server"
           command: make smoke-docker
       - android/start-emulator-and-run-tests:
           system-image: system-images;android-30;google_apis;x86
