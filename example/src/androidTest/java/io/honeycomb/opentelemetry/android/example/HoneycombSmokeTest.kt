@@ -53,7 +53,7 @@ class HoneycombSmokeTest {
     fun network_instrumentation_works() {
         rule.onNodeWithText("Make a Network Request").performClick()
 
-        rule.waitUntil {
+        rule.waitUntil(5000) {
             rule.onNodeWithText("Network Request Succeeded", true).isDisplayed()
         }
     }
