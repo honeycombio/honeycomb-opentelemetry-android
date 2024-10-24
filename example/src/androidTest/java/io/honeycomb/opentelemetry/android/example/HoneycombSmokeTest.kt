@@ -49,6 +49,11 @@ class HoneycombSmokeTest {
     }
 
     @Test
+    fun network_instrumentation_works() {
+        rule.onNodeWithText("Make a Network Request").performClick()
+    }
+
+    @Test
     fun anrDetection_works() {
         rule.onNodeWithText("Become Unresponsive (ANR)").performClick()
     }
