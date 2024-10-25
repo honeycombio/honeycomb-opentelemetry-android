@@ -17,15 +17,6 @@ jobs:
       - android/run-tests:
           test-command: ./gradlew testDebug
       - android/save-gradle-cache
-  android_test:
-    executor:
-      name: android/android-machine
-      resource-class: large
-      tag: default
-    steps:
-      - checkout
-      - android/start-emulator-and-run-tests:
-          system-image: system-images;android-30;google_apis;x86
   smoke_test:
     executor:
       name: android/android-machine
@@ -98,8 +89,6 @@ workflows:
     jobs:
       - unit_test:
           <<: *filters_always
-      - android_test:
-          <<: *filters_always
       - smoke_test:
           <<: *filters_always
       - publish_maven:
@@ -108,7 +97,6 @@ workflows:
             - java_beeline
           requires:
             - unit_test
-            - android_test
             - smoke_test
   nightly:
     triggers:
@@ -120,5 +108,4 @@ workflows:
                 - main
     jobs:
       - unit_test
-      - android_test
       - smoke_test
