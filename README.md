@@ -98,7 +98,7 @@ A trace is emitted whenever the app becomes unresponsive for longer than approxi
 * attributes:
   * `exception.stacktrace`
 
-### Crash Instrumnetation
+### Crash Instrumentation
 
 A trace is emitted whenever an uncaught exception is going to terminate the program. This is in addition to whatever other crash reporting is enabled. These traces are flushed as the app is shutting down, so the app does not need to be re-opened for them to be sent.
 
