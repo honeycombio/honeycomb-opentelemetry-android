@@ -5,6 +5,7 @@ plugins {
     `signing`
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.spotless)
 }
 
 android {
@@ -17,7 +18,7 @@ android {
             minCompileSdk = 21
         }
 
-        buildConfigField("String","HONEYCOMB_DISTRO_VERSION","\"0.0.1-alpha\"")
+        buildConfigField("String", "HONEYCOMB_DISTRO_VERSION", "\"0.0.1-alpha\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -30,7 +31,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -80,55 +81,60 @@ dependencies {
     androidTestImplementation(libs.opentelemetry.api)
     androidTestImplementation(libs.opentelemetry.sdk)
     androidTestImplementation(libs.opentelemetry.android.agent)
+
+    implementation(libs.spotless.plugin)
 }
+
+apply("${project.rootDir}/spotless.gradle")
 
 publishing {
     publications {
-        val maven = create<MavenPublication>("release") {
-            groupId = "io.honeycomb.android"
-            artifactId = "honeycomb-opentelemetry-android"
-            version = "0.0.1-alpha"
+        val maven =
+            create<MavenPublication>("release") {
+                groupId = "io.honeycomb.android"
+                artifactId = "honeycomb-opentelemetry-android"
+                version = "0.0.1-alpha"
 
-            afterEvaluate {
-                from(components["release"])
-            }
+                afterEvaluate {
+                    from(components["release"])
+                }
 
-            pom {
-                name = "Honeycomb OpenTelemetry Distribution for Android"
-                url = "https://github.com/honeycombio/honeycomb-opentelemetry-android"
-                description = "Honeycomb SDK for configuring OpenTelemetry instrumentation"
-                licenses {
-                    license {
-                        name = "The Apache License, Version 2.0"
-                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-                    }
-                }
-                developers {
-                    developer {
-                        id = "Honeycomb"
-                        name = "Honeycomb"
-                        email = "support@honeycomb.io"
-                        organization = "Honeycomb"
-                        organizationUrl = "https://honeycomb.io"
-                    }
-                }
-                scm {
+                pom {
+                    name = "Honeycomb OpenTelemetry Distribution for Android"
                     url = "https://github.com/honeycombio/honeycomb-opentelemetry-android"
-                    connection = "scm:git:git@github.com:honeycombio/honeycomb-opentelemetry-android.git"
-                    developerConnection = "scm:git:git@github.com:honeycombio/honeycomb-opentelemetry-android.git"
+                    description = "Honeycomb SDK for configuring OpenTelemetry instrumentation"
+                    licenses {
+                        license {
+                            name = "The Apache License, Version 2.0"
+                            url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = "Honeycomb"
+                            name = "Honeycomb"
+                            email = "support@honeycomb.io"
+                            organization = "Honeycomb"
+                            organizationUrl = "https://honeycomb.io"
+                        }
+                    }
+                    scm {
+                        url = "https://github.com/honeycombio/honeycomb-opentelemetry-android"
+                        connection = "scm:git:git@github.com:honeycombio/honeycomb-opentelemetry-android.git"
+                        developerConnection = "scm:git:git@github.com:honeycombio/honeycomb-opentelemetry-android.git"
+                    }
                 }
             }
-        }
 
         signing {
             val base64key = System.getenv("GPG_BASE64")
             val pw = System.getenv("GPG_PASSPHRASE")
-            val key = if (base64key != null && base64key != "") {
-                String(Base64.getDecoder().decode(base64key)).trim()
-            } else {
-                ""
-            }
-
+            val key =
+                if (base64key != null && base64key != "") {
+                    String(Base64.getDecoder().decode(base64key)).trim()
+                } else {
+                    ""
+                }
 
             useInMemoryPgpKeys(key, pw)
             sign(maven)
