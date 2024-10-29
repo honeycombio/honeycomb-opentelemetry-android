@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Playground(
                         otelRum,
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
                     )
                 }
             }
@@ -96,22 +96,31 @@ private fun onSendNetworkRequest(setResponse: (str: String) -> Unit) {
     setResponse("loading...")
 
     val client = OkHttpClient.Builder().build()
-    val request = Request.Builder()
-        .url("http://10.0.2.2:1080/simple-api")
-        .headers(Headers.headersOf("content-type", "application/json", "accept", "application/json"))
-        .build()
-    val callback = object : Callback {
-        override fun onFailure(call: Call, e: IOException) {
-            Log.w(TAG, "OkHttp error response: $e")
-            setResponse("error: ${e.message}")
+    val request =
+        Request.Builder()
+            .url("http://10.0.2.2:1080/simple-api")
+            .headers(Headers.headersOf("content-type", "application/json", "accept", "application/json"))
+            .build()
+    val callback =
+        object : Callback {
+            override fun onFailure(
+                call: Call,
+                e: IOException,
+            ) {
+                Log.w(TAG, "OkHttp error response: $e")
+                setResponse("error: ${e.message}")
+            }
+
+            override fun onResponse(
+                call: Call,
+                response: Response,
+            ) {
+                val body = response.body?.string()
+                Log.w(TAG, "OkHttp response: ${response.code}: ${response.message}, $body")
+                setResponse("Network Request Succeeded")
+                response.close()
+            }
         }
-        override fun onResponse(call: Call, response: Response) {
-            val body = response.body?.string()
-            Log.w(TAG, "OkHttp response: ${response.code}: ${response.message}, $body")
-            setResponse("Network Request Succeeded")
-            response.close()
-        }
-    }
     client.newCall(request).enqueue(callback)
 }
 
@@ -128,64 +137,72 @@ private fun onCrash() {
 enum class AnimationSpeed(val sleepTime: Long) {
     NORMAL(0),
     SLOW(32),
-    FROZEN(1400)
+    FROZEN(1400),
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Playground(otel: OpenTelemetryRum?, modifier: Modifier = Modifier) {
+fun Playground(
+    otel: OpenTelemetryRum?,
+    modifier: Modifier = Modifier,
+) {
     val networkRequestStatus = remember { mutableStateOf("") }
 
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.fillMaxSize(),
-        ) {
+    ) {
         Text(
-            text = "The following components demonstrate\n" +
+            text =
+                "The following components demonstrate\n" +
                     "auto-instrumentation features of the\n" +
-                    "Honeycomb Android SDK."
+                    "Honeycomb Android SDK.",
         )
         Spacer(modifier = Modifier.height(50.dp))
 
         // This component is specifically designed to render slowly,
         // to demonstrate slow render detections.
-        val angle = rememberInfiniteTransition(
-            label = "AngleTransition"
-        ).animateFloat(
-            initialValue = 0.0f,
-            targetValue = 360.0f,
-            animationSpec = infiniteRepeatable(
-                tween(1000, easing = LinearEasing),
-                RepeatMode.Restart),
-            label = "AngleAnimation",
-        )
+        val angle =
+            rememberInfiniteTransition(
+                label = "AngleTransition",
+            ).animateFloat(
+                initialValue = 0.0f,
+                targetValue = 360.0f,
+                animationSpec =
+                    infiniteRepeatable(
+                        tween(1000, easing = LinearEasing),
+                        RepeatMode.Restart,
+                    ),
+                label = "AngleAnimation",
+            )
         var animationSpeed by remember {
             mutableStateOf(AnimationSpeed.NORMAL)
         }
         Spacer(
-            modifier = Modifier
-                .height(100.dp)
-                .width(100.dp)
-                .drawBehind {
-                    // This is what makes it slow.
-                    if (animationSpeed.sleepTime > 0) {
-                        Thread.sleep(animationSpeed.sleepTime)
-                    }
-                    drawCircle(color = Color.Gray)
-                    inset(5.dp.toPx()) {
-                        drawCircle(color = Color.Yellow)
-                        val top = Offset(center.x, 0.0f)
-                        rotate(degrees = angle.value) {
-                            drawLine(
-                                color = Color.Gray,
-                                start = top,
-                                end = center,
-                                strokeWidth = 5.dp.toPx()
-                            )
+            modifier =
+                Modifier
+                    .height(100.dp)
+                    .width(100.dp)
+                    .drawBehind {
+                        // This is what makes it slow.
+                        if (animationSpeed.sleepTime > 0) {
+                            Thread.sleep(animationSpeed.sleepTime)
                         }
-                    }
-                },
+                        drawCircle(color = Color.Gray)
+                        inset(5.dp.toPx()) {
+                            drawCircle(color = Color.Yellow)
+                            val top = Offset(center.x, 0.0f)
+                            rotate(degrees = angle.value) {
+                                drawLine(
+                                    color = Color.Gray,
+                                    start = top,
+                                    end = center,
+                                    strokeWidth = 5.dp.toPx(),
+                                )
+                            }
+                        }
+                    },
         )
         SingleChoiceSegmentedButtonRow {
             SegmentedButton(

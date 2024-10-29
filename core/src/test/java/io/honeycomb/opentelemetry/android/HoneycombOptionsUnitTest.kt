@@ -1,7 +1,7 @@
 package io.honeycomb.opentelemetry.android
 
-import org.junit.Test
 import org.junit.Assert.*
+import org.junit.Test
 import kotlin.time.Duration.Companion.seconds
 
 /**
@@ -72,10 +72,11 @@ class HoneycombOptionsUnitTest {
         assertEquals("https://api.honeycomb.io:443/v1/metrics", options.metricsEndpoint)
         assertEquals("https://api.honeycomb.io:443/v1/logs", options.logsEndpoint)
 
-        val expectedHeaders = mapOf(
-            "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
-            "x-honeycomb-team" to "key",
-        )
+        val expectedHeaders =
+            mapOf(
+                "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
+                "x-honeycomb-team" to "key",
+            )
         assertEquals(expectedHeaders, options.tracesHeaders)
         assertEquals(expectedHeaders, options.metricsHeaders)
         assertEquals(expectedHeaders, options.logsHeaders)
@@ -94,17 +95,18 @@ class HoneycombOptionsUnitTest {
 
     @Test
     fun options_handlesEmptyStrings() {
-        val data = hashMapOf<String, Any?>(
-            "HONEYCOMB_API_KEY" to "key",
-            "OTEL_SERVICE_NAME" to "",
-            "OTEL_RESOURCE_ATTRIBUTES" to "",
-            "OTEL_TRACES_SAMPLER" to "",
-            "OTEL_TRACES_SAMPLER_ARG" to "",
-            "OTEL_PROPAGATORS" to "",
-            "OTEL_EXPORTER_OTLP_HEADERS" to "",
-            "OTEL_EXPORTER_OTLP_TIMEOUT" to null,
-            "OTEL_EXPORTER_OTLP_PROTOCOL" to "",
-        )
+        val data =
+            hashMapOf<String, Any?>(
+                "HONEYCOMB_API_KEY" to "key",
+                "OTEL_SERVICE_NAME" to "",
+                "OTEL_RESOURCE_ATTRIBUTES" to "",
+                "OTEL_TRACES_SAMPLER" to "",
+                "OTEL_TRACES_SAMPLER_ARG" to "",
+                "OTEL_PROPAGATORS" to "",
+                "OTEL_EXPORTER_OTLP_HEADERS" to "",
+                "OTEL_EXPORTER_OTLP_TIMEOUT" to null,
+                "OTEL_EXPORTER_OTLP_PROTOCOL" to "",
+            )
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
 
         assertEquals("unknown_service", options.serviceName)
@@ -114,7 +116,7 @@ class HoneycombOptionsUnitTest {
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
             ),
-            options.resourceAttributes
+            options.resourceAttributes,
         )
 
         assertEquals("parentbased_always_on", options.tracesSampler)
@@ -125,10 +127,11 @@ class HoneycombOptionsUnitTest {
         assertEquals("https://api.honeycomb.io:443/v1/metrics", options.metricsEndpoint)
         assertEquals("https://api.honeycomb.io:443/v1/logs", options.logsEndpoint)
 
-        val expectedHeaders = mapOf<String, String>(
-            "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
-            "x-honeycomb-team" to "key",
-        )
+        val expectedHeaders =
+            mapOf<String, String>(
+                "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
+                "x-honeycomb-team" to "key",
+            )
         assertEquals(expectedHeaders, options.tracesHeaders)
         assertEquals(expectedHeaders, options.metricsHeaders)
         assertEquals(expectedHeaders, options.logsHeaders)
@@ -144,18 +147,19 @@ class HoneycombOptionsUnitTest {
 
     @Test
     fun options_usesFallbacks() {
-        val data = hashMapOf<String, Any?>(
-            "HONEYCOMB_API_KEY" to "key",
-            "HONEYCOMB_API_ENDPOINT" to "http://example.com:1234",
-            "OTEL_SERVICE_NAME" to "service",
-            "OTEL_RESOURCE_ATTRIBUTES" to "resource=aaa",
-            "OTEL_TRACES_SAMPLER" to "sampler",
-            "OTEL_TRACES_SAMPLER_ARG" to "arg",
-            "OTEL_PROPAGATORS" to "propagators",
-            "OTEL_EXPORTER_OTLP_HEADERS" to "header=bbb",
-            "OTEL_EXPORTER_OTLP_TIMEOUT" to 30000,
-            "OTEL_EXPORTER_OTLP_PROTOCOL" to "http/json",
-        )
+        val data =
+            hashMapOf<String, Any?>(
+                "HONEYCOMB_API_KEY" to "key",
+                "HONEYCOMB_API_ENDPOINT" to "http://example.com:1234",
+                "OTEL_SERVICE_NAME" to "service",
+                "OTEL_RESOURCE_ATTRIBUTES" to "resource=aaa",
+                "OTEL_TRACES_SAMPLER" to "sampler",
+                "OTEL_TRACES_SAMPLER_ARG" to "arg",
+                "OTEL_PROPAGATORS" to "propagators",
+                "OTEL_EXPORTER_OTLP_HEADERS" to "header=bbb",
+                "OTEL_EXPORTER_OTLP_TIMEOUT" to 30000,
+                "OTEL_EXPORTER_OTLP_PROTOCOL" to "http/json",
+            )
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
 
         assertEquals("service", options.serviceName)
@@ -166,7 +170,7 @@ class HoneycombOptionsUnitTest {
                 "honeycomb.distro.version" to "0.0.1-alpha",
                 "honeycomb.distro.runtime_version" to "unknown",
             ),
-            options.resourceAttributes
+            options.resourceAttributes,
         )
 
         assertEquals("sampler", options.tracesSampler)
@@ -177,11 +181,12 @@ class HoneycombOptionsUnitTest {
         assertEquals("http://example.com:1234/v1/metrics", options.metricsEndpoint)
         assertEquals("http://example.com:1234/v1/logs", options.logsEndpoint)
 
-        val expectedHeaders = mapOf(
-            "header" to "bbb",
-            "x-honeycomb-team" to "key",
-            "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
-        )
+        val expectedHeaders =
+            mapOf(
+                "header" to "bbb",
+                "x-honeycomb-team" to "key",
+                "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
+            )
         assertEquals(expectedHeaders, options.tracesHeaders)
         assertEquals(expectedHeaders, options.metricsHeaders)
         assertEquals(expectedHeaders, options.logsHeaders)
@@ -197,35 +202,36 @@ class HoneycombOptionsUnitTest {
 
     @Test
     fun options_usesAllValues() {
-        val data = hashMapOf<String, Any?>(
-            "HONEYCOMB_API_KEY" to "key",
-            "HONEYCOMB_DATASET" to "dataset",
-            "HONEYCOMB_METRICS_DATASET" to "metrics",
-            "HONEYCOMB_TRACES_APIKEY" to "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-            "HONEYCOMB_METRICS_APIKEY" to "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-            "HONEYCOMB_LOGS_APIKEY" to "cccccccccccccccccccccccccccccccc",
-            "HONEYCOMB_TRACES_ENDPOINT" to "http://traces.example.com:1234",
-            "HONEYCOMB_METRICS_ENDPOINT" to "http://metrics.example.com:1234",
-            "HONEYCOMB_LOGS_ENDPOINT" to "http://logs.example.com:1234",
-            "SAMPLE_RATE" to 42,
-            "DEBUG" to true,
-            "OTEL_SERVICE_NAME" to "service",
-            "OTEL_RESOURCE_ATTRIBUTES" to "resource=aaa",
-            "OTEL_TRACES_SAMPLER" to "sampler",
-            "OTEL_TRACES_SAMPLER_ARG" to "arg",
-            "OTEL_PROPAGATORS" to "propagators",
-            "OTEL_EXPORTER_OTLP_TIMEOUT" to 30000,
-            "OTEL_EXPORTER_OTLP_PROTOCOL" to "http/json",
-            "OTEL_EXPORTER_OTLP_TRACES_HEADERS" to "header=ttt",
-            "OTEL_EXPORTER_OTLP_TRACES_TIMEOUT" to 40000,
-            "OTEL_EXPORTER_OTLP_TRACES_PROTOCOL" to "http/json",
-            "OTEL_EXPORTER_OTLP_METRICS_HEADERS" to "header=mmm",
-            "OTEL_EXPORTER_OTLP_METRICS_TIMEOUT" to 50000,
-            "OTEL_EXPORTER_OTLP_METRICS_PROTOCOL" to "http/json",
-            "OTEL_EXPORTER_OTLP_LOGS_HEADERS" to "header=lll",
-            "OTEL_EXPORTER_OTLP_LOGS_TIMEOUT" to 60000,
-            "OTEL_EXPORTER_OTLP_LOGS_PROTOCOL" to "http/json",
-        )
+        val data =
+            hashMapOf<String, Any?>(
+                "HONEYCOMB_API_KEY" to "key",
+                "HONEYCOMB_DATASET" to "dataset",
+                "HONEYCOMB_METRICS_DATASET" to "metrics",
+                "HONEYCOMB_TRACES_APIKEY" to "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "HONEYCOMB_METRICS_APIKEY" to "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "HONEYCOMB_LOGS_APIKEY" to "cccccccccccccccccccccccccccccccc",
+                "HONEYCOMB_TRACES_ENDPOINT" to "http://traces.example.com:1234",
+                "HONEYCOMB_METRICS_ENDPOINT" to "http://metrics.example.com:1234",
+                "HONEYCOMB_LOGS_ENDPOINT" to "http://logs.example.com:1234",
+                "SAMPLE_RATE" to 42,
+                "DEBUG" to true,
+                "OTEL_SERVICE_NAME" to "service",
+                "OTEL_RESOURCE_ATTRIBUTES" to "resource=aaa",
+                "OTEL_TRACES_SAMPLER" to "sampler",
+                "OTEL_TRACES_SAMPLER_ARG" to "arg",
+                "OTEL_PROPAGATORS" to "propagators",
+                "OTEL_EXPORTER_OTLP_TIMEOUT" to 30000,
+                "OTEL_EXPORTER_OTLP_PROTOCOL" to "http/json",
+                "OTEL_EXPORTER_OTLP_TRACES_HEADERS" to "header=ttt",
+                "OTEL_EXPORTER_OTLP_TRACES_TIMEOUT" to 40000,
+                "OTEL_EXPORTER_OTLP_TRACES_PROTOCOL" to "http/json",
+                "OTEL_EXPORTER_OTLP_METRICS_HEADERS" to "header=mmm",
+                "OTEL_EXPORTER_OTLP_METRICS_TIMEOUT" to 50000,
+                "OTEL_EXPORTER_OTLP_METRICS_PROTOCOL" to "http/json",
+                "OTEL_EXPORTER_OTLP_LOGS_HEADERS" to "header=lll",
+                "OTEL_EXPORTER_OTLP_LOGS_TIMEOUT" to 60000,
+                "OTEL_EXPORTER_OTLP_LOGS_PROTOCOL" to "http/json",
+            )
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
 
         assertEquals("service", options.serviceName)
@@ -235,7 +241,8 @@ class HoneycombOptionsUnitTest {
                 "resource" to "aaa",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
-            ), options.resourceAttributes
+            ),
+            options.resourceAttributes,
         )
 
         assertEquals("sampler", options.tracesSampler)
@@ -252,7 +259,8 @@ class HoneycombOptionsUnitTest {
                 "x-honeycomb-dataset" to "dataset",
                 "x-honeycomb-team" to "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
-            ), options.tracesHeaders
+            ),
+            options.tracesHeaders,
         )
         assertEquals(
             mapOf(
@@ -260,7 +268,8 @@ class HoneycombOptionsUnitTest {
                 "x-honeycomb-dataset" to "metrics",
                 "x-honeycomb-team" to "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
-            ), options.metricsHeaders
+            ),
+            options.metricsHeaders,
         )
         assertEquals(
             mapOf(
@@ -268,7 +277,8 @@ class HoneycombOptionsUnitTest {
                 "x-honeycomb-dataset" to "dataset",
                 "x-honeycomb-team" to "cccccccccccccccccccccccccccccccc",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
-            ), options.logsHeaders
+            ),
+            options.logsHeaders,
         )
 
         assertEquals(40.seconds, options.tracesTimeout)
@@ -285,32 +295,33 @@ class HoneycombOptionsUnitTest {
 
     @Test
     fun options_usesSetValues() {
-        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
-            .setDataset("dataset")
-            .setMetricsDataset("metrics")
-            .setTracesApiKey("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-            .setMetricsApiKey("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
-            .setLogsApiKey("cccccccccccccccccccccccccccccccc")
-            .setTracesApiEndpoint("http://traces.example.com:1234")
-            .setMetricsApiEndpoint("http://metrics.example.com:1234")
-            .setLogsApiEndpoint("http://logs.example.com:1234")
-            .setSampleRate(42)
-            .setDebug(true)
-            .setServiceName("service")
-            .setResourceAttributes(mapOf("resource" to "aaa"))
-            .setTracesSampler("sampler")
-            .setTracesSamplerArg("arg")
-            .setPropagators("propagators")
-            .setTracesTimeout(40.seconds)
-            .setMetricsTimeout(50.seconds)
-            .setLogsTimeout(60.seconds)
-            .setTracesHeaders(mapOf("header" to "ttt"))
-            .setMetricsHeaders(mapOf("header" to "mmm"))
-            .setLogsHeaders(mapOf("header" to "lll"))
-            .setTracesProtocol(OtlpProtocol.HTTP_JSON)
-            .setMetricsProtocol(OtlpProtocol.HTTP_JSON)
-            .setLogsProtocol(OtlpProtocol.HTTP_JSON)
-            .build()
+        val options =
+            HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
+                .setDataset("dataset")
+                .setMetricsDataset("metrics")
+                .setTracesApiKey("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                .setMetricsApiKey("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+                .setLogsApiKey("cccccccccccccccccccccccccccccccc")
+                .setTracesApiEndpoint("http://traces.example.com:1234")
+                .setMetricsApiEndpoint("http://metrics.example.com:1234")
+                .setLogsApiEndpoint("http://logs.example.com:1234")
+                .setSampleRate(42)
+                .setDebug(true)
+                .setServiceName("service")
+                .setResourceAttributes(mapOf("resource" to "aaa"))
+                .setTracesSampler("sampler")
+                .setTracesSamplerArg("arg")
+                .setPropagators("propagators")
+                .setTracesTimeout(40.seconds)
+                .setMetricsTimeout(50.seconds)
+                .setLogsTimeout(60.seconds)
+                .setTracesHeaders(mapOf("header" to "ttt"))
+                .setMetricsHeaders(mapOf("header" to "mmm"))
+                .setLogsHeaders(mapOf("header" to "lll"))
+                .setTracesProtocol(OtlpProtocol.HTTP_JSON)
+                .setMetricsProtocol(OtlpProtocol.HTTP_JSON)
+                .setLogsProtocol(OtlpProtocol.HTTP_JSON)
+                .build()
 
         assertEquals("service", options.serviceName)
         assertEquals(
@@ -319,7 +330,8 @@ class HoneycombOptionsUnitTest {
                 "resource" to "aaa",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
-            ), options.resourceAttributes
+            ),
+            options.resourceAttributes,
         )
 
         assertEquals("sampler", options.tracesSampler)
@@ -336,7 +348,8 @@ class HoneycombOptionsUnitTest {
                 "x-honeycomb-dataset" to "dataset",
                 "x-honeycomb-team" to "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
-            ), options.tracesHeaders
+            ),
+            options.tracesHeaders,
         )
         assertEquals(
             mapOf(
@@ -344,7 +357,8 @@ class HoneycombOptionsUnitTest {
                 "x-honeycomb-dataset" to "metrics",
                 "x-honeycomb-team" to "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
-            ), options.metricsHeaders
+            ),
+            options.metricsHeaders,
         )
         assertEquals(
             mapOf(
@@ -352,7 +366,8 @@ class HoneycombOptionsUnitTest {
                 "x-honeycomb-dataset" to "dataset",
                 "x-honeycomb-team" to "cccccccccccccccccccccccccccccccc",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
-            ), options.logsHeaders
+            ),
+            options.logsHeaders,
         )
 
         assertEquals(40.seconds, options.tracesTimeout)
@@ -369,22 +384,23 @@ class HoneycombOptionsUnitTest {
 
     @Test
     fun options_usesFallbackSetValues() {
-        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
-            .setDataset("dataset")
-            .setMetricsDataset("metrics")
-            .setApiKey("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-            .setApiEndpoint("http://api.example.com:1234")
-            .setSampleRate(42)
-            .setDebug(true)
-            .setServiceName("service")
-            .setResourceAttributes(mapOf("resource" to "aaa"))
-            .setTracesSampler("sampler")
-            .setTracesSamplerArg("arg")
-            .setPropagators("propagators")
-            .setTimeout(30.seconds)
-            .setHeaders(mapOf("header" to "hhh"))
-            .setProtocol(OtlpProtocol.HTTP_JSON)
-            .build()
+        val options =
+            HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
+                .setDataset("dataset")
+                .setMetricsDataset("metrics")
+                .setApiKey("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                .setApiEndpoint("http://api.example.com:1234")
+                .setSampleRate(42)
+                .setDebug(true)
+                .setServiceName("service")
+                .setResourceAttributes(mapOf("resource" to "aaa"))
+                .setTracesSampler("sampler")
+                .setTracesSamplerArg("arg")
+                .setPropagators("propagators")
+                .setTimeout(30.seconds)
+                .setHeaders(mapOf("header" to "hhh"))
+                .setProtocol(OtlpProtocol.HTTP_JSON)
+                .build()
 
         assertEquals("service", options.serviceName)
         assertEquals(
@@ -393,7 +409,8 @@ class HoneycombOptionsUnitTest {
                 "resource" to "aaa",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
-            ), options.resourceAttributes
+            ),
+            options.resourceAttributes,
         )
 
         assertEquals("sampler", options.tracesSampler)
@@ -410,7 +427,8 @@ class HoneycombOptionsUnitTest {
                 "x-honeycomb-dataset" to "dataset",
                 "x-honeycomb-team" to "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
-            ), options.tracesHeaders
+            ),
+            options.tracesHeaders,
         )
         assertEquals(
             mapOf(
@@ -418,7 +436,8 @@ class HoneycombOptionsUnitTest {
                 "x-honeycomb-dataset" to "metrics",
                 "x-honeycomb-team" to "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
-            ), options.metricsHeaders
+            ),
+            options.metricsHeaders,
         )
         assertEquals(
             mapOf(
@@ -426,7 +445,8 @@ class HoneycombOptionsUnitTest {
                 "x-honeycomb-dataset" to "dataset",
                 "x-honeycomb-team" to "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
-            ), options.logsHeaders
+            ),
+            options.logsHeaders,
         )
 
         assertEquals(30.seconds, options.tracesTimeout)
@@ -444,11 +464,12 @@ class HoneycombOptionsUnitTest {
     @Test
     fun classicKey_causesDatasetHeader() {
         val key = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
-            .setDataset("dataset")
-            .setMetricsDataset("metrics")
-            .setApiKey(key)
-            .build()
+        val options =
+            HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
+                .setDataset("dataset")
+                .setMetricsDataset("metrics")
+                .setApiKey(key)
+                .build()
 
         val otlpVersion = io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION
         assertEquals(
@@ -456,32 +477,36 @@ class HoneycombOptionsUnitTest {
                 "x-honeycomb-dataset" to "dataset",
                 "x-honeycomb-team" to key,
                 "x-otlp-version" to otlpVersion,
-            ), options.tracesHeaders
+            ),
+            options.tracesHeaders,
         )
         assertEquals(
             mapOf(
                 "x-honeycomb-dataset" to "metrics",
                 "x-honeycomb-team" to key,
                 "x-otlp-version" to otlpVersion,
-            ), options.metricsHeaders
+            ),
+            options.metricsHeaders,
         )
         assertEquals(
             mapOf(
                 "x-honeycomb-dataset" to "dataset",
                 "x-honeycomb-team" to key,
                 "x-otlp-version" to otlpVersion,
-            ), options.logsHeaders
+            ),
+            options.logsHeaders,
         )
     }
 
     @Test
     fun ingestClassicKey_causesDatasetHeader() {
         val key = "hcaic_7890123456789012345678901234567890123456789012345678901234"
-        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
-            .setDataset("dataset")
-            .setMetricsDataset("metrics")
-            .setApiKey(key)
-            .build()
+        val options =
+            HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
+                .setDataset("dataset")
+                .setMetricsDataset("metrics")
+                .setApiKey(key)
+                .build()
 
         val otlpVersion = io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION
         assertEquals(
@@ -489,52 +514,59 @@ class HoneycombOptionsUnitTest {
                 "x-honeycomb-dataset" to "dataset",
                 "x-honeycomb-team" to key,
                 "x-otlp-version" to otlpVersion,
-            ), options.tracesHeaders
+            ),
+            options.tracesHeaders,
         )
         assertEquals(
             mapOf(
                 "x-honeycomb-dataset" to "metrics",
                 "x-honeycomb-team" to key,
                 "x-otlp-version" to otlpVersion,
-            ), options.metricsHeaders
+            ),
+            options.metricsHeaders,
         )
         assertEquals(
             mapOf(
                 "x-honeycomb-dataset" to "dataset",
                 "x-honeycomb-team" to key,
                 "x-otlp-version" to otlpVersion,
-            ), options.logsHeaders
+            ),
+            options.logsHeaders,
         )
     }
 
     @Test
     fun newKey_precludesDatasetHeader() {
         val key = "not_classic"
-        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
-            .setDataset("dataset")
-            .setMetricsDataset("metrics")
-            .setApiKey(key)
-            .build()
+        val options =
+            HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
+                .setDataset("dataset")
+                .setMetricsDataset("metrics")
+                .setApiKey(key)
+                .build()
 
         val otlpVersion = io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION
         assertEquals(
             mapOf(
                 "x-honeycomb-team" to key,
                 "x-otlp-version" to otlpVersion,
-            ), options.tracesHeaders
+            ),
+            options.tracesHeaders,
         )
         assertEquals(
             mapOf(
                 "x-honeycomb-dataset" to "metrics",
                 "x-honeycomb-team" to key,
                 "x-otlp-version" to otlpVersion,
-            ), options.metricsHeaders
+            ),
+            options.metricsHeaders,
         )
         assertEquals(
             mapOf(
                 "x-honeycomb-team" to key,
                 "x-otlp-version" to otlpVersion,
-            ), options.logsHeaders
+            ),
+            options.logsHeaders,
         )
     }
 
@@ -546,17 +578,19 @@ class HoneycombOptionsUnitTest {
             mapOf(
                 "foo" to "bar",
                 "baz" to "123 456",
-            ), dict
+            ),
+            dict,
         )
     }
 
     @Test
     fun options_headersAreMerged() {
-        val data = mapOf<String, Any?>(
-            "HONEYCOMB_API_KEY" to "key",
-            "OTEL_EXPORTER_OTLP_HEADERS" to "foo=bar,baz=qux",
-            "OTEL_EXPORTER_OTLP_TRACES_HEADERS" to "foo=bar2,merged=yes"
-        )
+        val data =
+            mapOf<String, Any?>(
+                "HONEYCOMB_API_KEY" to "key",
+                "OTEL_EXPORTER_OTLP_HEADERS" to "foo=bar,baz=qux",
+                "OTEL_EXPORTER_OTLP_TRACES_HEADERS" to "foo=bar2,merged=yes",
+            )
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
         assertEquals(
             mapOf(
@@ -565,17 +599,19 @@ class HoneycombOptionsUnitTest {
                 "merged" to "yes",
                 "x-honeycomb-team" to "key",
                 "x-otlp-version" to io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION,
-            ), options.tracesHeaders
+            ),
+            options.tracesHeaders,
         )
     }
 
     @Test
     fun options_serviceNameTakesPrecedence() {
-        val data = mapOf<String, Any?>(
-            "HONEYCOMB_API_KEY" to "key",
-            "OTEL_SERVICE_NAME" to "explicit_name",
-            "OTEL_RESOURCE_ATTRIBUTES" to "service.name=resource_name"
-        )
+        val data =
+            mapOf<String, Any?>(
+                "HONEYCOMB_API_KEY" to "key",
+                "OTEL_SERVICE_NAME" to "explicit_name",
+                "OTEL_RESOURCE_ATTRIBUTES" to "service.name=resource_name",
+            )
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
         assertEquals("explicit_name", options.serviceName)
         assertEquals(
@@ -583,16 +619,18 @@ class HoneycombOptionsUnitTest {
                 "service.name" to "resource_name",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
-            ), options.resourceAttributes
+            ),
+            options.resourceAttributes,
         )
     }
 
     @Test
     fun options_fallsBackToServiceNameFromResourceAttributes() {
-        val data = mapOf<String, Any?>(
-            "HONEYCOMB_API_KEY" to "key",
-            "OTEL_RESOURCE_ATTRIBUTES" to "service.name=better"
-        )
+        val data =
+            mapOf<String, Any?>(
+                "HONEYCOMB_API_KEY" to "key",
+                "OTEL_RESOURCE_ATTRIBUTES" to "service.name=better",
+            )
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
         assertEquals("better", options.serviceName)
         assertEquals(
@@ -615,18 +653,20 @@ class HoneycombOptionsUnitTest {
                 "service.name" to "unknown_service",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
-            ), options.resourceAttributes
+            ),
+            options.resourceAttributes,
         )
     }
 
     @Test
     fun options_throwsOnMalformedKeyValueString() {
-        val source = HoneycombOptionsMapSource(
-            mapOf(
-                "HONEYCOMB_API_KEY" to "key",
-                "data" to "foo=bar,baz"
+        val source =
+            HoneycombOptionsMapSource(
+                mapOf(
+                    "HONEYCOMB_API_KEY" to "key",
+                    "data" to "foo=bar,baz",
+                ),
             )
-        )
         assertThrows(HoneycombException::class.java) {
             source.getKeyValueList("data")
         }
@@ -634,15 +674,15 @@ class HoneycombOptionsUnitTest {
 
     @Test
     fun options_throwsOnUnsupportedProtocol() {
-        val source = HoneycombOptionsMapSource(
-            mapOf<String, Any?>(
-                "HONEYCOMB_API_KEY" to "key",
-                "OTEL_TRACES_EXPORTER" to "not a protocol"
+        val source =
+            HoneycombOptionsMapSource(
+                mapOf<String, Any?>(
+                    "HONEYCOMB_API_KEY" to "key",
+                    "OTEL_TRACES_EXPORTER" to "not a protocol",
+                ),
             )
-        )
         assertThrows(HoneycombException::class.java) {
             HoneycombOptions.Builder(source).build()
         }
     }
 }
-

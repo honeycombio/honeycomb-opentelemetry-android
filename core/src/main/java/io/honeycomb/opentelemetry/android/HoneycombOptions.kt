@@ -56,7 +56,8 @@ private const val OTEL_EXPORTER_OTLP_LOGS_PROTOCOL_KEY = "OTEL_EXPORTER_OTLP_LOG
 enum class OtlpProtocol {
     GRPC,
     HTTP_PROTOBUF,
-    HTTP_JSON;
+    HTTP_JSON,
+    ;
 
     companion object {
         internal fun parse(s: String): OtlpProtocol? {
@@ -104,7 +105,7 @@ private fun getHoneycombEndpoint(
     endpoint: String?,
     fallback: String,
     protocol: OtlpProtocol,
-    suffix: String
+    suffix: String,
 ): String {
     if (endpoint != null) {
         return endpoint
@@ -128,7 +129,6 @@ private fun getHeaders(
     generalHeaders: Map<String, String>,
     signalHeaders: Map<String, String>,
 ): Map<String, String> {
-
     val otlpVersion = io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION
     val baseHeaders = mapOf("x-otlp-version" to otlpVersion)
     val signalBaseHeaders = mutableMapOf("x-honeycomb-team" to apiKey)
@@ -159,21 +159,17 @@ data class HoneycombOptions(
     val logsEndpoint: String,
     val sampleRate: Int,
     val debug: Boolean,
-
     val serviceName: String,
     val resourceAttributes: Map<String, String>,
     val tracesSampler: String,
     val tracesSamplerArg: String?,
     val propagators: String,
-
     val tracesHeaders: Map<String, String>,
     val metricsHeaders: Map<String, String>,
     val logsHeaders: Map<String, String>,
-
     val tracesTimeout: Duration,
     val metricsTimeout: Duration,
     val logsTimeout: Duration,
-
     val tracesProtocol: OtlpProtocol,
     val metricsProtocol: OtlpProtocol,
     val logsProtocol: OtlpProtocol,
@@ -222,7 +218,10 @@ data class HoneycombOptions(
             configureFromSource(source)
         }
 
-        private fun verifyExporter(source: HoneycombOptionsSource, key: String) {
+        private fun verifyExporter(
+            source: HoneycombOptionsSource,
+            key: String,
+        ) {
             val exporter = source.getString(key)?.lowercase() ?: "otlp"
             if (exporter != "otlp") {
                 throw HoneycombException("unsupported exporter $exporter for $key")
@@ -433,17 +432,18 @@ data class HoneycombOptions(
              * resource attributes should never be overwritten by automatic values. So, if there are
              * two different service names set, this will use the resource attributes version.
              */
+
             // Make sure the service name is in the resource attributes.
             resourceAttributes.putIfAbsent("service.name", serviceName)
             // The SDK version is generated from build.gradle.kts.
             resourceAttributes.putIfAbsent(
                 "honeycomb.distro.version",
-                BuildConfig.HONEYCOMB_DISTRO_VERSION
+                BuildConfig.HONEYCOMB_DISTRO_VERSION,
             )
             // Use the display version of Android. This is "unknown" when running tests in the JVM.
             resourceAttributes.putIfAbsent(
                 "honeycomb.distro.runtime_version",
-                Build.VERSION.RELEASE ?: "unknown"
+                Build.VERSION.RELEASE ?: "unknown",
             )
 
             val tracesApiKey = this.tracesApiKey ?: defaultApiKey()
@@ -472,24 +472,27 @@ data class HoneycombOptions(
                     this.logsHeaders,
                 )
 
-            val tracesEndpoint = getHoneycombEndpoint(
-                this.tracesEndpoint,
-                apiEndpoint,
-                tracesProtocol ?: protocol,
-                "v1/traces"
-            )
-            val metricsEndpoint = getHoneycombEndpoint(
-                this.metricsEndpoint,
-                apiEndpoint,
-                metricsProtocol ?: protocol,
-                "v1/metrics"
-            )
-            val logsEndpoint = getHoneycombEndpoint(
-                this.logsEndpoint,
-                apiEndpoint,
-                logsProtocol ?: protocol,
-                "v1/logs"
-            )
+            val tracesEndpoint =
+                getHoneycombEndpoint(
+                    this.tracesEndpoint,
+                    apiEndpoint,
+                    tracesProtocol ?: protocol,
+                    "v1/traces",
+                )
+            val metricsEndpoint =
+                getHoneycombEndpoint(
+                    this.metricsEndpoint,
+                    apiEndpoint,
+                    metricsProtocol ?: protocol,
+                    "v1/metrics",
+                )
+            val logsEndpoint =
+                getHoneycombEndpoint(
+                    this.logsEndpoint,
+                    apiEndpoint,
+                    logsProtocol ?: protocol,
+                    "v1/logs",
+                )
 
             return HoneycombOptions(
                 tracesApiKey,
