@@ -1,5 +1,6 @@
 package io.honeycomb.opentelemetry.android.example
 
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -46,6 +47,15 @@ class HoneycombSmokeTest {
     @Test
     fun metric_works() {
         rule.onNodeWithText("Send Metric").performClick()
+    }
+
+    @Test
+    fun network_instrumentation_works() {
+        rule.onNodeWithText("Make a Network Request").performClick()
+
+        rule.waitUntil(5000) {
+            rule.onNodeWithText("Network Request Succeeded", true).isDisplayed()
+        }
     }
 
     @Test
