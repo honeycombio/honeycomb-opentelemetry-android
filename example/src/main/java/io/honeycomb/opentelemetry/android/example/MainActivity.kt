@@ -49,7 +49,7 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
-val TAG = "example-app"
+val TAG = "MainActivity"
 
 /**
  * An activity with various UI elements that cause telemetry to be emitted.
@@ -134,7 +134,7 @@ enum class AnimationSpeed(val sleepTime: Long) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Playground(otel: OpenTelemetryRum?, modifier: Modifier = Modifier) {
-    val apiStatus = remember { mutableStateOf("") }
+    val networkRequestStatus = remember { mutableStateOf("") }
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -232,13 +232,13 @@ fun Playground(otel: OpenTelemetryRum?, modifier: Modifier = Modifier) {
                 text = "Crash",
             )
         }
-        Button(onClick = { onSendNetworkRequest { res -> apiStatus.value = res } }) {
+        Button(onClick = { onSendNetworkRequest { res -> networkRequestStatus.value = res } }) {
             Text(
                 text = "Make a Network Request",
             )
         }
         Text(
-            text = apiStatus.value,
+            text = networkRequestStatus.value,
         )
     }
 }
