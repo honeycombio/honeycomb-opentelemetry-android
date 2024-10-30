@@ -81,8 +81,6 @@ dependencies {
     androidTestImplementation(libs.opentelemetry.api)
     androidTestImplementation(libs.opentelemetry.sdk)
     androidTestImplementation(libs.opentelemetry.android.agent)
-
-    implementation(libs.spotless.plugin)
 }
 
 apply("${project.rootDir}/spotless.gradle")

@@ -94,8 +94,6 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.okhttp.library)
     byteBuddy(libs.okhttp.agent)
-
-    implementation(libs.spotless.plugin)
 }
 
 apply("${project.rootDir}/spotless.gradle")
