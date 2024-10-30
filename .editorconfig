@@ -11,4 +11,5 @@ insert_final_newline = true
 [*.{kt,kts}]
 max_line_length = 200
 ktlint_function_naming_ignore_when_annotated_with = Composable
+# `java.util.*,kotlinx.android.synthetic.**` is the default value, we add org.junit.Assert for our unit tests
 ij_kotlin_packages_to_use_import_on_demand = java.util.*,kotlinx.android.synthetic.**,org.junit.Assert.*
