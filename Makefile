@@ -5,6 +5,12 @@ build:
 test:
 	./gradlew test
 
+lint:
+	./gradlew spotlessCheck
+
+format:
+	./gradlew spotlessApply
+
 clean: clean-smoke-tests
 	./gradlew clean
 
