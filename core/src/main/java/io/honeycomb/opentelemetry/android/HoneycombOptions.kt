@@ -439,7 +439,7 @@ data class HoneycombOptions(
             resourceAttributes.putIfAbsent(
                 "honeycomb.distro.version",
                 BuildConfig.HONEYCOMB_DISTRO_VERSION,
-)
+            )
             // Use the display version of Android. This is "unknown" when running tests in the JVM.
             resourceAttributes.putIfAbsent(
                 "honeycomb.distro.runtime_version",
