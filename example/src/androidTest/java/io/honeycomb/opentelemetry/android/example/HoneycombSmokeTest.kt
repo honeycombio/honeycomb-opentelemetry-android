@@ -4,15 +4,13 @@ import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.AfterClass
-
+import org.junit.Assert.assertEquals
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
-import org.junit.Rule
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -24,7 +22,8 @@ import org.junit.Rule
 @RunWith(AndroidJUnit4::class)
 class HoneycombSmokeTest {
     companion object {
-        @AfterClass @JvmStatic fun flush() {
+        @AfterClass @JvmStatic
+        fun flush() {
             val app = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as ExampleApp
             app.flush()
         }

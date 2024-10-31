@@ -53,22 +53,26 @@ class Honeycomb {
         /**
          * Automatically configures OpenTelemetryRum based on values stored in the app's resources.
          */
-        fun configure(app: Application, options: HoneycombOptions): OpenTelemetryRum {
+        fun configure(
+            app: Application,
+            options: HoneycombOptions,
+        ): OpenTelemetryRum {
             val traceExporter = buildSpanExporter(options)
             val metricsExporter = buildMetricsExporter(options)
-            val logsExporter = if (options.logsProtocol == OtlpProtocol.GRPC) {
-                OtlpGrpcLogRecordExporter.builder()
-                    .setEndpoint(options.logsEndpoint)
-                    .setTimeout(options.logsTimeout.toJavaDuration())
-                    .setHeaders { options.logsHeaders }
-                    .build()
-            } else {
-                OtlpHttpLogRecordExporter.builder()
-                    .setEndpoint(options.logsEndpoint)
-                    .setTimeout(options.logsTimeout.toJavaDuration())
-                    .setHeaders { options.logsHeaders }
-                    .build()
-            }
+            val logsExporter =
+                if (options.logsProtocol == OtlpProtocol.GRPC) {
+                    OtlpGrpcLogRecordExporter.builder()
+                        .setEndpoint(options.logsEndpoint)
+                        .setTimeout(options.logsTimeout.toJavaDuration())
+                        .setHeaders { options.logsHeaders }
+                        .build()
+                } else {
+                    OtlpHttpLogRecordExporter.builder()
+                        .setEndpoint(options.logsEndpoint)
+                        .setTimeout(options.logsTimeout.toJavaDuration())
+                        .setHeaders { options.logsHeaders }
+                        .build()
+                }
 
             val resource =
                 Resource.builder().putAll(createAttributes(options.resourceAttributes)).build()
@@ -82,7 +86,10 @@ class Honeycomb {
             // Normally, uncaught exception traces have no name, so add one.
             crashInstrumentation.addAttributesExtractor(
                 AttributesExtractor.constant(
-                    AttributeKey.stringKey("name"), "UncaughtException"))
+                    AttributeKey.stringKey("name"),
+                    "UncaughtException",
+                ),
+            )
 
             val batchSpanProcessor = BatchSpanProcessor.builder(traceExporter).build()
 
@@ -95,7 +102,7 @@ class Honeycomb {
                 .addMeterProviderCustomizer { builder, _ ->
                     builder.setResource(resource)
                     builder.registerMetricReader(
-                        PeriodicMetricReader.builder(metricsExporter).build()
+                        PeriodicMetricReader.builder(metricsExporter).build(),
                     )
                 }
                 .addLoggerProviderCustomizer { builder, _ ->
@@ -110,55 +117,57 @@ class Honeycomb {
         }
 
         private fun buildSpanExporter(options: HoneycombOptions): SpanExporter {
-            val traceExporter = if (options.tracesProtocol == OtlpProtocol.GRPC) {
-                OtlpGrpcSpanExporter.builder()
-                    .setEndpoint(options.tracesEndpoint)
-                    .setTimeout(options.tracesTimeout.toJavaDuration())
-                    .setHeaders { options.tracesHeaders }
-                    .build()
-            } else {
-                OtlpHttpSpanExporter.builder()
-                    .setEndpoint(options.tracesEndpoint)
-                    .setTimeout(options.tracesTimeout.toJavaDuration())
-                    .setHeaders { options.tracesHeaders }
-                    .build()
-            }
+            val traceExporter =
+                if (options.tracesProtocol == OtlpProtocol.GRPC) {
+                    OtlpGrpcSpanExporter.builder()
+                        .setEndpoint(options.tracesEndpoint)
+                        .setTimeout(options.tracesTimeout.toJavaDuration())
+                        .setHeaders { options.tracesHeaders }
+                        .build()
+                } else {
+                    OtlpHttpSpanExporter.builder()
+                        .setEndpoint(options.tracesEndpoint)
+                        .setTimeout(options.tracesTimeout.toJavaDuration())
+                        .setHeaders { options.tracesHeaders }
+                        .build()
+                }
 
             if (options.debug) {
                 return SpanExporter.composite(traceExporter, OtlpJsonLoggingSpanExporter.create())
             }
-            return traceExporter;
+            return traceExporter
         }
 
         private fun buildMetricsExporter(options: HoneycombOptions): MetricExporter {
-            val metricsExporter = if (options.metricsProtocol == OtlpProtocol.GRPC) {
-                OtlpGrpcMetricExporter.builder()
-                    .setEndpoint(options.metricsEndpoint)
-                    .setTimeout(options.metricsTimeout.toJavaDuration())
-                    .setHeaders { options.metricsHeaders }
-                    .build()
-            } else {
-                OtlpHttpMetricExporter.builder()
-                    .setEndpoint(options.metricsEndpoint)
-                    .setTimeout(options.metricsTimeout.toJavaDuration())
-                    .setHeaders { options.metricsHeaders }
-                    .build()
-            }
+            val metricsExporter =
+                if (options.metricsProtocol == OtlpProtocol.GRPC) {
+                    OtlpGrpcMetricExporter.builder()
+                        .setEndpoint(options.metricsEndpoint)
+                        .setTimeout(options.metricsTimeout.toJavaDuration())
+                        .setHeaders { options.metricsHeaders }
+                        .build()
+                } else {
+                    OtlpHttpMetricExporter.builder()
+                        .setEndpoint(options.metricsEndpoint)
+                        .setTimeout(options.metricsTimeout.toJavaDuration())
+                        .setHeaders { options.metricsHeaders }
+                        .build()
+                }
 
             if (options.debug) {
                 return CompositeMetricExporter(metricsExporter, OtlpJsonLoggingMetricExporter.create())
             }
-            return metricsExporter;
+            return metricsExporter
         }
     }
 
-    private class CompositeMetricExporter(vararg val exporters: MetricExporter): MetricExporter {
+    private class CompositeMetricExporter(vararg val exporters: MetricExporter) : MetricExporter {
         override fun getAggregationTemporality(instrumentType: InstrumentType): AggregationTemporality {
             return try {
-                exporters.first().getAggregationTemporality(instrumentType);
+                exporters.first().getAggregationTemporality(instrumentType)
             } catch (e: NoSuchElementException) {
                 // doesn't really matter
-                AggregationTemporality.DELTA;
+                AggregationTemporality.DELTA
             }
         }
 

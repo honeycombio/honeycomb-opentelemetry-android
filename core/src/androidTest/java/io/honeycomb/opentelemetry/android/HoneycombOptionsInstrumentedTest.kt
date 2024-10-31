@@ -1,13 +1,11 @@
 package io.honeycomb.opentelemetry.android
 
 import android.os.Build
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-
+import androidx.test.platform.app.InstrumentationRegistry
+import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
 import kotlin.time.Duration.Companion.seconds
 
 @RunWith(AndroidJUnit4::class)
@@ -30,7 +28,8 @@ class HoneycombOptionsInstrumentedTest {
                 "service.name" to "unknown_service",
                 "honeycomb.distro.version" to "0.0.1-alpha",
                 "honeycomb.distro.runtime_version" to Build.VERSION.RELEASE,
-            ), options.resourceAttributes
+            ),
+            options.resourceAttributes,
         )
     }
 

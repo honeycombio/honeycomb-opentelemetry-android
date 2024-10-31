@@ -6,7 +6,7 @@ import io.honeycomb.opentelemetry.android.HoneycombOptions
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.sdk.OpenTelemetrySdk
 
-class ExampleApp: Application() {
+class ExampleApp : Application() {
     var otelRum: OpenTelemetryRum? = null
 
     override fun onCreate() {
@@ -14,13 +14,14 @@ class ExampleApp: Application() {
 
         // To use this sample app with Honeycomb, change the api key to your own key, and remove
         // the call to setApiEndpoint.
-        val options = HoneycombOptions.builder(this)
-            .setApiKey("test-key")
-            .setApiEndpoint("http://10.0.2.2:4318")
-            .setServiceName("android-test")
-            .setMetricsDataset("android-test-metrics")
-            .setDebug(true)
-            .build()
+        val options =
+            HoneycombOptions.builder(this)
+                .setApiKey("test-key")
+                .setApiEndpoint("http://10.0.2.2:4318")
+                .setServiceName("android-test")
+                .setMetricsDataset("android-test-metrics")
+                .setDebug(true)
+                .build()
 
         otelRum = Honeycomb.configure(this, options)
     }

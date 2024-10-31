@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("net.bytebuddy.byte-buddy-gradle-plugin") version("1.15.5")
+    alias(libs.plugins.bytebuddy)
+    alias(libs.plugins.spotless)
 }
 
 android {
@@ -26,7 +27,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -94,3 +95,5 @@ dependencies {
     implementation(libs.okhttp.library)
     byteBuddy(libs.okhttp.agent)
 }
+
+apply("${project.rootDir}/spotless.gradle")
