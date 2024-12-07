@@ -11,6 +11,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/example" />
+            <option value="$PROJECT_DIR$/instrumentation" />
+            <option value="$PROJECT_DIR$/instrumentation/ui" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.icons.extended)
     implementation(project(":core"))
 
     testImplementation(libs.junit)
@@ -93,7 +94,9 @@ dependencies {
 
     implementation(libs.okhttp)
     implementation(libs.okhttp.library)
+
     byteBuddy(libs.okhttp.agent)
+    byteBuddy(project(":instrumentation:ui"))
 }
 
 apply("${project.rootDir}/spotless.gradle")
