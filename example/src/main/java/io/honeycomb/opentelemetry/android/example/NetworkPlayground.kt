@@ -22,6 +22,8 @@ import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
 
+private val TAG = "NetworkPlayground"
+
 private fun onSendNetworkRequest(setResponse: (str: String) -> Unit) {
     Log.w(TAG, "making network request")
     setResponse("loading...")

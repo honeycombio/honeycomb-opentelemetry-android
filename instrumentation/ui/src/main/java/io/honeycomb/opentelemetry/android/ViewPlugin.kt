@@ -8,7 +8,7 @@ import net.bytebuddy.dynamic.DynamicType
 import net.bytebuddy.matcher.ElementMatchers
 import java.io.IOException
 
-class TestPlugin : Plugin {
+class ViewPlugin : Plugin {
     override fun apply(
         builder: DynamicType.Builder<*>,
         typeDescription: TypeDescription,
@@ -16,8 +16,8 @@ class TestPlugin : Plugin {
     ): DynamicType.Builder<*> {
         return builder.visit(
             Advice
-                .to(TestObjectAdvice::class.java)
-                .on(ElementMatchers.named("getValue"))
+                .to(ViewAdvice::class.java)
+                .on(ElementMatchers.named("performClick"))
         )
     }
 
@@ -26,6 +26,9 @@ class TestPlugin : Plugin {
     }
 
     override fun matches(target: TypeDescription): Boolean {
-        return target.typeName == "io.honeycomb.opentelemetry.android.TestObject"
+        if (target.typeName.startsWith("android.view")) {
+            throw RuntimeException("got here: ${target.typeName}")
+        }
+        return target.typeName == "android.view.View"
     }
 }

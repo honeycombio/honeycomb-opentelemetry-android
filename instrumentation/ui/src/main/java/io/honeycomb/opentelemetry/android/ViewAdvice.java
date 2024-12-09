@@ -2,9 +2,9 @@ package io.honeycomb.opentelemetry.android;
 
 import net.bytebuddy.asm.Advice;
 
-public class TestObjectAdvice {
+public class ViewAdvice {
     @Advice.OnMethodEnter
-    public static void enter(@Advice.This TestObject obj) {
+    public static void enter() {
         System.out.println("hello test object");
     }
 }

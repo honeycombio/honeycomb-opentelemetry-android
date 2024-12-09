@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetryAndroidTheme
 import io.opentelemetry.android.OpenTelemetryRum
 
-val TAG = "MainActivity"
+private val TAG = "MainActivity"
 
 // The tabs in the sample app.
 enum class PlaygroundTab(
@@ -101,7 +101,7 @@ fun Playground(
 
         when (currentTab.value) {
             PlaygroundTab.CORE -> {
-                CorePlayground()
+                CorePlayground(otel)
             }
             PlaygroundTab.UI -> {
                 UIPlayground()
