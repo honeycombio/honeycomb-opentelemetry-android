@@ -9,7 +9,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -53,10 +52,10 @@ fun AnimationSpeedTest() {
             initialValue = 0.0f,
             targetValue = 360.0f,
             animationSpec =
-            infiniteRepeatable(
-                tween(1000, easing = LinearEasing),
-                RepeatMode.Restart,
-            ),
+                infiniteRepeatable(
+                    tween(1000, easing = LinearEasing),
+                    RepeatMode.Restart,
+                ),
             label = "AngleAnimation",
         )
 
@@ -71,28 +70,28 @@ fun AnimationSpeedTest() {
     ) {
         Spacer(
             modifier =
-            Modifier
-                .height(100.dp)
-                .width(100.dp)
-                .drawBehind {
-                    // This is what makes it slow.
-                    if (animationSpeed.sleepTime > 0) {
-                        Thread.sleep(animationSpeed.sleepTime)
-                    }
-                    drawCircle(color = Color.Gray)
-                    inset(5.dp.toPx()) {
-                        drawCircle(color = Color.Yellow)
-                        val top = Offset(center.x, 0.0f)
-                        rotate(degrees = angle.value) {
-                            drawLine(
-                                color = Color.Gray,
-                                start = top,
-                                end = center,
-                                strokeWidth = 5.dp.toPx(),
-                            )
+                Modifier
+                    .height(100.dp)
+                    .width(100.dp)
+                    .drawBehind {
+                        // This is what makes it slow.
+                        if (animationSpeed.sleepTime > 0) {
+                            Thread.sleep(animationSpeed.sleepTime)
                         }
-                    }
-                },
+                        drawCircle(color = Color.Gray)
+                        inset(5.dp.toPx()) {
+                            drawCircle(color = Color.Yellow)
+                            val top = Offset(center.x, 0.0f)
+                            rotate(degrees = angle.value) {
+                                drawLine(
+                                    color = Color.Gray,
+                                    start = top,
+                                    end = center,
+                                    strokeWidth = 5.dp.toPx(),
+                                )
+                            }
+                        }
+                    },
         )
         Spacer(modifier = Modifier.height(20.dp))
         SingleChoiceSegmentedButtonRow {
