@@ -12,8 +12,13 @@ class ClassicActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_classic)
 
-        val button = findViewById<Button>(R.id.button)
-        button.setOnClickListener {
+        val backButton = findViewById<Button>(R.id.back_button)
+        backButton.setOnClickListener {
+            finish()
+        }
+
+        val exampleButton = findViewById<Button>(R.id.example_button)
+        exampleButton.setOnClickListener {
             Log.i(TAG, "Clicked!")
         }
     }

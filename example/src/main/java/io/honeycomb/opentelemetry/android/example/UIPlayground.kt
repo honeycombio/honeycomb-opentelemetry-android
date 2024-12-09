@@ -33,7 +33,7 @@ internal fun UIPlayground() {
                 context.startActivity(Intent(context, ClassicActivity::class.java))
             },
         ) {
-            Text(text = "hello world")
+            Text(text = "Start XML UI")
         }
     }
 }
