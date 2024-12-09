@@ -50,6 +50,7 @@ class HoneycombSmokeTest {
 
     @Test
     fun network_instrumentation_works() {
+        rule.onNodeWithText("Network").performClick()
         rule.onNodeWithText("Make a Network Request").performClick()
 
         rule.waitUntil(5000) {
@@ -64,6 +65,7 @@ class HoneycombSmokeTest {
 
     @Test
     fun slowRendersDetection_works() {
+        rule.onNodeWithText("UI").performClick()
         rule.onNodeWithText("Slow").performClick()
         Thread.sleep(1000)
         rule.onNodeWithText("Normal").performClick()
@@ -71,6 +73,7 @@ class HoneycombSmokeTest {
 
     @Test
     fun frozenRendersDetection_works() {
+        rule.onNodeWithText("UI").performClick()
         rule.onNodeWithText("Frozen").performClick()
         Thread.sleep(1000)
         rule.onNodeWithText("Normal").performClick()
