@@ -49,7 +49,7 @@ enum class PlaygroundTab(
     CORE("Core", Icons.Outlined.Home, Icons.Filled.Home),
     UI("UI", Icons.Outlined.Palette, Icons.Filled.Palette),
     NETWORK("Network", Icons.Outlined.Language, Icons.Filled.Language),
-    VIEW_INSTRUMENTATION("Render", Icons.Outlined.Straighten, Icons.Filled.Straighten)
+    VIEW_INSTRUMENTATION("Render", Icons.Outlined.Straighten, Icons.Filled.Straighten),
 }
 
 /**
