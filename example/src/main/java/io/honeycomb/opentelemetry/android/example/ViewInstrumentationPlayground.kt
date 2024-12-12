@@ -18,11 +18,35 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetryAndroidTheme
 import java.math.BigDecimal
 import java.math.RoundingMode
+import kotlin.time.measureTime
+
+@Composable
+private fun HoneycombInstrumentedComposable(
+    name: String,
+    composable: @Composable (() -> Unit),
+) {
+    val tracer = LocalOtelComposition.current!!.openTelemetry.tracerProvider.tracerBuilder("ViewInstrumentationPlayground").build()
+    val span = tracer.spanBuilder("Render").setAttribute("view.name", name).startSpan()
+    span.makeCurrent()
+
+    val duration =
+        measureTime {
+            composable()
+        }
+
+    // renderDuration is in seconds
+    // calling duration.inWholeSeconds would lose precision
+    span.setAttribute("view.renderDuration", duration.inWholeMicroseconds / 1_000_000.toDouble())
+
+    span.end()
+}
 
 @Composable
 private fun NestedExpensiveView(delayMs: Long) {
     Row {
-        Text(text = timeConsumingCalculation(delayMs))
+        HoneycombInstrumentedComposable("nested expensive text") {
+            Text(text = timeConsumingCalculation(delayMs))
+        }
     }
 }
 
@@ -50,11 +74,21 @@ private fun ExpensiveView() {
         modifier = Modifier.fillMaxWidth(),
     ) {
         DelayedSlider(delay = delay, onValueChange = setDelay)
-        Text(text = timeConsumingCalculation(delay))
-        Text(text = timeConsumingCalculation(delay))
-        Text(text = timeConsumingCalculation(delay))
-        NestedExpensiveView(delayMs = delay)
-        Text(text = timeConsumingCalculation(delay))
+        HoneycombInstrumentedComposable("expensive text 1") {
+            Text(text = timeConsumingCalculation(delay))
+        }
+        HoneycombInstrumentedComposable("expensive text 2") {
+            Text(text = timeConsumingCalculation(delay))
+        }
+        HoneycombInstrumentedComposable("expensive text 3") {
+            Text(text = timeConsumingCalculation(delay))
+        }
+        HoneycombInstrumentedComposable("nested expensive composable") {
+            NestedExpensiveView(delayMs = delay)
+        }
+        HoneycombInstrumentedComposable("expensive text 4") {
+            Text(text = timeConsumingCalculation(delay))
+        }
     }
 }
 
