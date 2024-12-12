@@ -38,3 +38,34 @@ teardown_file() {
   assert_equal "$result" '"GET"'
 }
 
+@test "UI touch events are captured" {
+    assert_not_empty $(spans_on_view_named "@honeycombio/instrumentation-ui" "Touch Began" "example_button")
+    assert_not_empty $(spans_on_view_named "@honeycombio/instrumentation-ui" "Touch Ended" "example_button")
+}
+
+@test "UI click events are captured" {
+    assert_not_empty $(spans_on_view_named "@honeycombio/instrumentation-ui" "click" "example_button")
+}
+
+@test "UI touch events have all attributes" {
+    span=$(spans_on_view_named "@honeycombio/instrumentation-ui" "click" "example_button")
+
+    name=$(echo "$span" | jq '.attributes[] | select(.key == "view.name").value.stringValue')
+    assert_equal "$name" '"example_button"'
+
+    class=$(echo "$span" | jq '.attributes[] | select(.key == "view.class").value.stringValue')
+    assert_equal "$class" '"android.widget.Button"'
+
+    class=$(echo "$span" | jq '.attributes[] | select(.key == "view.accessibilityClassName").value.stringValue')
+    assert_equal "$class" '"android.widget.Button"'
+
+    text=$(echo "$span" | jq '.attributes[] | select(.key == "view.text").value.stringValue')
+    assert_equal "$text" '"Example Button"'
+
+    package=$(echo "$span" | jq '.attributes[] | select(.key == "view.id.package").value.stringValue')
+    assert_equal "$package" '"io.honeycomb.opentelemetry.android.example"'
+
+    entry=$(echo "$span" | jq '.attributes[] | select(.key == "view.id.entry").value.stringValue')
+    assert_equal "$entry" '"example_button"'
+}
+

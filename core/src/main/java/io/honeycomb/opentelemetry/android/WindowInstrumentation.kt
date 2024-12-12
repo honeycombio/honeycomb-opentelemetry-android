@@ -26,7 +26,7 @@ import io.opentelemetry.android.instrumentation.AndroidInstrumentation
 import io.opentelemetry.api.trace.Span
 import kotlin.math.roundToInt
 
-private const val INSTRUMENTATION_NAME = "@honeycombio/instrumentation-uikit"
+private const val INSTRUMENTATION_NAME = "@honeycombio/instrumentation-ui"
 
 enum class TouchEventType(val spanName: String) {
     TOUCH_BEGAN("Touch Began"),
@@ -54,7 +54,7 @@ private class ViewAttributes(activity: Activity, view: View) {
     val name: String? get() = idEntry ?: text
 
     fun setAttributes(span: Span) {
-        className?.let { span.setAttribute("view.className", it) }
+        className?.let { span.setAttribute("view.class", it) }
         text?.let { span.setAttribute("view.text", it) }
         accessibilityClassName?.let { span.setAttribute("view.accessibilityClassName", it) }
         id?.let { span.setAttribute("view.id", it.toLong()) }
