@@ -6,6 +6,10 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
+import androidx.test.uiautomator.By
+import androidx.test.uiautomator.UiObject2
+import androidx.test.uiautomator.Until
 import org.junit.AfterClass
 import org.junit.Assert.assertEquals
 import org.junit.Rule
@@ -77,5 +81,23 @@ class HoneycombSmokeTest {
         rule.onNodeWithText("Frozen").performClick()
         Thread.sleep(1000)
         rule.onNodeWithText("Normal").performClick()
+    }
+
+    @Test
+    fun touchInstrumentation_works() {
+        rule.onNodeWithText("UI").performClick()
+        rule.onNodeWithText("Start XML UI").performClick()
+
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        val exampleButton: UiObject2? = device.findObject(
+            By.text("EXAMPLE BUTTON").clazz("android.widget.Button")
+        )
+        exampleButton!!.click()
+
+        val backButton: UiObject2? = device.findObject(
+            By.text("BACK").clazz("android.widget.Button")
+        )
+        backButton!!.click()
     }
 }

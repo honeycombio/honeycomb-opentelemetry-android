@@ -145,8 +145,10 @@ private class InteractionWindowCallback(
         if (event != null) {
             val type =
                 when (event.action) {
-                    MotionEvent.ACTION_UP -> TouchEventType.TOUCH_BEGAN
-                    MotionEvent.ACTION_DOWN -> TouchEventType.TOUCH_ENDED
+                    MotionEvent.ACTION_DOWN -> TouchEventType.TOUCH_BEGAN
+                    MotionEvent.ACTION_UP -> TouchEventType.TOUCH_ENDED
+                    MotionEvent.ACTION_POINTER_DOWN -> TouchEventType.TOUCH_BEGAN
+                    MotionEvent.ACTION_POINTER_UP -> TouchEventType.TOUCH_ENDED
                     else -> null
                 }
             if (type != null) {
