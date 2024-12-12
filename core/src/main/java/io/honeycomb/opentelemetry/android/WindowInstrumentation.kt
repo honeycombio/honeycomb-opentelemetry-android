@@ -39,11 +39,12 @@ private class ViewAttributes(activity: Activity, view: View) {
 
     val text: String? = if (view is TextView) view.text.toString() else null
 
-    val accessibilityClassName: String? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        view.accessibilityClassName.toString()
-    } else {
-        null
-    }
+    val accessibilityClassName: String? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            view.accessibilityClassName.toString()
+        } else {
+            null
+        }
 
     val id: Int? = if (view.id != View.NO_ID) view.id else null
 
@@ -81,7 +82,11 @@ private fun recordTouchEvent(
     }
 }
 
-private fun findTextViewAtPosition(content: View, x: Int, y: Int): TextView? {
+private fun findTextViewAtPosition(
+    content: View,
+    x: Int,
+    y: Int,
+): TextView? {
     if (content is ViewGroup) {
         if (content.isShown) {
             // Assuming that the developer hasn't used setZ, the controls are ordered back to front.
@@ -107,8 +112,8 @@ private fun findTextViewAtPosition(content: View, x: Int, y: Int): TextView? {
 
 private class InteractionGestureListener(
     val otelRum: OpenTelemetryRum,
-    val activity: Activity
-): SimpleOnGestureListener() {
+    val activity: Activity,
+) : SimpleOnGestureListener() {
     override fun onSingleTapUp(event: MotionEvent): Boolean {
         val contentView = activity.findViewById<View>(android.R.id.content)
         val textView = findTextViewAtPosition(contentView, event.x.roundToInt(), event.y.roundToInt())
@@ -124,7 +129,7 @@ private class InteractionGestureListener(
 private class InteractionWindowCallback(
     val otelRum: OpenTelemetryRum,
     val activity: Activity,
-    val wrapped: Window.Callback
+    val wrapped: Window.Callback,
 ) : Window.Callback {
     val gestureDetector = GestureDetector(activity, InteractionGestureListener(otelRum, activity))
 
@@ -138,11 +143,12 @@ private class InteractionWindowCallback(
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         if (event != null) {
-            val type = when(event.action) {
-                MotionEvent.ACTION_UP -> TouchEventType.TOUCH_BEGAN
-                MotionEvent.ACTION_DOWN -> TouchEventType.TOUCH_ENDED
-                else -> null
-            }
+            val type =
+                when (event.action) {
+                    MotionEvent.ACTION_UP -> TouchEventType.TOUCH_BEGAN
+                    MotionEvent.ACTION_DOWN -> TouchEventType.TOUCH_ENDED
+                    else -> null
+                }
             if (type != null) {
                 val x = event.x.roundToInt()
                 val y = event.y.roundToInt()
@@ -169,19 +175,32 @@ private class InteractionWindowCallback(
         return wrapped.onCreatePanelView(featureId)
     }
 
-    override fun onCreatePanelMenu(featureId: Int, menu: Menu): Boolean {
+    override fun onCreatePanelMenu(
+        featureId: Int,
+        menu: Menu,
+    ): Boolean {
         return wrapped.onCreatePanelMenu(featureId, menu)
     }
 
-    override fun onPreparePanel(featureId: Int, view: View?, menu: Menu): Boolean {
+    override fun onPreparePanel(
+        featureId: Int,
+        view: View?,
+        menu: Menu,
+    ): Boolean {
         return wrapped.onPreparePanel(featureId, view, menu)
     }
 
-    override fun onMenuOpened(featureId: Int, menu: Menu): Boolean {
+    override fun onMenuOpened(
+        featureId: Int,
+        menu: Menu,
+    ): Boolean {
         return wrapped.onMenuOpened(featureId, menu)
     }
 
-    override fun onMenuItemSelected(featureId: Int, item: MenuItem): Boolean {
+    override fun onMenuItemSelected(
+        featureId: Int,
+        item: MenuItem,
+    ): Boolean {
         return wrapped.onMenuItemSelected(featureId, item)
     }
 
@@ -205,7 +224,10 @@ private class InteractionWindowCallback(
         return wrapped.onDetachedFromWindow()
     }
 
-    override fun onPanelClosed(featureId: Int, menu: Menu) {
+    override fun onPanelClosed(
+        featureId: Int,
+        menu: Menu,
+    ) {
         return wrapped.onPanelClosed(featureId, menu)
     }
 
@@ -226,7 +248,10 @@ private class InteractionWindowCallback(
         return wrapped.onWindowStartingActionMode(callback)
     }
 
-    override fun onWindowStartingActionMode(callback: ActionMode.Callback?, type: Int): ActionMode? {
+    override fun onWindowStartingActionMode(
+        callback: ActionMode.Callback?,
+        type: Int,
+    ): ActionMode? {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             wrapped.onWindowStartingActionMode(callback, type)
         } else {
@@ -244,9 +269,12 @@ private class InteractionWindowCallback(
 }
 
 private class InteractionLifecycleCallbacks(
-    val otelRum: OpenTelemetryRum
+    val otelRum: OpenTelemetryRum,
 ) : Application.ActivityLifecycleCallbacks {
-    override fun onActivityCreated(activity: Activity, bundle: Bundle?) {
+    override fun onActivityCreated(
+        activity: Activity,
+        bundle: Bundle?,
+    ) {
         activity.window.callback = InteractionWindowCallback(otelRum, activity, activity.window.callback)
     }
 
@@ -258,14 +286,20 @@ private class InteractionLifecycleCallbacks(
 
     override fun onActivityStopped(p0: Activity) {}
 
-    override fun onActivitySaveInstanceState(p0: Activity, p1: Bundle) {}
+    override fun onActivitySaveInstanceState(
+        p0: Activity,
+        p1: Bundle,
+    ) {}
 
     override fun onActivityDestroyed(p0: Activity) {}
 }
 
 @AutoService(AndroidInstrumentation::class)
 class WindowInstrumentation : AndroidInstrumentation {
-    override fun install(application: Application, openTelemetryRum: OpenTelemetryRum) {
+    override fun install(
+        application: Application,
+        openTelemetryRum: OpenTelemetryRum,
+    ) {
         application.registerActivityLifecycleCallbacks(InteractionLifecycleCallbacks(openTelemetryRum))
     }
 }

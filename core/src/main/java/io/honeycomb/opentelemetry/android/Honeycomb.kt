@@ -1,25 +1,6 @@
 package io.honeycomb.opentelemetry.android
 
-import android.app.Activity
 import android.app.Application
-import android.graphics.Rect
-import android.os.Build
-import android.os.Bundle
-import android.view.ActionMode
-import android.view.GestureDetector
-import android.view.GestureDetector.SimpleOnGestureListener
-import android.view.KeyEvent
-import android.view.Menu
-import android.view.MenuItem
-import android.view.MotionEvent
-import android.view.SearchEvent
-import android.view.View
-import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
-import android.view.accessibility.AccessibilityEvent
-import android.widget.TextView
-import androidx.core.view.children
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.config.OtelRumConfig
 import io.opentelemetry.android.instrumentation.activity.ActivityLifecycleInstrumentation
@@ -47,8 +28,6 @@ import io.opentelemetry.sdk.metrics.export.PeriodicMetricReader
 import io.opentelemetry.sdk.resources.Resource
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor
 import io.opentelemetry.sdk.trace.export.SpanExporter
-import kotlin.math.floor
-import kotlin.math.roundToInt
 import kotlin.time.toJavaDuration
 
 /** Creates an Attributes object from a String->String Map. */
