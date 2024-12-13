@@ -22,7 +22,6 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.Instant
 import kotlin.time.TimeSource.Monotonic.markNow
-import kotlin.time.measureTime
 
 private const val TAG = "ViewInstrumentation"
 
@@ -36,26 +35,36 @@ private inline fun HoneycombInstrumentedComposable(
     composable: @Composable (() -> Unit),
 ) {
     val tracer = LocalOtelComposition.current!!.openTelemetry.tracerProvider.tracerBuilder("ViewInstrumentationPlayground").build()
-    val span = tracer.spanBuilder("Render").setAttribute("view.name", name).startSpan()
+    val span =
+        tracer
+            .spanBuilder("View Render")
+            .setAttribute("view.name", name)
+            .startSpan()
 
-    val mark = markNow()
     span.makeCurrent().use {
-        val duration =
-            measureTime {
-                composable()
+        val bodySpan =
+            tracer
+                .spanBuilder("View Body")
+                .setAttribute("view.name", name)
+                .startSpan()
+
+        bodySpan.makeCurrent().use {
+            val start = markNow()
+            composable()
+            val endTime = Instant.now()
+
+            val bodyDuration = start.elapsedNow()
+            // bodyDuration is in seconds
+            // calling duration.inWholeSeconds would lose precision
+            span.setAttribute("view.renderDuration", bodyDuration.inWholeMicroseconds / 1_000_000.toDouble())
+
+            SideEffect {
+                bodySpan.end(endTime)
+                val renderDuration = start.elapsedNow()
+                span.setAttribute("view.totalDuration", renderDuration.inWholeMicroseconds / 1_000_000.toDouble())
+                span.end()
             }
-
-        // renderDuration is in seconds
-        // calling duration.inWholeSeconds would lose precision
-        span.setAttribute("view.renderDuration", duration.inWholeMicroseconds / 1_000_000.toDouble())
-
-    }
-    val endTime = Instant.now()
-
-    SideEffect {
-        val duration = mark.elapsedNow()
-        span.setAttribute("view.totalDuration", duration.inWholeMicroseconds / 1_000_000.toDouble())
-        span.end(endTime)
+        }
     }
 }
 
