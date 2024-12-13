@@ -9,11 +9,13 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
+import androidx.test.uiautomator.Until
 import org.junit.AfterClass
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -99,6 +101,6 @@ class HoneycombSmokeTest {
             device.findObject(
                 By.text("BACK").clazz("android.widget.Button"),
             )
-        backButton!!.click()
+        backButton!!.clickAndWait(Until.newWindow(), 5000)
     }
 }

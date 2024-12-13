@@ -101,8 +101,19 @@ private fun findTextViewAtPosition(
         }
     }
     if (content is TextView) {
-        val rect = Rect()
-        content.getHitRect(rect)
+        val hitRect = Rect()
+        content.getHitRect(hitRect)
+
+        val location = IntArray(2)
+        content.getLocationInWindow(location)
+
+        val left = location[0]
+        val top = location[1]
+        val right = left + hitRect.width()
+        val bottom = top + hitRect.height()
+
+        val rect = Rect(left, top, right, bottom)
+
         if (rect.contains(x, y)) {
             return content
         }
@@ -115,13 +126,9 @@ private class InteractionGestureListener(
     val activity: Activity,
 ) : SimpleOnGestureListener() {
     override fun onSingleTapUp(event: MotionEvent): Boolean {
-        val contentView = activity.findViewById<View>(android.R.id.content)
-        val textView = findTextViewAtPosition(contentView, event.x.roundToInt(), event.y.roundToInt())
-        if (textView != null) {
-            val x = event.x.roundToInt()
-            val y = event.y.roundToInt()
-            recordTouchEvent(otelRum, TouchEventType.CLICK, activity, x, y)
-        }
+        val x = event.x.roundToInt()
+        val y = event.y.roundToInt()
+        recordTouchEvent(otelRum, TouchEventType.CLICK, activity, x, y)
         return super.onSingleTapUp(event)
     }
 }
