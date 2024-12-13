@@ -89,7 +89,8 @@ private fun findTextViewAtPosition(
 ): TextView? {
     if (content is ViewGroup) {
         if (content.isShown) {
-            // Assuming that the developer hasn't used setZ, the controls are ordered back to front.
+            // Empirically, this seems to be the order that Android uses to find the touch target,
+            // even if the developer has used setZ to override the render order.
             for (child in content.children.toList().reversed()) {
                 if (child.isShown) {
                     val view = findTextViewAtPosition(child, x, y)
