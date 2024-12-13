@@ -1,5 +1,6 @@
 package io.honeycomb.opentelemetry.android.example
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,6 +9,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -18,27 +20,43 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetryAndroidTheme
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.time.Instant
+import kotlin.time.TimeSource.Monotonic.markNow
 import kotlin.time.measureTime
 
+private const val TAG = "ViewInstrumentation"
+
+/**
+ * Heavily inspired by https://github.com/theapache64/boil/blob/master/files/LogComposition.kt
+ */
 @Composable
-private fun HoneycombInstrumentedComposable(
+@Suppress("NOTHING_TO_INLINE")
+private inline fun HoneycombInstrumentedComposable(
     name: String,
     composable: @Composable (() -> Unit),
 ) {
     val tracer = LocalOtelComposition.current!!.openTelemetry.tracerProvider.tracerBuilder("ViewInstrumentationPlayground").build()
     val span = tracer.spanBuilder("Render").setAttribute("view.name", name).startSpan()
-    span.makeCurrent()
 
-    val duration =
-        measureTime {
-            composable()
-        }
+    val mark = markNow()
+    span.makeCurrent().use {
+        val duration =
+            measureTime {
+                composable()
+            }
 
-    // renderDuration is in seconds
-    // calling duration.inWholeSeconds would lose precision
-    span.setAttribute("view.renderDuration", duration.inWholeMicroseconds / 1_000_000.toDouble())
+        // renderDuration is in seconds
+        // calling duration.inWholeSeconds would lose precision
+        span.setAttribute("view.renderDuration", duration.inWholeMicroseconds / 1_000_000.toDouble())
 
-    span.end()
+    }
+    val endTime = Instant.now()
+
+    SideEffect {
+        val duration = mark.elapsedNow()
+        span.setAttribute("view.totalDuration", duration.inWholeMicroseconds / 1_000_000.toDouble())
+        span.end(endTime)
+    }
 }
 
 @Composable
@@ -68,26 +86,34 @@ private fun DelayedSlider(
 @Composable
 private fun ExpensiveView() {
     val (delay, setDelay) = remember { mutableLongStateOf(1000L) }
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        DelayedSlider(delay = delay, onValueChange = setDelay)
-        HoneycombInstrumentedComposable("expensive text 1") {
-            Text(text = timeConsumingCalculation(delay))
-        }
-        HoneycombInstrumentedComposable("expensive text 2") {
-            Text(text = timeConsumingCalculation(delay))
-        }
-        HoneycombInstrumentedComposable("expensive text 3") {
-            Text(text = timeConsumingCalculation(delay))
-        }
-        HoneycombInstrumentedComposable("nested expensive composable") {
-            NestedExpensiveView(delayMs = delay)
-        }
-        HoneycombInstrumentedComposable("expensive text 4") {
-            Text(text = timeConsumingCalculation(delay))
+
+    HoneycombInstrumentedComposable("main view") {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            DelayedSlider(delay = delay, onValueChange = setDelay)
+
+            HoneycombInstrumentedComposable("expensive text 1") {
+                Text(text = timeConsumingCalculation(delay))
+            }
+
+            HoneycombInstrumentedComposable("expensive text 2") {
+                Text(text = timeConsumingCalculation(delay))
+            }
+
+            HoneycombInstrumentedComposable("expensive text 3") {
+                Text(text = timeConsumingCalculation(delay))
+            }
+
+            HoneycombInstrumentedComposable("nested expensive view") {
+                NestedExpensiveView(delayMs = delay)
+            }
+
+            HoneycombInstrumentedComposable("expensive text 4") {
+                Text(text = timeConsumingCalculation(delay))
+            }
         }
     }
 }
@@ -116,9 +142,9 @@ internal fun ViewInstrumentationPlayground() {
 }
 
 private fun timeConsumingCalculation(delayMs: Long): String {
-    println("starting time consuming calculation")
+    Log.d(TAG, "starting time consuming calculation")
     Thread.sleep(delayMs)
-    return "slow text: ${BigDecimal.valueOf(delayMs / 1000).setScale(2, RoundingMode.HALF_UP)} seconds"
+    return "slow text: ${BigDecimal.valueOf(delayMs / 1000.toDouble()).setScale(2, RoundingMode.HALF_UP)} seconds"
 }
 
 @Preview(showBackground = true)
