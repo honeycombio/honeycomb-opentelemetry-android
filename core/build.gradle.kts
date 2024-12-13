@@ -61,6 +61,7 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.auto.service.annotations)
     implementation(libs.instrumentation.activity)
     implementation(libs.instrumentation.anr)
     implementation(libs.instrumentation.crash)

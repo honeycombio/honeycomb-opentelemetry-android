@@ -82,6 +82,7 @@ class Honeycomb {
             val crashInstrumentation = CrashReporterInstrumentation()
             val lifecycleInstrumentation = ActivityLifecycleInstrumentation()
             val slowRenderingInstrumentation = SlowRenderingInstrumentation()
+            val windowInstrumentation = WindowInstrumentation()
 
             // Normally, uncaught exception traces have no name, so add one.
             crashInstrumentation.addAttributesExtractor(
@@ -113,6 +114,7 @@ class Honeycomb {
                 .addInstrumentation(crashInstrumentation)
                 .addInstrumentation(lifecycleInstrumentation)
                 .addInstrumentation(slowRenderingInstrumentation)
+                .addInstrumentation(windowInstrumentation)
                 .build()
         }
 

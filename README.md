@@ -59,6 +59,9 @@ The following auto-instrumentation libraries are automatically included:
 * [`io.opentelemetry.android:instrumentation-crash`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/crash)
 * [`io.opentelemetry.android:instrumentation-slowrendering`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/slowrendering)
 
+The following additional auto-instrumentation is implemented in this library:
+* UI interaction in XML-based Activities.
+
 ### Activity Lifecycle Instrumentation
 
 A trace is emitted before, during, and after each stage of the [Android Activity Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle).
@@ -125,3 +128,21 @@ Network instrumentation is not included by default but can be configured on top 
 * [`io.opentelemetry.android:okhttp-3.0`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/okhttp/okhttp-3.0)
 
 Configuration of each of these packages is described in their respective READMEs.
+
+### UI Interaction Instrumentation
+
+Various touch events are instrumented for `TextView` fields, such as:
+* `Touch Began` - A touch started
+* `Touch Ended` - A touch ended
+* `click` - A "tap"
+
+These events may have the following attributes.
+* `view.class` - e.g. `"android.widget.Button"`
+* `view.accessibilityClassName` - The [`accessibilityClassName`](https://developer.android.com/reference/android/widget/TextView#getAccessibilityClassName()) for the view.
+   Usually the same as `view.class`.
+* `view.text` - The text of the `TextView`.
+* `view.id` - The XML ID of the view element, as an integer.
+* `view.id.entry` - The text form of the XML ID of the view element.
+* `view.id.package` - The package for the XML ID of the view.
+* `view.name` - The "best" available name of the view, given the other identifiers. Usually the same as `view.id.entry`.
+
