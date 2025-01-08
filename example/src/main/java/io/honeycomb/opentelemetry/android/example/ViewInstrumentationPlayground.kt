@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetryAndroidTheme
 import java.math.BigDecimal
@@ -34,7 +35,7 @@ private inline fun HoneycombInstrumentedComposable(
     name: String,
     composable: @Composable (() -> Unit),
 ) {
-    val tracer = LocalOtelComposition.current!!.openTelemetry.tracerProvider.tracerBuilder("ViewInstrumentationPlayground").build()
+    val tracer = LocalOtelComposition.current!!.openTelemetry.tracerProvider.tracerBuilder("io.honeycomb.render-instrumentation").build()
     val span =
         tracer
             .spanBuilder("View Render")
@@ -142,7 +143,11 @@ internal fun ViewInstrumentationPlayground() {
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(text = "enable slow render")
-            Switch(checked = enabled, onCheckedChange = setEnabled)
+            Switch(
+                checked = enabled,
+                onCheckedChange = setEnabled,
+                modifier = Modifier.testTag("slow_render_switch")
+            )
         }
         if (enabled) {
             ExpensiveView()

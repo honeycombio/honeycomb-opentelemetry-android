@@ -1,7 +1,10 @@
 package io.honeycomb.opentelemetry.android.example
 
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.text.intl.Locale
@@ -103,5 +106,19 @@ class HoneycombSmokeTest {
 
         val backButton: UiObject2? = device.findObject(buttonSelector("Back"))
         backButton!!.clickAndWait(Until.newWindow(), 1000)
+    }
+
+    @Test
+    fun renderInstrumentation_works() {
+        rule.onNodeWithText("Render").performClick()
+        rule.onNodeWithTag("slow_render_switch").performClick()
+
+        rule.waitUntil(5000) {
+            rule.onAllNodesWithText("slow text", true).assertCountEquals(5)
+
+            true
+        }
+
+        rule.onNodeWithText("Core").performClick()
     }
 }
