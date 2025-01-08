@@ -9,7 +9,6 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -18,61 +17,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
+import io.honeycomb.opentelemetry.android.HoneycombInstrumentedComposable
 import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetryAndroidTheme
 import java.math.BigDecimal
 import java.math.RoundingMode
-import java.time.Instant
-import kotlin.time.TimeSource.Monotonic.markNow
 
 private const val TAG = "ViewInstrumentation"
-
-/**
- * Heavily inspired by https://github.com/theapache64/boil/blob/master/files/LogComposition.kt
- */
-@Composable
-@Suppress("NOTHING_TO_INLINE")
-private inline fun HoneycombInstrumentedComposable(
-    name: String,
-    composable: @Composable (() -> Unit),
-) {
-    val tracer = LocalOtelComposition.current!!.openTelemetry.tracerProvider.tracerBuilder("io.honeycomb.render-instrumentation").build()
-    val span =
-        tracer
-            .spanBuilder("View Render")
-            .setAttribute("view.name", name)
-            .startSpan()
-
-    span.makeCurrent().use {
-        val bodySpan =
-            tracer
-                .spanBuilder("View Body")
-                .setAttribute("view.name", name)
-                .startSpan()
-
-        bodySpan.makeCurrent().use {
-            val start = markNow()
-            composable()
-            val endTime = Instant.now()
-
-            val bodyDuration = start.elapsedNow()
-            // bodyDuration is in seconds
-            // calling duration.inWholeSeconds would lose precision
-            span.setAttribute("view.renderDuration", bodyDuration.inWholeMicroseconds / 1_000_000.toDouble())
-
-            SideEffect {
-                bodySpan.end(endTime)
-                val renderDuration = start.elapsedNow()
-                span.setAttribute("view.totalDuration", renderDuration.inWholeMicroseconds / 1_000_000.toDouble())
-                span.end()
-            }
-        }
-    }
-}
 
 @Composable
 private fun NestedExpensiveView(delayMs: Long) {
     Row {
-        HoneycombInstrumentedComposable("nested expensive text") {
+        HoneycombInstrumentedComposable("nested expensive text", LocalOtelComposition.current!!.openTelemetry) {
             Text(text = timeConsumingCalculation(delayMs))
         }
     }
@@ -97,7 +52,7 @@ private fun DelayedSlider(
 private fun ExpensiveView() {
     val (delay, setDelay) = remember { mutableLongStateOf(1000L) }
 
-    HoneycombInstrumentedComposable("main view") {
+    HoneycombInstrumentedComposable("main view", LocalOtelComposition.current!!.openTelemetry) {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -105,23 +60,23 @@ private fun ExpensiveView() {
         ) {
             DelayedSlider(delay = delay, onValueChange = setDelay)
 
-            HoneycombInstrumentedComposable("expensive text 1") {
+            HoneycombInstrumentedComposable("expensive text 1", LocalOtelComposition.current!!.openTelemetry) {
                 Text(text = timeConsumingCalculation(delay))
             }
 
-            HoneycombInstrumentedComposable("expensive text 2") {
+            HoneycombInstrumentedComposable("expensive text 2", LocalOtelComposition.current!!.openTelemetry) {
                 Text(text = timeConsumingCalculation(delay))
             }
 
-            HoneycombInstrumentedComposable("expensive text 3") {
+            HoneycombInstrumentedComposable("expensive text 3", LocalOtelComposition.current!!.openTelemetry) {
                 Text(text = timeConsumingCalculation(delay))
             }
 
-            HoneycombInstrumentedComposable("nested expensive view") {
+            HoneycombInstrumentedComposable("nested expensive view", LocalOtelComposition.current!!.openTelemetry) {
                 NestedExpensiveView(delayMs = delay)
             }
 
-            HoneycombInstrumentedComposable("expensive text 4") {
+            HoneycombInstrumentedComposable("expensive text 4", LocalOtelComposition.current!!.openTelemetry) {
                 Text(text = timeConsumingCalculation(delay))
             }
         }
@@ -146,7 +101,7 @@ internal fun ViewInstrumentationPlayground() {
             Switch(
                 checked = enabled,
                 onCheckedChange = setEnabled,
-                modifier = Modifier.testTag("slow_render_switch")
+                modifier = Modifier.testTag("slow_render_switch"),
             )
         }
         if (enabled) {
