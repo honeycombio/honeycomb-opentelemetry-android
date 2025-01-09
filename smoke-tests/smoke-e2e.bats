@@ -13,8 +13,8 @@ teardown_file() {
 }
 
 @test "SDK only installs instrumentation once" {
-  result=$(sessions_started | wc -l)
-  assert_equal "$result" "       1"
+  result=$(sessions_started | wc -l | tr -d ' ')
+  assert_equal "$result" "1"
 }
 
 @test "SDK can send spans" {
