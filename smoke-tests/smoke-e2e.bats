@@ -12,6 +12,11 @@ teardown_file() {
   cp collector/data.json collector/data-results/data-${CONTAINER_NAME}.json
 }
 
+@test "SDK only installs instrumentation once" {
+  result=$(sessions_started | wc -l)
+  assert_equal "$result" "       1"
+}
+
 @test "SDK can send spans" {
   result=$(span_names_for ${SMOKE_TEST_SCOPE})
   assert_equal "$result" '"test-span"'

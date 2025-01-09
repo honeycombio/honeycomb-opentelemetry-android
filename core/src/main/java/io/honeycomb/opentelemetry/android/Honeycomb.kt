@@ -78,42 +78,18 @@ class Honeycomb {
                 Resource.builder().putAll(createAttributes(options.resourceAttributes)).build()
             val rumConfig = OtelRumConfig()
 
-            val anrInstrumentation = AnrInstrumentation()
-            val crashInstrumentation = CrashReporterInstrumentation()
-            val lifecycleInstrumentation = ActivityLifecycleInstrumentation()
-            val slowRenderingInstrumentation = SlowRenderingInstrumentation()
             val windowInstrumentation = WindowInstrumentation()
-
-            // Normally, uncaught exception traces have no name, so add one.
-            crashInstrumentation.addAttributesExtractor(
-                AttributesExtractor.constant(
-                    AttributeKey.stringKey("name"),
-                    "UncaughtException",
-                ),
-            )
-
-            val batchSpanProcessor = BatchSpanProcessor.builder(traceExporter).build()
 
             return OpenTelemetryRum.builder(app, rumConfig)
                 .setResource(resource)
-                .addTracerProviderCustomizer { builder, _ ->
-                    builder.setResource(resource)
-                    builder.addSpanProcessor(batchSpanProcessor)
-                }
+                .addSpanExporterCustomizer { traceExporter }
+                .addLogRecordExporterCustomizer { logsExporter }
                 .addMeterProviderCustomizer { builder, _ ->
                     builder.setResource(resource)
                     builder.registerMetricReader(
                         PeriodicMetricReader.builder(metricsExporter).build(),
                     )
                 }
-                .addLoggerProviderCustomizer { builder, _ ->
-                    builder.setResource(resource)
-                    builder.addLogRecordProcessor(SimpleLogRecordProcessor.create(logsExporter))
-                }
-                .addInstrumentation(anrInstrumentation)
-                .addInstrumentation(crashInstrumentation)
-                .addInstrumentation(lifecycleInstrumentation)
-                .addInstrumentation(slowRenderingInstrumentation)
                 .addInstrumentation(windowInstrumentation)
                 .build()
         }
