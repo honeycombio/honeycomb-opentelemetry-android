@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Honeycomb OpenTelemetry Android"
 include(":core")
 include(":example")
+include(":compose")
