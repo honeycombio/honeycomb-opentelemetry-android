@@ -1,6 +1,8 @@
 # Releasing
 
 - `Add steps to prepare release`
+- Update version numbers in build.gradle.kts for core and compose packages.
+  - also in core/src/test and core/src/androidTest as necessary (do a project wide search to find the right instances)
 - Update `CHANGELOG.md` with the changes since the last release.
 - Commit changes, push, and open a release preparation pull request for review.
 - Once the pull request is merged, fetch the updated `main` branch.
