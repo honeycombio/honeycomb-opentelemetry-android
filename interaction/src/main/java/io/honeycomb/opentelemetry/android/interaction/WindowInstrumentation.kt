@@ -1,4 +1,4 @@
-package io.honeycomb.opentelemetry.android
+package io.honeycomb.opentelemetry.android.interaction
 
 import android.app.Activity
 import android.app.Application
@@ -310,6 +310,11 @@ class WindowInstrumentation : AndroidInstrumentation {
         application: Application,
         openTelemetryRum: OpenTelemetryRum,
     ) {
+        println("registering window instrumentation")
         application.registerActivityLifecycleCallbacks(InteractionLifecycleCallbacks(openTelemetryRum))
+    }
+
+    fun exists() {
+        println("hello")
     }
 }

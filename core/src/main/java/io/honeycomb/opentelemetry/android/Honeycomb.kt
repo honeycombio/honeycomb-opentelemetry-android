@@ -66,7 +66,7 @@ class Honeycomb {
                 Resource.getDefault().toBuilder().putAll(createAttributes(options.resourceAttributes)).build()
             val rumConfig = OtelRumConfig()
 
-            val windowInstrumentation = WindowInstrumentation()
+//            val windowInstrumentation = io.honeycomb.opentelemetry.android.interaction.WindowInstrumentation()
 
             return OpenTelemetryRum.builder(app, rumConfig)
                 .setResource(resource)
@@ -81,7 +81,7 @@ class Honeycomb {
                         PeriodicMetricReader.builder(metricsExporter).build(),
                     )
                 }
-                .addInstrumentation(windowInstrumentation)
+//                .addInstrumentation(windowInstrumentation)
                 .build()
         }
 
