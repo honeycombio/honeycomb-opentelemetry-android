@@ -1,5 +1,9 @@
 # Honeycomb Android SDK changelog
 
+## v0.0.3-alpha
+
+* fix: Fixes a bug with duplicate auto-instrumentation
+
 ## v0.0.2-alpha
 
 * feat: Add touch auto-instrumentation for XML-based TextViews
