@@ -8,13 +8,10 @@ import io.opentelemetry.sdk.trace.ReadableSpan
 import io.opentelemetry.sdk.trace.SpanProcessor
 
 class HoneycombBaggageSpanProcessor(val filter: (String, BaggageEntry) -> Boolean): SpanProcessor {
-
     override fun onStart(parentContext: Context, span: ReadWriteSpan) {
-        Baggage.fromContextOrNull(parentContext)?.let { baggage ->
-            baggage.forEach { key, entry ->
-                if (filter(key, entry)) {
-                    span.setAttribute(key, entry.value)
-                }
+        Baggage.current().forEach { key, entry ->
+            if (filter(key, entry)) {
+                span.setAttribute(key, entry.value)
             }
         }
     }

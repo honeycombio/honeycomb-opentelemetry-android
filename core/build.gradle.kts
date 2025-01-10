@@ -72,10 +72,12 @@ dependencies {
     implementation(libs.opentelemetry.exporter.logging.otlp)
     implementation(libs.opentelemetry.exporter.otlp)
     implementation(libs.opentelemetry.instrumentation.api)
+    implementation(libs.opentelemetry.baggage.processor)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.opentelemetry.sdk.testing)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
