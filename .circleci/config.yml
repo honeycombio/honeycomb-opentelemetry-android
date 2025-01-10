@@ -65,6 +65,8 @@ jobs:
           command: ./gradlew assembleRelease
       - store_artifacts:
           path: core/build/outputs/aar
+      - store_artifacts:
+          path: compose/build/outputs/aar
   publish_maven:
     executor:
       name: android/android-machine
