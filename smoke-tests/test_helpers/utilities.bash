@@ -6,11 +6,27 @@
 #   $2 - span name
 #   $3 - view.name
 spans_on_view_named() {
+	spans_with_attribute_value "$1" "$2" view.name "$3"
+}
+
+# Session IDs associated with a cold start.
+sessions_started() {
+	spans_with_attribute_value "io.opentelemetry.lifecycle" "AppStart" "start.type" "cold" \
+	    | jq ".attributes?[]? | select(.key? == \"session.id\").value.stringValue"
+}
+
+# Spans matching a particular attribute.
+# Arguments:
+#   $1 - scope
+#   $2 - span name
+#   $3 - attribute key
+#   $4 - attribute value
+spans_with_attribute_value() {
     spans_received | jq ".scopeSpans[] \
         | select(.scope.name == \"$1\").spans[] \
         | select (.name == \"$2\") as \$span \
         | .attributes?[]? \
-        | select (.key? == \"view.name\" and .value.stringValue == \"$3\") \
+        | select (.key? == \"$3\" and .value.stringValue == \"$4\") \
         | \$span"
 }
 
