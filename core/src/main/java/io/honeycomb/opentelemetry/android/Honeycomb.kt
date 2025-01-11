@@ -36,7 +36,6 @@ private fun createAttributes(dict: Map<String, String>): Attributes {
 //       https://github.com/honeycombio/specs/blob/main/specs/otel-sdk-distro.md
 //
 // * DeterministicSampler.
-// * BaggageSpanProcessor.
 // * Debug logging.
 //
 // TODO: Add options for enabling/disabling specific instrumentation.
