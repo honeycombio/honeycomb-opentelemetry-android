@@ -4,6 +4,7 @@ import android.app.Application
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.config.OtelRumConfig
 import io.opentelemetry.api.common.Attributes
+import io.opentelemetry.contrib.baggage.processor.BaggageSpanProcessor
 import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingMetricExporter
 import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingSpanExporter
 import io.opentelemetry.exporter.otlp.http.logs.OtlpHttpLogRecordExporter
@@ -75,6 +76,9 @@ class Honeycomb {
             return OpenTelemetryRum.builder(app, rumConfig)
                 .setResource(resource)
                 .addSpanExporterCustomizer { traceExporter }
+                .addTracerProviderCustomizer { builder, _ ->
+                    builder.addSpanProcessor(BaggageSpanProcessor.allowAllBaggageKeys())
+                }
                 .addLogRecordExporterCustomizer { logsExporter }
                 .addMeterProviderCustomizer { builder, _ ->
                     builder.setResource(resource)
