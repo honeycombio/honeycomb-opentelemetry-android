@@ -36,7 +36,6 @@ private fun createAttributes(dict: Map<String, String>): Attributes {
 //
 // * DeterministicSampler.
 // * BaggageSpanProcessor.
-// * Debug logging.
 //
 // TODO: Add options for enabling/disabling specific instrumentation.
 
@@ -49,6 +48,10 @@ class Honeycomb {
             app: Application,
             options: HoneycombOptions,
         ): OpenTelemetryRum {
+            if (options.debug) {
+                configureDebug(options)
+            }
+
             val traceExporter = buildSpanExporter(options)
             val metricsExporter = buildMetricsExporter(options)
             val logsExporter =
