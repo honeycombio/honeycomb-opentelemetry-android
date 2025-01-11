@@ -16,9 +16,10 @@ import io.opentelemetry.api.baggage.Baggage
 private fun onSendSpan(otelRum: OpenTelemetryRum?) {
     val otel = otelRum?.openTelemetry
     val tracer = otel?.getTracer("@honeycombio/smoke-test")
-    val baggage = Baggage.builder()
-        .put("baggage-key", "baggage-value")
-        .build()
+    val baggage =
+        Baggage.builder()
+            .put("baggage-key", "baggage-value")
+            .build()
     baggage.makeCurrent().use {
         val span = tracer?.spanBuilder("test-span")?.startSpan()
         Thread.sleep(50)
