@@ -61,7 +61,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.runtime.android)
+    implementation(libs.androidx.runtime.compose)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
 
