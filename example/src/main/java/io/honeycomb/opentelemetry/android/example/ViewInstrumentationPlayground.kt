@@ -10,7 +10,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -19,16 +18,17 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import io.honeycomb.opentelemetry.android.HoneycombInstrumentedComposable
 import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetryAndroidTheme
-import java.math.BigDecimal
-import java.math.RoundingMode
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.Duration.Companion.milliseconds
 
 private const val TAG = "ViewInstrumentation"
 
 @Composable
-private fun NestedExpensiveView(delayMs: Long) {
+private fun NestedExpensiveView(delay: Duration) {
     Row {
         HoneycombInstrumentedComposable("nested expensive text", LocalOtelComposition.current!!.openTelemetry) {
-            Text(text = timeConsumingCalculation(delayMs))
+            Text(text = timeConsumingCalculation(delay))
         }
     }
 }
@@ -36,13 +36,13 @@ private fun NestedExpensiveView(delayMs: Long) {
 @Composable
 private fun DelayedSlider(
     delay: Long,
-    onValueChange: (Long) -> Unit,
+    onValueChange: (Duration) -> Unit,
 ) {
     val (sliderDelay, setSliderDelay) = remember { mutableFloatStateOf(delay.toFloat()) }
     Slider(
         value = sliderDelay,
         onValueChange = setSliderDelay,
-        onValueChangeFinished = { onValueChange(sliderDelay.toLong()) },
+        onValueChangeFinished = { onValueChange(sliderDelay.toLong().milliseconds) },
         valueRange = 0f..4000f,
         steps = 7,
     )
@@ -50,7 +50,7 @@ private fun DelayedSlider(
 
 @Composable
 private fun ExpensiveView() {
-    val (delay, setDelay) = remember { mutableLongStateOf(1000L) }
+    val (delay, setDelay) = remember { mutableStateOf(1000L.milliseconds) }
 
     HoneycombInstrumentedComposable("main view", LocalOtelComposition.current!!.openTelemetry) {
         Column(
@@ -58,7 +58,7 @@ private fun ExpensiveView() {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            DelayedSlider(delay = delay, onValueChange = setDelay)
+            DelayedSlider(delay = delay.toLong(DurationUnit.MILLISECONDS), onValueChange = setDelay)
 
             HoneycombInstrumentedComposable("expensive text 1", LocalOtelComposition.current!!.openTelemetry) {
                 Text(text = timeConsumingCalculation(delay))
@@ -73,7 +73,7 @@ private fun ExpensiveView() {
             }
 
             HoneycombInstrumentedComposable("nested expensive view", LocalOtelComposition.current!!.openTelemetry) {
-                NestedExpensiveView(delayMs = delay)
+                NestedExpensiveView(delay = delay)
             }
 
             HoneycombInstrumentedComposable("expensive text 4", LocalOtelComposition.current!!.openTelemetry) {
@@ -110,10 +110,10 @@ internal fun ViewInstrumentationPlayground() {
     }
 }
 
-private fun timeConsumingCalculation(delayMs: Long): String {
+private fun timeConsumingCalculation(delay: Duration): String {
     Log.d(TAG, "starting time consuming calculation")
-    Thread.sleep(delayMs)
-    return "slow text: ${BigDecimal.valueOf(delayMs / 1000.toDouble()).setScale(2, RoundingMode.HALF_UP)} seconds"
+    Thread.sleep(delay.toLong(DurationUnit.MILLISECONDS))
+    return "slow text: ${delay.toDouble(DurationUnit.SECONDS)} seconds"
 }
 
 @Preview(showBackground = true)
