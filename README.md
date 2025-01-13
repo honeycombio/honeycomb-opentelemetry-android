@@ -146,3 +146,28 @@ These events may have the following attributes.
 * `view.id.package` - The package for the XML ID of the view.
 * `view.name` - The "best" available name of the view, given the other identifiers. Usually the same as `view.id.entry`.
 
+## Manual Instrumentation
+
+### Android Compose
+Wrap your SwiftUI views with `HoneycombInstrumentedComposable(name: String, otelRum: OpenTelemetry)`, like so:
+
+```
+@Composable
+private fun MyComposable() {
+    HoneycombInstrumentedComposable("main view", openTelemetry) {
+        // ...
+    }
+}
+```
+
+This will measure and emit instrumentation for your Composable's render times, ex:
+
+Specifically, it will emit 2 kinds of span for each composable that is wrapped:
+
+`View Render` spans encompass the entire rendering process, from initialization to appearing on screen. They include the following attributes:
+- `view.name` (string): the name passed to `HoneycombInstrumentedComposable`
+- `view.renderDuration` (double): amount of time to spent initializing the contents of `HoneycombInstrumentedComposable`
+- `view.totalDuration` (double): amount of time from when the contents of `HoneycombInstrumentedComposable` start initializing to when the contents appear on screen
+
+`View Body` spans encompass just the contents of the `HoneycombInstrumentedView`, and include the following attributes:
+- `view.name` (string): the name passed to `HoneycombInstrumentedComposable`
