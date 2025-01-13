@@ -20,6 +20,9 @@ teardown_file() {
 @test "SDK can send spans" {
   result=$(span_names_for ${SMOKE_TEST_SCOPE})
   assert_equal "$result" '"test-span"'
+
+  baggage=$(attribute_for_span_key ${SMOKE_TEST_SCOPE} "test-span" "baggage-key" "string")
+  assert_equal "$baggage" '"baggage-value"'
 }
 
 @test "SDK can send metrics" {

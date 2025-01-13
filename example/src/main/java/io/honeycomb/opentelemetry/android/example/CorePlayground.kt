@@ -11,13 +11,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetryAndroidTheme
 import io.opentelemetry.android.OpenTelemetryRum
+import io.opentelemetry.api.baggage.Baggage
 
 private fun onSendSpan(otelRum: OpenTelemetryRum?) {
     val otel = otelRum?.openTelemetry
     val tracer = otel?.getTracer("@honeycombio/smoke-test")
-    val span = tracer?.spanBuilder("test-span")?.startSpan()
-    Thread.sleep(50)
-    span?.end()
+    val baggage =
+        Baggage.builder()
+            .put("baggage-key", "baggage-value")
+            .build()
+    baggage.makeCurrent().use {
+        val span = tracer?.spanBuilder("test-span")?.startSpan()
+        Thread.sleep(50)
+        span?.end()
+    }
 }
 
 private fun onSendMetrics(otelRum: OpenTelemetryRum?) {
