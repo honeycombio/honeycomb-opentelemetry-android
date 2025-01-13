@@ -9,7 +9,7 @@ import java.time.Instant
 import kotlin.time.DurationUnit
 import kotlin.time.TimeSource.Monotonic.markNow
 
-private const val TAG = "HNY OTel Compose" // max 23 characters :sob:
+private const val TAG = "HoneycombInstrumentedCo" // max 23 characters :sob:
 
 /**
  * Heavily inspired by https://github.com/theapache64/boil/blob/master/files/LogComposition.kt

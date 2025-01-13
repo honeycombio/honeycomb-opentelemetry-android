@@ -189,8 +189,8 @@ Specifically, it will emit 2 kinds of span for each composable that is wrapped:
 
 `View Render` spans encompass the entire rendering process, from initialization to appearing on screen. They include the following attributes:
 - `view.name` (string): the name passed to `HoneycombInstrumentedComposable`
-- `view.renderDuration` (double): amount of time to spent initializing the contents of `HoneycombInstrumentedComposable`
-- `view.totalDuration` (double): amount of time from when the contents of `HoneycombInstrumentedComposable` start initializing to when the contents appear on screen
+- `view.renderDuration` (double): amount of time in seconds to spent initializing the contents of `HoneycombInstrumentedComposable`
+- `view.totalDuration` (double): amount of time in seconds from when the contents of `HoneycombInstrumentedComposable` start initializing to when the contents appear on screen
 
 `View Body` spans encompass just the contents of the `HoneycombInstrumentedView`, and include the following attributes:
 - `view.name` (string): the name passed to `HoneycombInstrumentedComposable`
