@@ -14,9 +14,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Straighten
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Straighten
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -24,6 +26,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.honeycomb.opentelemetry.android.LocalOpenTelemetryRum
 import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetryAndroidTheme
 import io.opentelemetry.android.OpenTelemetryRum
 
@@ -47,6 +51,7 @@ enum class PlaygroundTab(
     CORE("Core", Icons.Outlined.Home, Icons.Filled.Home),
     UI("UI", Icons.Outlined.Palette, Icons.Filled.Palette),
     NETWORK("Network", Icons.Outlined.Language, Icons.Filled.Language),
+    VIEW_INSTRUMENTATION("Render", Icons.Outlined.Straighten, Icons.Filled.Straighten),
 }
 
 /**
@@ -63,16 +68,18 @@ class MainActivity : ComponentActivity() {
         setContent {
             val currentTab = remember { mutableStateOf(PlaygroundTab.CORE) }
 
-            HoneycombOpenTelemetryAndroidTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    bottomBar = { NavBar(currentTab) },
-                ) { innerPadding ->
-                    Playground(
-                        otelRum,
-                        currentTab,
-                        modifier = Modifier.padding(innerPadding),
-                    )
+            CompositionLocalProvider(LocalOpenTelemetryRum provides otelRum) {
+                HoneycombOpenTelemetryAndroidTheme {
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        bottomBar = { NavBar(currentTab) },
+                    ) { innerPadding ->
+                        Playground(
+                            otelRum,
+                            currentTab,
+                            modifier = Modifier.padding(innerPadding),
+                        )
+                    }
                 }
             }
         }
@@ -89,7 +96,10 @@ fun Playground(
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.fillMaxSize().padding(20.dp),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(20.dp),
     ) {
         Text(
             text =
@@ -103,11 +113,14 @@ fun Playground(
             PlaygroundTab.CORE -> {
                 CorePlayground(otel)
             }
-            PlaygroundTab.UI -> {
-                UIPlayground()
-            }
             PlaygroundTab.NETWORK -> {
                 NetworkPlayground()
+            }
+            PlaygroundTab.VIEW_INSTRUMENTATION -> {
+                ViewInstrumentationPlayground()
+            }
+            PlaygroundTab.UI -> {
+                UIPlayground()
             }
         }
     }

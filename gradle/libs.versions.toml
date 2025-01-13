@@ -6,6 +6,7 @@ appcompat = "1.7.0"
 autoService = "1.1.1"
 bytebuddy = "1.15.5"
 composeBom = "2024.04.01"
+composeRuntime = "1.7.6"
 constraintlayout = "2.1.4"
 coreKtx = "1.13.1"
 desugarLibs = "2.1.2"
@@ -39,6 +40,7 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "j
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+androidx-runtime-compose = { group = "androidx.compose.runtime", name = "runtime-android", version.ref = "composeRuntime" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }

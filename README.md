@@ -146,3 +146,51 @@ These events may have the following attributes.
 * `view.id.package` - The package for the XML ID of the view.
 * `view.name` - The "best" available name of the view, given the other identifiers. Usually the same as `view.id.entry`.
 
+## Manual Instrumentation
+
+### Android Compose
+#### Setup
+Initialize the `Honeycomb` sdk, and then wrap your entire app in a `CompositionLocalProvider` that provides `LocalOpenTelemetryRum`, as so:
+
+```kotlin
+import io.honeycomb.opentelemetry.android.LocalOpenTelemetryRum
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val app = application as ExampleApp
+        val otelRum = app.otelRum
+
+        setContent {
+            CompositionLocalProvider(LocalOpenTelemetryRum provides otelRum) {
+                // app content
+            }
+        }
+    }
+}
+```
+
+#### Usage
+Wrap your SwiftUI views with `HoneycombInstrumentedComposable(name: String)`, like so:
+
+```kotlin
+@Composable
+private fun MyComposable() {
+    HoneycombInstrumentedComposable("main view") {
+        // ...
+    }
+}
+```
+
+This will measure and emit instrumentation for your Composable's render times, ex:
+
+Specifically, it will emit 2 kinds of span for each composable that is wrapped:
+
+`View Render` spans encompass the entire rendering process, from initialization to appearing on screen. They include the following attributes:
+- `view.name` (string): the name passed to `HoneycombInstrumentedComposable`
+- `view.renderDuration` (double): amount of time in seconds to spent initializing the contents of `HoneycombInstrumentedComposable`
+- `view.totalDuration` (double): amount of time in seconds from when the contents of `HoneycombInstrumentedComposable` start initializing to when the contents appear on screen
+
+`View Body` spans encompass just the contents of the `HoneycombInstrumentedView`, and include the following attributes:
+- `view.name` (string): the name passed to `HoneycombInstrumentedComposable`
