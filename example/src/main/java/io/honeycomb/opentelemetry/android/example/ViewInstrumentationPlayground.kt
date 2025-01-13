@@ -27,7 +27,7 @@ private const val TAG = "ViewInstrumentation"
 @Composable
 private fun NestedExpensiveView(delay: Duration) {
     Row {
-        HoneycombInstrumentedComposable("nested expensive text", LocalOtelComposition.current!!.openTelemetry) {
+        HoneycombInstrumentedComposable("nested expensive text") {
             Text(text = timeConsumingCalculation(delay))
         }
     }
@@ -52,7 +52,7 @@ private fun DelayedSlider(
 private fun ExpensiveView() {
     val (delay, setDelay) = remember { mutableStateOf(1000L.milliseconds) }
 
-    HoneycombInstrumentedComposable("main view", LocalOtelComposition.current!!.openTelemetry) {
+    HoneycombInstrumentedComposable("main view") {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -60,23 +60,23 @@ private fun ExpensiveView() {
         ) {
             DelayedSlider(delay = delay.toLong(DurationUnit.MILLISECONDS), onValueChange = setDelay)
 
-            HoneycombInstrumentedComposable("expensive text 1", LocalOtelComposition.current!!.openTelemetry) {
+            HoneycombInstrumentedComposable("expensive text 1") {
                 Text(text = timeConsumingCalculation(delay))
             }
 
-            HoneycombInstrumentedComposable("expensive text 2", LocalOtelComposition.current!!.openTelemetry) {
+            HoneycombInstrumentedComposable("expensive text 2") {
                 Text(text = timeConsumingCalculation(delay))
             }
 
-            HoneycombInstrumentedComposable("expensive text 3", LocalOtelComposition.current!!.openTelemetry) {
+            HoneycombInstrumentedComposable("expensive text 3") {
                 Text(text = timeConsumingCalculation(delay))
             }
 
-            HoneycombInstrumentedComposable("nested expensive view", LocalOtelComposition.current!!.openTelemetry) {
+            HoneycombInstrumentedComposable("nested expensive view") {
                 NestedExpensiveView(delay = delay)
             }
 
-            HoneycombInstrumentedComposable("expensive text 4", LocalOtelComposition.current!!.openTelemetry) {
+            HoneycombInstrumentedComposable("expensive text 4") {
                 Text(text = timeConsumingCalculation(delay))
             }
         }

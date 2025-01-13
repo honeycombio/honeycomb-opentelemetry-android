@@ -29,7 +29,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
-import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -37,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.honeycomb.opentelemetry.android.LocalOpenTelemetryRum
 import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetryAndroidTheme
 import io.opentelemetry.android.OpenTelemetryRum
 
@@ -54,8 +54,6 @@ enum class PlaygroundTab(
     VIEW_INSTRUMENTATION("Render", Icons.Outlined.Straighten, Icons.Filled.Straighten),
 }
 
-val LocalOtelComposition = compositionLocalOf<OpenTelemetryRum?> { null }
-
 /**
  * An activity with various UI elements that cause telemetry to be emitted.
  */
@@ -70,7 +68,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val currentTab = remember { mutableStateOf(PlaygroundTab.CORE) }
 
-            CompositionLocalProvider(LocalOtelComposition provides otelRum) {
+            CompositionLocalProvider(LocalOpenTelemetryRum provides otelRum) {
                 HoneycombOpenTelemetryAndroidTheme {
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),

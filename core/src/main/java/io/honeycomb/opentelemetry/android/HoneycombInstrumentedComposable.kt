@@ -1,11 +1,15 @@
 package io.honeycomb.opentelemetry.android
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import io.opentelemetry.api.OpenTelemetry
+import androidx.compose.runtime.compositionLocalOf
+import io.opentelemetry.android.OpenTelemetryRum
 import java.time.Instant
 import kotlin.time.DurationUnit
 import kotlin.time.TimeSource.Monotonic.markNow
+
+private const val TAG = "HNY OTel Compose" // max 23 characters :sob:
 
 /**
  * Heavily inspired by https://github.com/theapache64/boil/blob/master/files/LogComposition.kt
@@ -13,9 +17,16 @@ import kotlin.time.TimeSource.Monotonic.markNow
 @Composable
 fun HoneycombInstrumentedComposable(
     name: String,
-    otelRum: OpenTelemetry,
     composable: @Composable (() -> Unit),
 ) {
+    if (LocalOpenTelemetryRum.current == null) {
+        Log.w(TAG, "No LocalOpenTelemetryRum provided!")
+
+        composable()
+        return
+    }
+
+    val otelRum = LocalOpenTelemetryRum.current!!.openTelemetry
     val tracer = otelRum.tracerProvider.tracerBuilder("io.honeycomb.render-instrumentation").build()
     val span =
         tracer
@@ -49,3 +60,5 @@ fun HoneycombInstrumentedComposable(
         }
     }
 }
+
+val LocalOpenTelemetryRum = compositionLocalOf<OpenTelemetryRum?> { null }

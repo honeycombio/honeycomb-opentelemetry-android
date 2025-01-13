@@ -149,12 +149,35 @@ These events may have the following attributes.
 ## Manual Instrumentation
 
 ### Android Compose
-Wrap your SwiftUI views with `HoneycombInstrumentedComposable(name: String, otelRum: OpenTelemetry)`, like so:
+#### Setup
+Initialize the `Honeycomb` sdk, and then wrap your entire app in a `CompositionLocalProvider` that provides `LocalOpenTelemetryRum`, as so:
 
+```kotlin
+import io.honeycomb.opentelemetry.android.LocalOpenTelemetryRum
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val app = application as ExampleApp
+        val otelRum = app.otelRum
+
+        setContent {
+            CompositionLocalProvider(LocalOpenTelemetryRum provides otelRum) {
+                // app content
+            }
+        }
+    }
+}
 ```
+
+#### Usage
+Wrap your SwiftUI views with `HoneycombInstrumentedComposable(name: String)`, like so:
+
+```kotlin
 @Composable
 private fun MyComposable() {
-    HoneycombInstrumentedComposable("main view", openTelemetry) {
+    HoneycombInstrumentedComposable("main view") {
         // ...
     }
 }
