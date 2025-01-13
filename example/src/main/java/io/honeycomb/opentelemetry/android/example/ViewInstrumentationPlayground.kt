@@ -19,8 +19,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.honeycomb.opentelemetry.android.HoneycombInstrumentedComposable
 import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetryAndroidTheme
 import kotlin.time.Duration
-import kotlin.time.DurationUnit
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.DurationUnit
 
 private const val TAG = "ViewInstrumentation"
 
