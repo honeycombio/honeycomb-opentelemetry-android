@@ -1,12 +1,12 @@
 package io.honeycomb.opentelemetry.android
 
+import android.util.Log
+
+private val TAG = "HoneycombDebug"
+
 internal fun configureDebug(options: HoneycombOptions) {
     if (options.debug) {
-        print("🐝 Honeycomb SDK Debug Mode Enabled 🐝")
-
-        print("API Key configured for traces: ${options.tracesApiKey}")
-        print("Service Name configured for traces: ${options.serviceName}")
-        print("Endpoint configured for traces: ${options.tracesEndpoint}")
-        print("Sample Rate configured for traces: ${options.sampleRate}")
+        Log.d(TAG, "🐝 Honeycomb SDK Debug Mode Enabled 🐝")
+        Log.d(TAG, "Honeycomb options: $options")
     }
 }
