@@ -21,6 +21,10 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.DurationUnit
+
+val UI_WAIT_TIMEOUT = 10.seconds
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -63,7 +67,7 @@ class HoneycombSmokeTest {
         rule.onNodeWithText("Network").performClick()
         rule.onNodeWithText("Make a Network Request").performClick()
 
-        rule.waitUntil(5000) {
+        rule.waitUntil(UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS)) {
             rule.onNodeWithText("Network Request Succeeded", true).isDisplayed()
         }
     }
@@ -77,7 +81,8 @@ class HoneycombSmokeTest {
     fun slowRendersDetection_works() {
         rule.onNodeWithText("UI").performClick()
         rule.onNodeWithText("Slow").performClick()
-        Thread.sleep(1000)
+        // Let it do slow renders for two seconds to capture some traces.
+        Thread.sleep(2000)
         rule.onNodeWithText("Normal").performClick()
     }
 
@@ -85,7 +90,8 @@ class HoneycombSmokeTest {
     fun frozenRendersDetection_works() {
         rule.onNodeWithText("UI").performClick()
         rule.onNodeWithText("Frozen").performClick()
-        Thread.sleep(1000)
+        // Let it do frozen renders for two seconds to capture some traces.
+        Thread.sleep(2000)
         rule.onNodeWithText("Normal").performClick()
     }
 
@@ -99,13 +105,23 @@ class HoneycombSmokeTest {
         rule.onNodeWithText("Start XML UI").performClick()
 
         val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.wait(Until.hasObject(buttonSelector("Example Button")), 1000)
 
-        val exampleButton: UiObject2? = device.findObject(buttonSelector("Example Button"))
+        val exampleButton: UiObject2? =
+            device.wait(
+                Until.findObject(buttonSelector("Example Button")),
+                UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS),
+            )
         exampleButton!!.click()
 
-        val backButton: UiObject2? = device.findObject(buttonSelector("Back"))
-        backButton!!.clickAndWait(Until.newWindow(), 1000)
+        val backButton: UiObject2? =
+            device.wait(
+                Until.findObject(buttonSelector("Back")),
+                UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS),
+            )
+        backButton!!.clickAndWait(
+            Until.newWindow(),
+            UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS),
+        )
     }
 
     @Test
@@ -113,9 +129,8 @@ class HoneycombSmokeTest {
         rule.onNodeWithText("Render").performClick()
         rule.onNodeWithTag("slow_render_switch").performClick()
 
-        rule.waitUntil(5000) {
+        rule.waitUntil(UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS)) {
             rule.onAllNodesWithText("slow text", true).assertCountEquals(5)
-
             true
         }
 
