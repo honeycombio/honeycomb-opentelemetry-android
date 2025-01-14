@@ -32,14 +32,6 @@ private fun createAttributes(dict: Map<String, String>): Attributes {
     return builder.build()
 }
 
-// TODO: Implement the following features.
-//       https://github.com/honeycombio/specs/blob/main/specs/otel-sdk-distro.md
-//
-// * DeterministicSampler.
-// * Debug logging.
-//
-// TODO: Add options for enabling/disabling specific instrumentation.
-
 class Honeycomb {
     companion object {
         /**
@@ -49,6 +41,10 @@ class Honeycomb {
             app: Application,
             options: HoneycombOptions,
         ): OpenTelemetryRum {
+            if (options.debug) {
+                configureDebug(options)
+            }
+
             val traceExporter = buildSpanExporter(options)
             val metricsExporter = buildMetricsExporter(options)
             val logsExporter =
