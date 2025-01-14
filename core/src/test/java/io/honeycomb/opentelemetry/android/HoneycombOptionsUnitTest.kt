@@ -167,7 +167,7 @@ class HoneycombOptionsUnitTest {
             mapOf(
                 "service.name" to "service",
                 "resource" to "aaa",
-                "honeycomb.distro.version" to "0.0.1-experimental2",
+                "honeycomb.distro.version" to "0.0.0-DEVELOPMENT",
                 "honeycomb.distro.runtime_version" to "unknown",
             ),
             options.resourceAttributes,

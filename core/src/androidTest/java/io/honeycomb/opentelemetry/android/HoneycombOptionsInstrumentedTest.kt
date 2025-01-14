@@ -26,7 +26,7 @@ class HoneycombOptionsInstrumentedTest {
         assertEquals(
             mapOf(
                 "service.name" to "unknown_service",
-                "honeycomb.distro.version" to "0.0.1-experimental2",
+                "honeycomb.distro.version" to "0.0.0-DEVELOPMENT",
                 "honeycomb.distro.runtime_version" to Build.VERSION.RELEASE,
             ),
             options.resourceAttributes,

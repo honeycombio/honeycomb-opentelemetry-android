@@ -18,7 +18,7 @@ android {
             minCompileSdk = 21
         }
 
-        buildConfigField("String", "HONEYCOMB_DISTRO_VERSION", "\"0.0.1-experimental2\"")
+        buildConfigField("String", "HONEYCOMB_DISTRO_VERSION", "\"${project.version}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -101,7 +101,7 @@ publishing {
             create<MavenPublication>("release") {
                 groupId = "io.honeycomb.android"
                 artifactId = "honeycomb-opentelemetry-android"
-                version = "0.0.1-experimental2"
+                version = project.version.toString()
 
                 afterEvaluate {
                     from(components["release"])
