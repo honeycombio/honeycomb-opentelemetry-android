@@ -162,12 +162,15 @@ class HoneycombOptionsUnitTest {
             )
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
 
+        var expectedVersion = System.getenv("CIRCLE_TAG")
+        expectedVersion = expectedVersion?.slice(1 until expectedVersion.length) ?: "0.0.0-DEVELOPMENT"
+
         assertEquals("service", options.serviceName)
         assertEquals(
             mapOf(
                 "service.name" to "service",
                 "resource" to "aaa",
-                "honeycomb.distro.version" to "0.0.0-DEVELOPMENT",
+                "honeycomb.distro.version" to expectedVersion,
                 "honeycomb.distro.runtime_version" to "unknown",
             ),
             options.resourceAttributes,

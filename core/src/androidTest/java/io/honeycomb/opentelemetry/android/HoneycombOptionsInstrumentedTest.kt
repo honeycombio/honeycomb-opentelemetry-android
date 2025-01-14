@@ -23,10 +23,14 @@ class HoneycombOptionsInstrumentedTest {
     fun runtimeVersion_isAutomaticallySet() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val options = HoneycombOptions.builder(context).build()
+
+        var expectedVersion = System.getenv("CIRCLE_TAG")
+        expectedVersion = expectedVersion?.slice(1 until expectedVersion.length) ?: "0.0.0-DEVELOPMENT"
+
         assertEquals(
             mapOf(
                 "service.name" to "unknown_service",
-                "honeycomb.distro.version" to "0.0.0-DEVELOPMENT",
+                "honeycomb.distro.version" to expectedVersion,
                 "honeycomb.distro.runtime_version" to Build.VERSION.RELEASE,
             ),
             options.resourceAttributes,
