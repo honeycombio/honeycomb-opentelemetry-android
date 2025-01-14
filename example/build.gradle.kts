@@ -85,6 +85,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.material)
     implementation(project(":core"))
+    implementation(project(":compose"))
 
     testImplementation(libs.junit)
 

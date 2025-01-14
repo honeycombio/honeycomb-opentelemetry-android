@@ -153,7 +153,7 @@ These events may have the following attributes.
 Initialize the `Honeycomb` sdk, and then wrap your entire app in a `CompositionLocalProvider` that provides `LocalOpenTelemetryRum`, as so:
 
 ```kotlin
-import io.honeycomb.opentelemetry.android.LocalOpenTelemetryRum
+import io.honeycomb.opentelemetry.android.compose.LocalOpenTelemetryRum
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -172,7 +172,7 @@ class MainActivity : ComponentActivity() {
 ```
 
 #### Usage
-Wrap your SwiftUI views with `HoneycombInstrumentedComposable(name: String)`, like so:
+Wrap your Composables with `HoneycombInstrumentedComposable(name: String)`, like so:
 
 ```kotlin
 @Composable

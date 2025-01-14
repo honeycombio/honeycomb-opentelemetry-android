@@ -1,4 +1,4 @@
-package io.honeycomb.opentelemetry.android
+package io.honeycomb.opentelemetry.android.compose
 
 import android.util.Log
 import androidx.compose.runtime.Composable
