@@ -25,7 +25,7 @@ import java.io.File
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
 
-val UI_WAIT_TIMEOUT = 10.seconds
+val UI_WAIT_TIMEOUT = 5.seconds
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -100,18 +100,27 @@ class HoneycombSmokeTest {
         return By.text(text.toUpperCase(Locale.current)).clazz("android.widget.Button")
     }
 
-    @Test
-    fun touchInstrumentation_works() {
-        rule.onNodeWithText("UI").performClick()
-        rule.onNodeWithText("Start XML UI").performClick()
-
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        val exampleButton: UiObject2? =
+    /**
+     * Attempts to get the button with the given text, or else throws.
+     * This function will retry multiple times, and deal with any ANR dialogs in the way.
+     */
+    private fun getButton(
+        device: UiDevice,
+        text: String,
+        retries: Int = 3
+    ): UiObject2 {
+        // Attempt to get the button.
+        val button: UiObject2? =
             device.wait(
-                Until.findObject(buttonSelector("Example Button")),
+                Until.findObject(buttonSelector(text)),
                 UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS),
             )
-        if (exampleButton == null) {
+        if (button != null) {
+            return button
+        }
+
+        if (retries <= 0) {
+            // We failed, so attempt to take a screenshot and throw an exception.
             // This is a special directory that will be saved to the build directory after the test finishes.
             val screenshotPath = File("/sdcard/Android/media/io.honeycomb.opentelemetry.android.example/additional_test_output/failure.png")
             if (device.takeScreenshot(screenshotPath)) {
@@ -120,14 +129,32 @@ class HoneycombSmokeTest {
                 throw RuntimeException("Example Button missing. Unable to take screenshot.")
             }
         }
-        exampleButton.click()
 
-        val backButton: UiObject2? =
+        // If the Activity doesn't load in a few seconds, then it probably actually has loaded,
+        // but cannot be found because of something like an ANR dialog blocking the app.
+        // If it _is_ an ANR dialog, then attempt to close it.
+        val waitButton: UiObject2? =
             device.wait(
-                Until.findObject(buttonSelector("Back")),
+                Until.findObject(buttonSelector("Wait")),
                 UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS),
             )
-        backButton!!.clickAndWait(
+        waitButton?.click()
+
+        return getButton(device, text, retries - 1)
+    }
+
+    @Test
+    fun touchInstrumentation_works() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        rule.onNodeWithText("UI").performClick()
+        rule.onNodeWithText("Start XML UI").performClick()
+
+        val exampleButton = getButton(device, "Example Button")
+        exampleButton.click()
+
+        val backButton = getButton(device, "Back")
+        backButton.clickAndWait(
             Until.newWindow(),
             UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS),
         )
