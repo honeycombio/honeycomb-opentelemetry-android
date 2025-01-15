@@ -100,18 +100,17 @@ class HoneycombSmokeTest {
         return By.text(text.toUpperCase(Locale.current)).clazz("android.widget.Button")
     }
 
+    @Test
     fun touchInstrumentation_works() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-
         rule.onNodeWithText("UI").performClick()
         rule.onNodeWithText("Start XML UI").performClick()
 
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
         val exampleButton: UiObject2? =
             device.wait(
                 Until.findObject(buttonSelector("Example Button")),
                 UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS),
             )
-
         if (exampleButton == null) {
             // This is a special directory that will be saved to the build directory after the test finishes.
             val screenshotPath = File("/sdcard/Android/media/io.honeycomb.opentelemetry.android.example/additional_test_output/failure.png")
