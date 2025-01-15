@@ -135,7 +135,7 @@ class HoneycombSmokeTest {
         // If it _is_ an ANR dialog, then attempt to close it.
         val waitButton: UiObject2? =
             device.wait(
-                Until.findObject(buttonSelector("Wait")),
+                Until.findObject(By.text("Wait")),
                 UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS),
             )
         waitButton?.click()
