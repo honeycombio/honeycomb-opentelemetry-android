@@ -5,6 +5,11 @@ orbs:
   android: circleci/android@2.5
   bats: circleci/bats@1.0.0
 
+parameters:
+  java-version:
+    type: integer
+    default: 17
+
 jobs:
   unit_test:
     executor:
@@ -14,6 +19,8 @@ jobs:
     steps:
       - checkout
       - android/restore-gradle-cache
+      - android/change-java-version:
+          java-version: << pipeline.parameters.java-version >>
       - android/run-tests:
           test-command: ./gradlew testDebug
       - android/save-gradle-cache
@@ -25,6 +32,8 @@ jobs:
     steps:
       - checkout
       - android/restore-gradle-cache
+      - android/change-java-version:
+          java-version: << pipeline.parameters.java-version >>
       - run:
           name: "Run Spotless"
           command: ./gradlew spotlessCheck
@@ -44,6 +53,8 @@ jobs:
       - run:
           name: "Start Collector & Mock Server"
           command: make smoke-docker
+      - android/change-java-version:
+          java-version: << pipeline.parameters.java-version >>
       - android/start-emulator-and-run-tests:
           system-image: system-images;android-30;google_apis;x86
           test-command: ./gradlew :example:connectedDebugAndroidTest
@@ -59,6 +70,8 @@ jobs:
     steps:
       - checkout
       - android/restore-gradle-cache
+      - android/change-java-version:
+          java-version: << pipeline.parameters.java-version >>
       - android/restore-build-cache
       - run:
           name: Assemble release build
@@ -72,6 +85,8 @@ jobs:
       tag: default
     steps:
       - checkout
+      - android/change-java-version:
+          java-version: << pipeline.parameters.java-version >>
       - run:
           name: "Publish Artifacts to Maven"
           command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
