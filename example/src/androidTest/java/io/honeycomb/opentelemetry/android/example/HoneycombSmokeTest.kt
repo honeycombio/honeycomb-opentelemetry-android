@@ -107,7 +107,7 @@ class HoneycombSmokeTest {
     private fun getButton(
         device: UiDevice,
         text: String,
-        retries: Int = 3
+        retries: Int = 3,
     ): UiObject2 {
         // Attempt to get the button.
         val button: UiObject2? =
