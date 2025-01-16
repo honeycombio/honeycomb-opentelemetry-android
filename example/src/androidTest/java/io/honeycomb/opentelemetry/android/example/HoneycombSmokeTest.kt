@@ -25,7 +25,11 @@ import java.io.File
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
 
+// How long to wait for the UI to update between interactions.
 val UI_WAIT_TIMEOUT = 5.seconds
+
+// This is a special directory that will be saved to the build directory after the test finishes.
+const val ADDITIONAL_TEST_OUTPUT_DIRECTORY = "/sdcard/Android/media/io.honeycomb.opentelemetry.android.example/additional_test_output"
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -121,8 +125,7 @@ class HoneycombSmokeTest {
 
         if (retries <= 0) {
             // We failed, so attempt to take a screenshot and throw an exception.
-            // This is a special directory that will be saved to the build directory after the test finishes.
-            val screenshotPath = File("/sdcard/Android/media/io.honeycomb.opentelemetry.android.example/additional_test_output/failure.png")
+            val screenshotPath = File(ADDITIONAL_TEST_OUTPUT_DIRECTORY, "getButton_failure.png")
             if (device.takeScreenshot(screenshotPath)) {
                 throw RuntimeException("Example Button missing. See screenshot at $screenshotPath")
             } else {
