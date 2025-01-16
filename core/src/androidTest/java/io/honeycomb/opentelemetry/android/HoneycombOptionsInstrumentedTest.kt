@@ -29,6 +29,7 @@ class HoneycombOptionsInstrumentedTest {
                 "service.name" to "unknown_service",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to Build.VERSION.RELEASE,
+                "telemetry.sdk.language" to "android",
             ),
             options.resourceAttributes,
         )

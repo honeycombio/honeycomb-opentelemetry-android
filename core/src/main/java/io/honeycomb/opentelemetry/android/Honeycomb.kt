@@ -63,7 +63,7 @@ class Honeycomb {
                 }
 
             val resource =
-                Resource.builder().putAll(createAttributes(options.resourceAttributes)).build()
+                Resource.getDefault().toBuilder().putAll(createAttributes(options.resourceAttributes)).build()
             val rumConfig = OtelRumConfig()
 
             val windowInstrumentation = WindowInstrumentation()

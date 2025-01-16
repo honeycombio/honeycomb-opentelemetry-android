@@ -17,6 +17,19 @@ teardown_file() {
   assert_equal "$result" "1"
 }
 
+@test "SDK sends correct resource attributes" {
+  result=$(resource_attributes_received | sort | uniq)
+  assert_equal "$result" '"honeycomb.distro.runtime_version"
+"honeycomb.distro.version"
+"service.name"
+"telemetry.sdk.language"
+"telemetry.sdk.name"
+"telemetry.sdk.version"'
+
+  result=$(resource_attribute_named "telemetry.sdk.language" "string" | uniq)
+  assert_equal "$result" '"android"'
+}
+
 @test "SDK can send spans" {
   result=$(span_names_for ${SMOKE_TEST_SCOPE})
   assert_equal "$result" '"test-span"'
