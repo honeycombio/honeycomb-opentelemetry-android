@@ -1,12 +1,6 @@
 # Releasing
 
-- Update `CHANGELOG.md` with the changes since the last release.
-  - One quick way to do this is to run:
-    ```shell
-    git log --pretty='%C(green)%d%Creset- %s | %an'
-    ```
-  - Copy the latest commits and paste them into `CHANGELOG.md`
-  - Update the author names to GitHub handles
+- Ensure `CHANGELOG.md` is updated with the changes since the last release, and then change the `Unreleased` heading to the next version number and add a new empty `Unreleased` section.
 - Commit changes, push, and open a release preparation pull request for review.
 - Once the pull request is merged, fetch the updated `main` branch.
 - Apply a tag for the new version on the merged commit (e.g. `git tag -a v1.2.3 -m "v1.2.3"`). The tag **must** start with a `v` in order for the release tooling to pick it up.

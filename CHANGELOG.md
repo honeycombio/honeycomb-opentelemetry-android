@@ -1,5 +1,9 @@
 # Honeycomb Android SDK changelog
 
+## Unreleased
+
+* feat: Add instrumentation helpers for Android Compose
+
 ## v0.0.3-alpha
 
 * fix: Fixes a bug with duplicate auto-instrumentation
