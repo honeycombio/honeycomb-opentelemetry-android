@@ -23,10 +23,11 @@ class HoneycombOptionsInstrumentedTest {
     fun runtimeVersion_isAutomaticallySet() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         val options = HoneycombOptions.builder(context).build()
+
         assertEquals(
             mapOf(
                 "service.name" to "unknown_service",
-                "honeycomb.distro.version" to "0.0.1-alpha",
+                "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to Build.VERSION.RELEASE,
             ),
             options.resourceAttributes,
