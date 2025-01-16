@@ -59,6 +59,8 @@ jobs:
           system-image: system-images;android-30;google_apis;x86
           test-command: ./gradlew :example:connectedDebugAndroidTest
           max-tries: 1
+      - store_artifacts:
+          path: example/build/outputs/connected_android_test_additional_output
       - run:
           name: "Run Smoke Tests"
           command: make smoke-bats

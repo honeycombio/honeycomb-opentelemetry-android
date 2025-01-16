@@ -21,6 +21,15 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.File
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.DurationUnit
+
+// How long to wait for the UI to update between interactions.
+val UI_WAIT_TIMEOUT = 5.seconds
+
+// This is a special directory that will be saved to the build directory after the test finishes.
+const val ADDITIONAL_TEST_OUTPUT_DIRECTORY = "/sdcard/Android/media/io.honeycomb.opentelemetry.android.example/additional_test_output"
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -63,7 +72,7 @@ class HoneycombSmokeTest {
         rule.onNodeWithText("Network").performClick()
         rule.onNodeWithText("Make a Network Request").performClick()
 
-        rule.waitUntil(5000) {
+        rule.waitUntil(UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS)) {
             rule.onNodeWithText("Network Request Succeeded", true).isDisplayed()
         }
     }
@@ -77,7 +86,8 @@ class HoneycombSmokeTest {
     fun slowRendersDetection_works() {
         rule.onNodeWithText("UI").performClick()
         rule.onNodeWithText("Slow").performClick()
-        Thread.sleep(1000)
+        // Let it do slow renders for two seconds to capture some traces.
+        Thread.sleep(2000)
         rule.onNodeWithText("Normal").performClick()
     }
 
@@ -85,7 +95,8 @@ class HoneycombSmokeTest {
     fun frozenRendersDetection_works() {
         rule.onNodeWithText("UI").performClick()
         rule.onNodeWithText("Frozen").performClick()
-        Thread.sleep(1000)
+        // Let it do frozen renders for two seconds to capture some traces.
+        Thread.sleep(2000)
         rule.onNodeWithText("Normal").performClick()
     }
 
@@ -93,19 +104,63 @@ class HoneycombSmokeTest {
         return By.text(text.toUpperCase(Locale.current)).clazz("android.widget.Button")
     }
 
+    /**
+     * Attempts to get the button with the given text, or else throws.
+     * This function will retry multiple times, and deal with any ANR dialogs in the way.
+     */
+    private fun getButton(
+        device: UiDevice,
+        text: String,
+        retries: Int = 3,
+    ): UiObject2 {
+        // Attempt to get the button.
+        val button: UiObject2? =
+            device.wait(
+                Until.findObject(buttonSelector(text)),
+                UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS),
+            )
+        if (button != null) {
+            return button
+        }
+
+        if (retries <= 0) {
+            // We failed, so attempt to take a screenshot and throw an exception.
+            val screenshotPath = File(ADDITIONAL_TEST_OUTPUT_DIRECTORY, "getButton_failure.png")
+            if (device.takeScreenshot(screenshotPath)) {
+                throw RuntimeException("Example Button missing. See screenshot at $screenshotPath")
+            } else {
+                throw RuntimeException("Example Button missing. Unable to take screenshot.")
+            }
+        }
+
+        // If the Activity doesn't load in a few seconds, then it probably actually has loaded,
+        // but cannot be found because of something like an ANR dialog blocking the app.
+        // If it _is_ an ANR dialog, then attempt to close it.
+        val waitButton: UiObject2? =
+            device.wait(
+                Until.findObject(By.text("Wait")),
+                UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS),
+            )
+        waitButton?.click()
+
+        return getButton(device, text, retries - 1)
+    }
+
     @Test
     fun touchInstrumentation_works() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
         rule.onNodeWithText("UI").performClick()
         rule.onNodeWithText("Start XML UI").performClick()
 
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.wait(Until.hasObject(buttonSelector("Example Button")), 1000)
+        val exampleButton = getButton(device, "Example Button")
+        exampleButton.click()
 
-        val exampleButton: UiObject2? = device.findObject(buttonSelector("Example Button"))
-        exampleButton!!.click()
-
-        val backButton: UiObject2? = device.findObject(buttonSelector("Back"))
-        backButton!!.clickAndWait(Until.newWindow(), 1000)
+        val backButton = getButton(device, "Back")
+        backButton.clickAndWait(
+            Until.newWindow(),
+            UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS),
+        )
     }
 
     @Test
@@ -113,9 +168,8 @@ class HoneycombSmokeTest {
         rule.onNodeWithText("Render").performClick()
         rule.onNodeWithTag("slow_render_switch").performClick()
 
-        rule.waitUntil(5000) {
+        rule.waitUntil(UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS)) {
             rule.onAllNodesWithText("slow text", true).assertCountEquals(5)
-
             true
         }
 
