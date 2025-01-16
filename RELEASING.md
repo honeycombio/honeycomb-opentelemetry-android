@@ -1,5 +1,6 @@
 # Releasing
 
+- Update the version number in the README (ie. the installation instructions)
 - Ensure `CHANGELOG.md` is updated with the changes since the last release, and then change the `Unreleased` heading to the next version number and add a new empty `Unreleased` section.
 - Commit changes, push, and open a release preparation pull request for review.
 - Once the pull request is merged, fetch the updated `main` branch.
