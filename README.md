@@ -12,7 +12,7 @@ Honeycomb wrapper for [OpenTelemetry](https://opentelemetry.io) on Android.
 Add the following dependencies to your `build.gradle.kts`:
 ```
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.1-alpha")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.3-alpha")
 }
 ```
 
@@ -150,10 +150,17 @@ These events may have the following attributes.
 
 ### Android Compose
 #### Setup
-Initialize the `Honeycomb` sdk, and then wrap your entire app in a `CompositionLocalProvider` that provides `LocalOpenTelemetryRum`, as so:
+Android Compose instrumentation is included in a standalone library. Add the following to your dependencies in `build.gradle.kts`:
+```
+dependencies {
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android-compose:0.0.3-alpha")
+}
+```
+
+After you initialize the `Honeycomb` sdk, wrap your entire app in a `CompositionLocalProvider` that provides `LocalOpenTelemetryRum`, as so:
 
 ```kotlin
-import io.honeycomb.opentelemetry.android.LocalOpenTelemetryRum
+import io.honeycomb.opentelemetry.android.compose.LocalOpenTelemetryRum
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -172,7 +179,7 @@ class MainActivity : ComponentActivity() {
 ```
 
 #### Usage
-Wrap your SwiftUI views with `HoneycombInstrumentedComposable(name: String)`, like so:
+Wrap your Composables with `HoneycombInstrumentedComposable(name: String)`, like so:
 
 ```kotlin
 @Composable

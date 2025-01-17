@@ -446,6 +446,12 @@ data class HoneycombOptions(
                 Build.VERSION.RELEASE ?: "unknown",
             )
 
+            // The language is technically Kotlin, but Android apps can be Java or Kotlin or both, so:
+            resourceAttributes.putIfAbsent(
+                "telemetry.sdk.language",
+                "android",
+            )
+
             val tracesApiKey = this.tracesApiKey ?: defaultApiKey()
             val metricsApiKey = this.metricsApiKey ?: defaultApiKey()
             val logsApiKey = this.logsApiKey ?: defaultApiKey()

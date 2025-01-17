@@ -16,7 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
-import io.honeycomb.opentelemetry.android.HoneycombInstrumentedComposable
+import io.honeycomb.opentelemetry.android.compose.HoneycombInstrumentedComposable
 import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetryAndroidTheme
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds

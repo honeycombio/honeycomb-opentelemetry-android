@@ -60,6 +60,7 @@ class HoneycombOptionsUnitTest {
                 "service.name" to "unknown_service",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
             ),
             options.resourceAttributes,
         )
@@ -115,6 +116,7 @@ class HoneycombOptionsUnitTest {
                 "service.name" to "unknown_service",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
             ),
             options.resourceAttributes,
         )
@@ -161,14 +163,14 @@ class HoneycombOptionsUnitTest {
                 "OTEL_EXPORTER_OTLP_PROTOCOL" to "http/json",
             )
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
-
         assertEquals("service", options.serviceName)
         assertEquals(
             mapOf(
                 "service.name" to "service",
                 "resource" to "aaa",
-                "honeycomb.distro.version" to "0.0.3-alpha",
+                "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
             ),
             options.resourceAttributes,
         )
@@ -241,6 +243,7 @@ class HoneycombOptionsUnitTest {
                 "resource" to "aaa",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
             ),
             options.resourceAttributes,
         )
@@ -330,6 +333,7 @@ class HoneycombOptionsUnitTest {
                 "resource" to "aaa",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
             ),
             options.resourceAttributes,
         )
@@ -409,6 +413,7 @@ class HoneycombOptionsUnitTest {
                 "resource" to "aaa",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
             ),
             options.resourceAttributes,
         )
@@ -619,6 +624,7 @@ class HoneycombOptionsUnitTest {
                 "service.name" to "resource_name",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
             ),
             options.resourceAttributes,
         )
@@ -638,6 +644,7 @@ class HoneycombOptionsUnitTest {
                 "service.name" to "better",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
             ),
             options.resourceAttributes,
         )
@@ -653,6 +660,7 @@ class HoneycombOptionsUnitTest {
                 "service.name" to "unknown_service",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
             ),
             options.resourceAttributes,
         )

@@ -17,6 +17,19 @@ teardown_file() {
   assert_equal "$result" "1"
 }
 
+@test "SDK sends correct resource attributes" {
+  result=$(resource_attributes_received | sort | uniq)
+  assert_equal "$result" '"honeycomb.distro.runtime_version"
+"honeycomb.distro.version"
+"service.name"
+"telemetry.sdk.language"
+"telemetry.sdk.name"
+"telemetry.sdk.version"'
+
+  result=$(resource_attribute_named "telemetry.sdk.language" "string" | uniq)
+  assert_equal "$result" '"android"'
+}
+
 @test "SDK captures Activity Lifecycle events" {
     # This test is primarily to test that OTel integration is working, and the exact order of
     # events depends on the order the tests were run. So, just check that all types are present.

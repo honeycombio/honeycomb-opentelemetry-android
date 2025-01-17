@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "io.honeycomb.opentelemetry.android"
+    namespace = "io.honeycomb.opentelemetry.android.compose"
     compileSdk = 34
 
     defaultConfig {
@@ -80,7 +80,6 @@ dependencies {
     implementation(libs.opentelemetry.exporter.logging.otlp)
     implementation(libs.opentelemetry.exporter.otlp)
     implementation(libs.opentelemetry.instrumentation.api)
-    implementation(libs.opentelemetry.baggage.processor)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
@@ -100,7 +99,7 @@ publishing {
         val maven =
             create<MavenPublication>("release") {
                 groupId = "io.honeycomb.android"
-                artifactId = "honeycomb-opentelemetry-android"
+                artifactId = "honeycomb-opentelemetry-android-compose"
                 version = project.version.toString()
 
                 afterEvaluate {
@@ -108,9 +107,9 @@ publishing {
                 }
 
                 pom {
-                    name = "Honeycomb OpenTelemetry Distribution for Android"
+                    name = "Honeycomb Instrumentation for Android Compose"
                     url = "https://github.com/honeycombio/honeycomb-opentelemetry-android"
-                    description = "Honeycomb SDK for configuring OpenTelemetry instrumentation"
+                    description = "Honeycomb SDK for instrumentating Android Compose applications"
                     licenses {
                         license {
                             name = "The Apache License, Version 2.0"
