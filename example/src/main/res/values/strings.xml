@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">HoneycombExample</string>
+    <string name="app_name">Honeycomb Example</string>
+    <string name="first_fragment">This is the first fragment.</string>
+    <string name="second_fragment">This is the second fragment.</string>
 </resources>
