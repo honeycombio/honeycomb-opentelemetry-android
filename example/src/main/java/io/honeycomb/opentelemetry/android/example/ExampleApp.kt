@@ -3,9 +3,7 @@ package io.honeycomb.opentelemetry.android.example
 import android.app.Application
 import io.honeycomb.opentelemetry.android.Honeycomb
 import io.honeycomb.opentelemetry.android.HoneycombOptions
-import io.honeycomb.opentelemetry.android.interaction.WindowInstrumentation
 import io.opentelemetry.android.OpenTelemetryRum
-import io.opentelemetry.android.instrumentation.AndroidInstrumentationLoader
 import io.opentelemetry.sdk.OpenTelemetrySdk
 
 class ExampleApp : Application() {
@@ -24,12 +22,6 @@ class ExampleApp : Application() {
                 .setMetricsDataset("android-test-metrics")
                 .setDebug(true)
                 .build()
-
-        if (true) { // TODO: how tf does this get installed?
-            val i = AndroidInstrumentationLoader.getInstrumentation(WindowInstrumentation::class.java)
-            println(i)
-            i?.exists()
-        }
 
         otelRum = Honeycomb.configure(this, options)
     }
