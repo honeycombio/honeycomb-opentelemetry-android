@@ -30,6 +30,48 @@ teardown_file() {
   assert_equal "$result" '"android"'
 }
 
+@test "SDK captures Activity Lifecycle events" {
+    # This test is primarily to test that OTel integration is working, and the exact order of
+    # events depends on the order the tests were run. So, just check that all types are present.
+
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Created "activityName" "string" | sort | uniq)
+    assert_equal "$result" '"ClassicActivity"
+"MainActivity"'
+
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Paused "activityName" "string" | sort | uniq)
+    assert_equal "$result" '"ClassicActivity"
+"MainActivity"'
+ 
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Stopped "activityName" "string" | sort | uniq)
+    assert_equal "$result" '"ClassicActivity"
+"MainActivity"'
+
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Destroyed "activityName" "string" | sort | uniq)
+    assert_equal "$result" '"ClassicActivity"
+"MainActivity"'
+}
+
+@test "SDK captures Fragment Lifecycle events" {
+    # This test is primarily to test that OTel integration is working, and the exact order of
+    # events depends on the order the tests were run. So, just check that all types are present.
+
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Created "fragmentName" "string" | sort | uniq)
+    assert_equal "$result" '"FirstFragment"
+"SecondFragment"'
+
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Paused "fragmentName" "string" | sort | uniq)
+    assert_equal "$result" '"FirstFragment"
+"SecondFragment"'
+ 
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Stopped "fragmentName" "string" | sort | uniq)
+    assert_equal "$result" '"FirstFragment"
+"SecondFragment"'
+
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Destroyed "fragmentName" "string" | sort | uniq)
+    assert_equal "$result" '"FirstFragment"
+"SecondFragment"'
+}
+
 @test "SDK can send spans" {
   result=$(span_names_for ${SMOKE_TEST_SCOPE})
   assert_equal "$result" '"test-span"'
@@ -75,7 +117,7 @@ teardown_file() {
     assert_equal "$name" '"example_button"'
 
     class=$(echo "$span" | jq '.attributes[] | select(.key == "view.class").value.stringValue')
-    assert_equal "$class" '"android.widget.Button"'
+    assert_equal "$class" '"androidx.appcompat.widget.AppCompatButton"'
 
     class=$(echo "$span" | jq '.attributes[] | select(.key == "view.accessibilityClassName").value.stringValue')
     assert_equal "$class" '"android.widget.Button"'

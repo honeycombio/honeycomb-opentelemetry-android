@@ -175,4 +175,21 @@ class HoneycombSmokeTest {
 
         rule.onNodeWithText("Core").performClick()
     }
+
+    @Test
+    fun fragmentInstrumentation_works() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+        rule.onNodeWithText("UI").performClick()
+        rule.onNodeWithText("Start XML UI").performClick()
+
+        val secondFragmentButton = getButton(device, "Second Fragment")
+        secondFragmentButton.click()
+
+        val backButton = getButton(device, "Back")
+        backButton.clickAndWait(
+            Until.newWindow(),
+            UI_WAIT_TIMEOUT.toLong(DurationUnit.MILLISECONDS),
+        )
+    }
 }
