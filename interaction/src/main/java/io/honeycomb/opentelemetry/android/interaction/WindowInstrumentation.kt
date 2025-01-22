@@ -310,11 +310,6 @@ class WindowInstrumentation : AndroidInstrumentation {
         application: Application,
         openTelemetryRum: OpenTelemetryRum,
     ) {
-        println("registering window instrumentation")
         application.registerActivityLifecycleCallbacks(InteractionLifecycleCallbacks(openTelemetryRum))
-    }
-
-    fun exists() {
-        println("hello")
     }
 }
