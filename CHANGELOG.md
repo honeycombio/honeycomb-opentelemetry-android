@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* refactor: move touch auto-instrumentation to separate package
+* refactor: Move touch auto-instrumentation to separate package
 * feat: Add instrumentation package for Android Compose
 
 ## v0.0.3-alpha
