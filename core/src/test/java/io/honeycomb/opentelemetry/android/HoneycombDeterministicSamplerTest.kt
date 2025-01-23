@@ -14,7 +14,6 @@ import org.junit.runners.Parameterized.Parameters
 
 @RunWith(Parameterized::class)
 class HoneycombDeterministicSamplerTest(private val args: TestArguments) {
-
     companion object {
         @JvmStatic
         @Parameters
