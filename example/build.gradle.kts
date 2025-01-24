@@ -84,8 +84,9 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.material3)
     implementation(libs.material)
-    implementation(project(":core"))
     implementation(project(":compose"))
+    implementation(project(":core"))
+    implementation(project(":interaction"))
 
     testImplementation(libs.junit)
 

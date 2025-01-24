@@ -1,4 +1,4 @@
-package io.honeycomb.opentelemetry.android
+package io.honeycomb.opentelemetry.android.interaction
 
 import android.app.Activity
 import android.app.Application

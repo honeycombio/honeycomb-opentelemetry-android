@@ -66,8 +66,6 @@ class Honeycomb {
                 Resource.getDefault().toBuilder().putAll(createAttributes(options.resourceAttributes)).build()
             val rumConfig = OtelRumConfig()
 
-            val windowInstrumentation = WindowInstrumentation()
-
             return OpenTelemetryRum.builder(app, rumConfig)
                 .setResource(resource)
                 .addSpanExporterCustomizer { traceExporter }
@@ -81,7 +79,6 @@ class Honeycomb {
                         PeriodicMetricReader.builder(metricsExporter).build(),
                     )
                 }
-                .addInstrumentation(windowInstrumentation)
                 .build()
         }
 
