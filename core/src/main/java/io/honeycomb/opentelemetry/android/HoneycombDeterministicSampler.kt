@@ -40,13 +40,3 @@ class HoneycombDeterministicSampler(private val sampleRate: Int) : Sampler {
         return "DeterministicSampler"
     }
 }
-
-// private class HoneycombDecision(val decision: SamplingDecision, val attributes: Attributes) : SamplingResult {
-//    override fun getDecision(): SamplingDecision {
-//        return decision
-//    }
-//
-//    override fun getAttributes(): Attributes {
-//        return attributes
-//    }
-// }
