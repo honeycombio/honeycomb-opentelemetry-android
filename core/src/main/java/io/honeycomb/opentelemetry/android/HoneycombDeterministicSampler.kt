@@ -1,5 +1,6 @@
 package io.honeycomb.opentelemetry.android
 
+import android.util.Log
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.api.trace.SpanKind
 import io.opentelemetry.context.Context
@@ -7,7 +8,6 @@ import io.opentelemetry.sdk.trace.data.LinkData
 import io.opentelemetry.sdk.trace.samplers.Sampler
 import io.opentelemetry.sdk.trace.samplers.SamplingDecision
 import io.opentelemetry.sdk.trace.samplers.SamplingResult
-import android.util.Log
 
 private val TAG = "HoneycombDeterministicS"
 
