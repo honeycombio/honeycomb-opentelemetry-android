@@ -2,8 +2,9 @@
 
 ## Unreleased
 
+* feat: Add deterministic sampler
 * refactor: Move touch auto-instrumentation to separate package
-* feat: Add instrumentation package for Android Compose
+* feat: Add instrumentation helpers for Android Compose
 
 ## v0.0.3-alpha
 

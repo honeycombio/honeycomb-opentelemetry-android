@@ -12,6 +12,7 @@ coreKtx = "1.13.1"
 desugarLibs = "2.1.2"
 espressoCore = "3.6.1"
 junit = "4.13.2"
+junitParams = "5.8.2"
 junitVersion = "1.2.1"
 kotlin = "1.9.0"
 lifecycleRuntimeKtx = "2.8.3"
@@ -52,6 +53,7 @@ auto-service-annotations = { module = "com.google.auto.service:auto-service-anno
 bytebuddy = { module = "net.bytebuddy:byte-buddy", version.ref = "bytebuddy" }
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarLibs" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junitParams"}
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 opentelemetry-android-agent = { module = "io.opentelemetry.android:android-agent", version.ref = "opentelemetryAndroid" }
