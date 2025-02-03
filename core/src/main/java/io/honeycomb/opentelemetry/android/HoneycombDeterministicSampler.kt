@@ -7,14 +7,20 @@ import io.opentelemetry.sdk.trace.data.LinkData
 import io.opentelemetry.sdk.trace.samplers.Sampler
 import io.opentelemetry.sdk.trace.samplers.SamplingDecision
 import io.opentelemetry.sdk.trace.samplers.SamplingResult
+import android.util.Log
+
+private val TAG = "HoneycombDeterministicS"
 
 class HoneycombDeterministicSampler(private val sampleRate: Int) : Sampler {
     private val inner: Sampler =
         if (sampleRate < 1) {
+            Log.d(TAG, "Sample rate too low, not emitting any spans!")
             Sampler.alwaysOff()
         } else if (sampleRate == 1) {
+            Log.d(TAG, "Not sampling, emitting all spans")
             Sampler.alwaysOn()
         } else {
+            Log.d(TAG, "Sampling enabled: emitting every 1 in $sampleRate spans")
             Sampler.traceIdRatioBased(1.0 / sampleRate)
         }
 
