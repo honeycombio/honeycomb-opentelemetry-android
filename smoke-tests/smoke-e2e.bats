@@ -41,7 +41,7 @@ teardown_file() {
     result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Paused "activityName" "string" | sort | uniq)
     assert_equal "$result" '"ClassicActivity"
 "MainActivity"'
- 
+
     result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Stopped "activityName" "string" | sort | uniq)
     assert_equal "$result" '"ClassicActivity"
 "MainActivity"'
@@ -62,7 +62,7 @@ teardown_file() {
     result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Paused "fragmentName" "string" | sort | uniq)
     assert_equal "$result" '"FirstFragment"
 "SecondFragment"'
- 
+
     result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Stopped "fragmentName" "string" | sort | uniq)
     assert_equal "$result" '"FirstFragment"
 "SecondFragment"'
@@ -75,6 +75,13 @@ teardown_file() {
 @test "SDK can send spans" {
   result=$(span_names_for ${SMOKE_TEST_SCOPE})
   assert_equal "$result" '"test-span"'
+
+  attributes=$(attributes_from_span_named ${SMOKE_TEST_SCOPE} "test-span" | jq .key | sort | uniq)
+  assert_equal "$attributes" '"SampleRate"
+"baggage-key"
+"network.connection.type"
+"screen.name"
+"session.id"'
 
   baggage=$(attribute_for_span_key ${SMOKE_TEST_SCOPE} "test-span" "baggage-key" "string")
   assert_equal "$baggage" '"baggage-value"'
