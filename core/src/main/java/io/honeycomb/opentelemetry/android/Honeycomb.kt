@@ -71,6 +71,7 @@ class Honeycomb {
                 .addSpanExporterCustomizer { traceExporter }
                 .addTracerProviderCustomizer { builder, _ ->
                     builder.addSpanProcessor(BaggageSpanProcessor.allowAllBaggageKeys())
+                    builder.setSampler(HoneycombDeterministicSampler(options.sampleRate))
                 }
                 .addLogRecordExporterCustomizer { logsExporter }
                 .addMeterProviderCustomizer { builder, _ ->
