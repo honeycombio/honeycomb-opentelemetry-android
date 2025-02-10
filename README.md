@@ -50,6 +50,38 @@ To manually send a span:
     span?.end()
 ```
 
+## Configuration Options
+
+| Option               | Type                                            | Required? | Description                                                                                                                                 |
+|----------------------|-------------------------------------------------|-----------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| `apiKey`             | String                                          | Yes       | Default [Honeycomb API Key](https://docs.honeycomb.io/working-with-your-data/settings/api-keys/) to use to send data directly to Honeycomb. |
+| `tracesApiKey`       | String                                          | No        | Dedicated API Key to use when sending traces.                                                                                               |
+| `metricsApiKey`      | String                                          | No        | Dedicated API Key to use when sending metrics.                                                                                              |
+| `logsApiKey`         | String                                          | No        | Dedicated API Key to use when sending logs.                                                                                                 |
+| `dataset`            | String                                          | No        | Name of Honeycomb dataset to send traces to. Required if sending to a classic Honeycomb environment.                                        |
+| `metricsDataset`     | String                                          | No        | Name of Honeycomb dataset to send metrics to, instead of `dataset`.                                                                         |
+| `apiEndpoint`        | String                                          | No        | API endpoint to send data to.                                                                                                               |
+| `tracesEndpoint`     | String                                          | No        | API endpoint to send traces to. Overrides `apiEndpoint` for trace data.                                                                     |
+| `metricsEndpoint`    | String                                          | No        | API endpoint to send metrics to. Overrides `apiEndpoint` for metrics data.                                                                  |
+| `logsEndpoint`       | String                                          | No        | API endpoint to send trace to. Overrides `apiEndpoint` for logs data.                                                                       |
+| `sampleRate`         | Int                                             | No        | Sample rate to apply (ie. a value of `40` means 1 in 40 traces will be exported).                                                           |
+| `debug`              | Boolean                                         | No        | Enable debug logging.                                                                                                                       |
+| `serviceName`        | String?                                         | No        | Name of Honeycomb service to send data to.                                                                                                  |
+| `resourceAttributes` | Map<String, String>                             | No        | Attributes to attach to outgoing resources.                                                                                                 |
+| `headers`            | Map<String, String>                             | No        | Headers to include on exported data.                                                                                                        |
+| `tracesHeaders`      | Map<String, String>                             | No        | Headers to add to exported trace data.                                                                                                      |
+| `metricsHeaders`     | Map<String, String>                             | No        | Headers to add to exported metrics data.                                                                                                    |
+| `logsHeaders`        | Map<String, String>                             | No        | Headers to add to exported logs data.                                                                                                       |
+| `timeout`            | Duration                                        | No        | Timeout used by exporter when sending data.                                                                                                 |
+| `tracesTimeout`      | Duration                                        | No        | Timeout used by traces exporter. Overrides `timeout` for trace data.                                                                        |
+| `metricsTimeout`     | Duration                                        | No        | Timeout used by metrics exporter. Overrides `timeout` for metrics data.                                                                     |
+| `logsTimeout`        | Duration                                        | No        | Timeout used by logs exporter. Overrides `timeout` for logs data.                                                                           |
+| `protocol`           | io.honeycomb.opentelemetry.android.OtlpProtocol | No        | Protocol to use when sending data.                                                                                                          |
+| `tracesProtocol`     | io.honeycomb.opentelemetry.android.OtlpProtocol | No        | Overrides `protocol` for trace data.                                                                                                        |
+| `metricsProtocol`    | io.honeycomb.opentelemetry.android.OtlpProtocol | No        | Overrides `protocol` for metrics data.                                                                                                      |
+| `logsProtocol`       | io.honeycomb.opentelemetry.android.OtlpProtocol | No        | Overrides `protocol` for logs data.                                                                                                         |
+
+
 ## Auto-instrumentation
 
 The following auto-instrumentation libraries are automatically included:
