@@ -26,13 +26,6 @@ private const val OTEL_SERVICE_NAME_KEY = "OTEL_SERVICE_NAME"
 private const val OTEL_SERVICE_NAME_DEFAULT = "unknown_service"
 private const val OTEL_RESOURCE_ATTRIBUTES_KEY = "OTEL_RESOURCE_ATTRIBUTES"
 
-private const val OTEL_TRACES_SAMPLER_KEY = "OTEL_TRACES_SAMPLER"
-private const val OTEL_TRACES_SAMPLER_DEFAULT = "parentbased_always_on"
-private const val OTEL_TRACES_SAMPLER_ARG_KEY = "OTEL_TRACES_SAMPLER_ARG"
-
-private const val OTEL_PROPAGATORS_KEY = "OTEL_PROPAGATORS"
-private const val OTEL_PROPAGATORS_DEFAULT = "tracecontext,baggage"
-
 private const val OTEL_TRACES_EXPORTER_KEY = "OTEL_TRACES_EXPORTER"
 private const val OTEL_METRICS_EXPORTER_KEY = "OTEL_METRICS_EXPORTER"
 private const val OTEL_LOGS_EXPORTER_KEY = "OTEL_METRICS_EXPORTER"
@@ -161,9 +154,6 @@ data class HoneycombOptions(
     val debug: Boolean,
     val serviceName: String,
     val resourceAttributes: Map<String, String>,
-    val tracesSampler: String,
-    val tracesSamplerArg: String?,
-    val propagators: String,
     val tracesHeaders: Map<String, String>,
     val metricsHeaders: Map<String, String>,
     val logsHeaders: Map<String, String>,
@@ -193,9 +183,6 @@ data class HoneycombOptions(
 
         private var serviceName: String? = null
         private var resourceAttributes: Map<String, String> = mapOf()
-        private var tracesSampler: String = OTEL_TRACES_SAMPLER_DEFAULT
-        private var tracesSamplerArg: String? = null
-        private var propagators: String = OTEL_PROPAGATORS_DEFAULT
 
         private var headers: Map<String, String> = mapOf()
         private var tracesHeaders: Map<String, String> = mapOf()
@@ -248,9 +235,6 @@ data class HoneycombOptions(
             debug = source.getBoolean(DEBUG_KEY) ?: debug
             serviceName = source.getString(OTEL_SERVICE_NAME_KEY) ?: serviceName
             resourceAttributes = source.getKeyValueList(OTEL_RESOURCE_ATTRIBUTES_KEY)
-            tracesSampler = source.getString(OTEL_TRACES_SAMPLER_KEY) ?: tracesSampler
-            tracesSamplerArg = source.getString(OTEL_TRACES_SAMPLER_ARG_KEY)
-            propagators = source.getString(OTEL_PROPAGATORS_KEY) ?: propagators
             headers = source.getKeyValueList(OTEL_EXPORTER_OTLP_HEADERS_KEY)
             tracesHeaders = source.getKeyValueList(OTEL_EXPORTER_OTLP_TRACES_HEADERS_KEY)
             metricsHeaders = source.getKeyValueList(OTEL_EXPORTER_OTLP_METRICS_HEADERS_KEY)
@@ -332,21 +316,6 @@ data class HoneycombOptions(
 
         fun setResourceAttributes(resources: Map<String, String>): Builder {
             resourceAttributes = resources
-            return this
-        }
-
-        fun setTracesSampler(sampler: String): Builder {
-            tracesSampler = sampler
-            return this
-        }
-
-        fun setTracesSamplerArg(arg: String?): Builder {
-            tracesSamplerArg = arg
-            return this
-        }
-
-        fun setPropagators(propagators: String): Builder {
-            this.propagators = propagators
             return this
         }
 
@@ -513,9 +482,6 @@ data class HoneycombOptions(
                 debug,
                 serviceName,
                 resourceAttributes,
-                tracesSampler,
-                tracesSamplerArg,
-                propagators,
                 tracesHeaders,
                 metricsHeaders,
                 logsHeaders,
