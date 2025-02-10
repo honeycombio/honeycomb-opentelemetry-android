@@ -65,10 +65,6 @@ class HoneycombOptionsUnitTest {
             options.resourceAttributes,
         )
 
-        assertEquals("parentbased_always_on", options.tracesSampler)
-        assertNull(options.tracesSamplerArg)
-        assertEquals("tracecontext,baggage", options.propagators)
-
         assertEquals("https://api.honeycomb.io:443/v1/traces", options.tracesEndpoint)
         assertEquals("https://api.honeycomb.io:443/v1/metrics", options.metricsEndpoint)
         assertEquals("https://api.honeycomb.io:443/v1/logs", options.logsEndpoint)
@@ -101,9 +97,6 @@ class HoneycombOptionsUnitTest {
                 "HONEYCOMB_API_KEY" to "key",
                 "OTEL_SERVICE_NAME" to "",
                 "OTEL_RESOURCE_ATTRIBUTES" to "",
-                "OTEL_TRACES_SAMPLER" to "",
-                "OTEL_TRACES_SAMPLER_ARG" to "",
-                "OTEL_PROPAGATORS" to "",
                 "OTEL_EXPORTER_OTLP_HEADERS" to "",
                 "OTEL_EXPORTER_OTLP_TIMEOUT" to null,
                 "OTEL_EXPORTER_OTLP_PROTOCOL" to "",
@@ -120,10 +113,6 @@ class HoneycombOptionsUnitTest {
             ),
             options.resourceAttributes,
         )
-
-        assertEquals("parentbased_always_on", options.tracesSampler)
-        assertNull(options.tracesSamplerArg)
-        assertEquals("tracecontext,baggage", options.propagators)
 
         assertEquals("https://api.honeycomb.io:443/v1/traces", options.tracesEndpoint)
         assertEquals("https://api.honeycomb.io:443/v1/metrics", options.metricsEndpoint)
@@ -155,9 +144,6 @@ class HoneycombOptionsUnitTest {
                 "HONEYCOMB_API_ENDPOINT" to "http://example.com:1234",
                 "OTEL_SERVICE_NAME" to "service",
                 "OTEL_RESOURCE_ATTRIBUTES" to "resource=aaa",
-                "OTEL_TRACES_SAMPLER" to "sampler",
-                "OTEL_TRACES_SAMPLER_ARG" to "arg",
-                "OTEL_PROPAGATORS" to "propagators",
                 "OTEL_EXPORTER_OTLP_HEADERS" to "header=bbb",
                 "OTEL_EXPORTER_OTLP_TIMEOUT" to 30000,
                 "OTEL_EXPORTER_OTLP_PROTOCOL" to "http/json",
@@ -174,10 +160,6 @@ class HoneycombOptionsUnitTest {
             ),
             options.resourceAttributes,
         )
-
-        assertEquals("sampler", options.tracesSampler)
-        assertEquals("arg", options.tracesSamplerArg)
-        assertEquals("propagators", options.propagators)
 
         assertEquals("http://example.com:1234/v1/traces", options.tracesEndpoint)
         assertEquals("http://example.com:1234/v1/metrics", options.metricsEndpoint)
@@ -219,9 +201,6 @@ class HoneycombOptionsUnitTest {
                 "DEBUG" to true,
                 "OTEL_SERVICE_NAME" to "service",
                 "OTEL_RESOURCE_ATTRIBUTES" to "resource=aaa",
-                "OTEL_TRACES_SAMPLER" to "sampler",
-                "OTEL_TRACES_SAMPLER_ARG" to "arg",
-                "OTEL_PROPAGATORS" to "propagators",
                 "OTEL_EXPORTER_OTLP_TIMEOUT" to 30000,
                 "OTEL_EXPORTER_OTLP_PROTOCOL" to "http/json",
                 "OTEL_EXPORTER_OTLP_TRACES_HEADERS" to "header=ttt",
@@ -247,10 +226,6 @@ class HoneycombOptionsUnitTest {
             ),
             options.resourceAttributes,
         )
-
-        assertEquals("sampler", options.tracesSampler)
-        assertEquals("arg", options.tracesSamplerArg)
-        assertEquals("propagators", options.propagators)
 
         assertEquals("http://traces.example.com:1234", options.tracesEndpoint)
         assertEquals("http://metrics.example.com:1234", options.metricsEndpoint)
@@ -312,9 +287,6 @@ class HoneycombOptionsUnitTest {
                 .setDebug(true)
                 .setServiceName("service")
                 .setResourceAttributes(mapOf("resource" to "aaa"))
-                .setTracesSampler("sampler")
-                .setTracesSamplerArg("arg")
-                .setPropagators("propagators")
                 .setTracesTimeout(40.seconds)
                 .setMetricsTimeout(50.seconds)
                 .setLogsTimeout(60.seconds)
@@ -337,10 +309,6 @@ class HoneycombOptionsUnitTest {
             ),
             options.resourceAttributes,
         )
-
-        assertEquals("sampler", options.tracesSampler)
-        assertEquals("arg", options.tracesSamplerArg)
-        assertEquals("propagators", options.propagators)
 
         assertEquals("http://traces.example.com:1234", options.tracesEndpoint)
         assertEquals("http://metrics.example.com:1234", options.metricsEndpoint)
@@ -398,9 +366,6 @@ class HoneycombOptionsUnitTest {
                 .setDebug(true)
                 .setServiceName("service")
                 .setResourceAttributes(mapOf("resource" to "aaa"))
-                .setTracesSampler("sampler")
-                .setTracesSamplerArg("arg")
-                .setPropagators("propagators")
                 .setTimeout(30.seconds)
                 .setHeaders(mapOf("header" to "hhh"))
                 .setProtocol(OtlpProtocol.HTTP_JSON)
@@ -417,10 +382,6 @@ class HoneycombOptionsUnitTest {
             ),
             options.resourceAttributes,
         )
-
-        assertEquals("sampler", options.tracesSampler)
-        assertEquals("arg", options.tracesSamplerArg)
-        assertEquals("propagators", options.propagators)
 
         assertEquals("http://api.example.com:1234/v1/traces", options.tracesEndpoint)
         assertEquals("http://api.example.com:1234/v1/metrics", options.metricsEndpoint)
