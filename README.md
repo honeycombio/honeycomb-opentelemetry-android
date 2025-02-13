@@ -180,6 +180,26 @@ These events may have the following attributes.
 
 ## Manual Instrumentation
 
+### Context Propagation
+
+In most cases, OpenTelemetry context will be propagated correctly across function calls, etc. By default, OpenTelemetry context is stored in a `java.lang.ThreadLocal`. However, Kotlin Coroutines may operate across multiple threads, and therefore do not automatically inherit the correct OpenTelemetry context.
+
+Instead, context must be propagated manually, via the [OpenTelemetry Kotlin Extensions](https://github.com/open-telemetry/opentelemetry-java/tree/main/extensions/kotlin).
+
+```gradle
+dependencies {
+  implementation("io.opentelemetry:opentelemetry-extension-kotlin:1.47.0")
+}
+```
+
+Once these are installed, replace any `launch` calls with
+
+```kotlin
+launch(Span.current().asContextElement()) {
+
+}
+```
+
 ### Android Compose
 #### Setup
 Android Compose instrumentation is included in a standalone library. Add the following to your dependencies in `build.gradle.kts`:
