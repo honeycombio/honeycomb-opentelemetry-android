@@ -7,6 +7,9 @@
 * feat: Add deterministic sampler (configurable through the `sampleRate` option)
 * refactor: Move touch auto-instrumentation to separate package
 * feat: Add instrumentation helpers for Android Compose
+* add BaggageSpanProcessor
+* add debug logging in configure
+* include `telemetry.sdk.language` resource attribute
 
 ## v0.0.3-alpha
 
