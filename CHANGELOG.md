@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.0.4-alpha
+
 * feat: Add deterministic sampler (configurable through the `sampleRate` option)
 * refactor: Move touch auto-instrumentation to separate package
 * feat: Add instrumentation helpers for Android Compose
