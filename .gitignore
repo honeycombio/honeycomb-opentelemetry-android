@@ -17,3 +17,8 @@
 .cxx
 local.properties
 .envrc
+
+# smoke test artifacts
+smoke-tests/collector/data-results/data-ios-test.json
+smoke-tests/collector/data.json
+smoke-tests/report.xml
