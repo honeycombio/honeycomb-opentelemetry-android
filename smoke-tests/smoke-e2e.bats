@@ -151,3 +151,7 @@ teardown_file() {
 "nested expensive text"
 "nested expensive view"'
 }
+
+@test "Span Processor gets added correctly" {
+    result=$(spans_received | jq ".attributes[] | select (.key == \"app.metadata\").value.stringValue" "app.metadata" string | uniq)
+}

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Add a `setSpanProcessor()` function to `HoneycombOptions` builder to allow clients to supply custom span processors.
+
 ## v0.0.4-alpha
 
 * feat: Add deterministic sampler (configurable through the `sampleRate` option)
