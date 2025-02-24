@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.0.5-alpha
+
 * Add a `setSpanProcessor()` function to `HoneycombOptions` builder to allow clients to supply custom span processors.
 
 ## v0.0.4-alpha

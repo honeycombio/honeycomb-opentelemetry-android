@@ -12,7 +12,7 @@ Honeycomb wrapper for [OpenTelemetry](https://opentelemetry.io) on Android.
 Add the following dependencies to your `build.gradle.kts`:
 ```
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.4-alpha")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.5-alpha")
 }
 ```
 
