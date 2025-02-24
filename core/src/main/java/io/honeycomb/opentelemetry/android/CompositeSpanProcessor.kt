@@ -5,14 +5,17 @@ import io.opentelemetry.sdk.trace.ReadWriteSpan
 import io.opentelemetry.sdk.trace.ReadableSpan
 import io.opentelemetry.sdk.trace.SpanProcessor
 
-class CompositeSpanProcessor: SpanProcessor {
+class CompositeSpanProcessor : SpanProcessor {
     var spanProcessors: MutableList<SpanProcessor> = ArrayList()
 
     fun addSpanProcessor(spanProcessor: SpanProcessor) {
         this.spanProcessors.add(spanProcessor)
     }
 
-    override fun onStart(parentContext: Context, span: ReadWriteSpan) {
+    override fun onStart(
+        parentContext: Context,
+        span: ReadWriteSpan,
+    ) {
         for (spanProcessor in spanProcessors) {
             spanProcessor.onStart(parentContext, span)
         }

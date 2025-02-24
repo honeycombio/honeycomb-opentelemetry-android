@@ -5,8 +5,11 @@ import io.opentelemetry.sdk.trace.ReadWriteSpan
 import io.opentelemetry.sdk.trace.ReadableSpan
 import io.opentelemetry.sdk.trace.SpanProcessor
 
-class SimpleSpanProcessor: SpanProcessor {
-    override fun onStart(parentContext: Context, span: ReadWriteSpan) {
+class SimpleSpanProcessor : SpanProcessor {
+    override fun onStart(
+        parentContext: Context,
+        span: ReadWriteSpan,
+    ) {
         span.setAttribute("app.metadata", "extra metadata")
     }
 
