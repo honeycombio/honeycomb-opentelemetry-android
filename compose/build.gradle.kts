@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "io.honeycomb.opentelemetry.android.compose"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 21
@@ -42,7 +42,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     kotlinOptions {
         jvmTarget = "1.8"
