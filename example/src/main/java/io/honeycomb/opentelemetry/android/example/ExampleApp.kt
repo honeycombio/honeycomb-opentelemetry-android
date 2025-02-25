@@ -5,6 +5,7 @@ import io.honeycomb.opentelemetry.android.Honeycomb
 import io.honeycomb.opentelemetry.android.HoneycombOptions
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.sdk.OpenTelemetrySdk
+import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
 
 class ExampleApp : Application() {
     var otelRum: OpenTelemetryRum? = null
@@ -20,6 +21,7 @@ class ExampleApp : Application() {
                 .setApiEndpoint("http://10.0.2.2:4318")
                 .setServiceName("android-test")
                 .setMetricsDataset("android-test-metrics")
+                .setSpanProcessor(SimpleSpanProcessor())
                 .setDebug(true)
                 .build()
 

@@ -2,6 +2,7 @@ package io.honeycomb.opentelemetry.android
 
 import android.content.Context
 import android.os.Build
+import io.opentelemetry.sdk.trace.SpanProcessor
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -150,6 +151,7 @@ data class HoneycombOptions(
     val tracesEndpoint: String,
     val metricsEndpoint: String,
     val logsEndpoint: String,
+    val spanProcessor: SpanProcessor?,
     val sampleRate: Int,
     val debug: Boolean,
     val serviceName: String,
@@ -178,6 +180,7 @@ data class HoneycombOptions(
         private var metricsEndpoint: String? = null
         private var logsEndpoint: String? = null
 
+        private var spanProcessor: SpanProcessor? = null
         private var sampleRate: Int = 1
         private var debug: Boolean = false
 
@@ -296,6 +299,11 @@ data class HoneycombOptions(
 
         fun setLogsApiEndpoint(endpoint: String): Builder {
             logsEndpoint = endpoint
+            return this
+        }
+
+        fun setSpanProcessor(spanProcessor: SpanProcessor): Builder {
+            this.spanProcessor = spanProcessor
             return this
         }
 
@@ -478,6 +486,7 @@ data class HoneycombOptions(
                 tracesEndpoint,
                 metricsEndpoint,
                 logsEndpoint,
+                spanProcessor,
                 sampleRate,
                 debug,
                 serviceName,

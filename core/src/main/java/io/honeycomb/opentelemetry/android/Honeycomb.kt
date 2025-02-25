@@ -83,7 +83,12 @@ class Honeycomb {
                 .setResource(resource)
                 .addSpanExporterCustomizer { traceExporter }
                 .addTracerProviderCustomizer { builder, _ ->
-                    builder.addSpanProcessor(BaggageSpanProcessor.allowAllBaggageKeys())
+                    val spanProcessor = CompositeSpanProcessor()
+                    spanProcessor.addSpanProcessor(BaggageSpanProcessor.allowAllBaggageKeys())
+                    options.spanProcessor?.let {
+                        spanProcessor.addSpanProcessor(options.spanProcessor)
+                    }
+                    builder.addSpanProcessor(spanProcessor)
                     builder.setSampler(HoneycombDeterministicSampler(options.sampleRate))
                 }
                 .addLogRecordExporterCustomizer { logsExporter }
