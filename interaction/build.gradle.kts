@@ -13,7 +13,7 @@ plugins {
 
 android {
     namespace = "io.honeycomb.opentelemetry.android.interaction"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 21
