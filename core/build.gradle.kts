@@ -77,6 +77,8 @@ dependencies {
     implementation(libs.opentelemetry.android.agent)
     implementation(libs.opentelemetry.api)
     implementation(libs.opentelemetry.sdk)
+    implementation(libs.opentelemetry.semconv)
+    implementation(libs.opentelemetry.semconv.incubating)
     implementation(libs.opentelemetry.exporter.logging.otlp)
     implementation(libs.opentelemetry.exporter.otlp)
     implementation(libs.opentelemetry.instrumentation.api)

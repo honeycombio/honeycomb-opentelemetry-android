@@ -4,6 +4,8 @@ import android.app.Application
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.config.OtelRumConfig
 import io.opentelemetry.api.common.Attributes
+import io.opentelemetry.api.common.AttributesBuilder
+import io.opentelemetry.api.logs.Logger
 import io.opentelemetry.contrib.baggage.processor.BaggageSpanProcessor
 import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingMetricExporter
 import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingSpanExporter
@@ -13,6 +15,7 @@ import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter
 import io.opentelemetry.exporter.otlp.logs.OtlpGrpcLogRecordExporter
 import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter
+import io.opentelemetry.sdk.OpenTelemetrySdk
 import io.opentelemetry.sdk.common.CompletableResultCode
 import io.opentelemetry.sdk.metrics.InstrumentType
 import io.opentelemetry.sdk.metrics.data.AggregationTemporality
@@ -21,7 +24,17 @@ import io.opentelemetry.sdk.metrics.export.MetricExporter
 import io.opentelemetry.sdk.metrics.export.PeriodicMetricReader
 import io.opentelemetry.sdk.resources.Resource
 import io.opentelemetry.sdk.trace.export.SpanExporter
+import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_STACKTRACE
+import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_TYPE
+import io.opentelemetry.semconv.incubating.EventIncubatingAttributes.EVENT_NAME
+import io.opentelemetry.semconv.incubating.ThreadIncubatingAttributes.THREAD_ID
+import io.opentelemetry.semconv.incubating.ThreadIncubatingAttributes.THREAD_NAME
+import java.io.PrintWriter
+import java.io.StringWriter
 import kotlin.time.toJavaDuration
+
+// TODO: Make this name consistent.
+private const val CRASH_INSTRUMENTATION_NAME = "io.honeycomb.crash"
 
 /** Creates an Attributes object from a String->String Map. */
 private fun createAttributes(dict: Map<String, String>): Attributes {
@@ -81,6 +94,49 @@ class Honeycomb {
                     )
                 }
                 .build()
+        }
+
+        // This code is adapted from the OpenTelemetry crash auto-instrumentation, and should match
+        // the format of the events there.
+        fun logException(otel: OpenTelemetryRum, throwable: Throwable, thread: Thread?) {
+            // TODO: It would be nice to include the common RuntimeDetailsExtractor, in order to
+            // augment the event with additional metadata, such as memory usage and battery percentage.
+            // However, that might require changing this into an entire separate instrumentation
+            // package.
+
+            val sdk = otel.openTelemetry as OpenTelemetrySdk
+            val loggerProvider = sdk.sdkLoggerProvider
+            val logger: Logger = loggerProvider.loggerBuilder(CRASH_INSTRUMENTATION_NAME).build()
+
+            val attributesBuilder: AttributesBuilder =
+                Attributes.builder()
+                    .put(EXCEPTION_STACKTRACE, stackTraceToString(throwable))
+                    .put(EXCEPTION_TYPE, throwable.javaClass.name)
+
+            throwable.message?.let {
+                attributesBuilder.put(EXCEPTION_STACKTRACE, it)
+            }
+
+            thread?.let {
+                attributesBuilder
+                    .put(THREAD_ID, it.id)
+                    .put(THREAD_NAME, it.name)
+            }
+
+            attributesBuilder.put(EVENT_NAME, "device.crash")
+            logger.logRecordBuilder()
+                .setAllAttributes(attributesBuilder.build())
+                .emit()
+        }
+
+        private fun stackTraceToString(throwable: Throwable): String {
+            val sw = StringWriter(256)
+            val pw = PrintWriter(sw)
+
+            throwable.printStackTrace(pw)
+            pw.flush()
+
+            return sw.toString()
         }
 
         private fun buildSpanExporter(options: HoneycombOptions): SpanExporter {
