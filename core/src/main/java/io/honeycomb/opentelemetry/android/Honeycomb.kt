@@ -34,7 +34,6 @@ import java.io.PrintWriter
 import java.io.StringWriter
 import kotlin.time.toJavaDuration
 
-// TODO: Make this name consistent.
 private const val CRASH_INSTRUMENTATION_NAME = "io.honeycomb.crash"
 
 /** Creates an Attributes object from a String->String Map. */
@@ -112,7 +111,7 @@ class Honeycomb {
             // TODO: It would be nice to include the common RuntimeDetailsExtractor, in order to
             // augment the event with additional metadata, such as memory usage and battery percentage.
             // However, that might require changing this into an entire separate instrumentation
-            // package.
+            // package. So for now, just do this.
 
             val sdk = otel.openTelemetry as OpenTelemetrySdk
             val loggerProvider = sdk.sdkLoggerProvider
