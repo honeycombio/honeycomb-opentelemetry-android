@@ -24,6 +24,7 @@ import io.opentelemetry.sdk.metrics.export.MetricExporter
 import io.opentelemetry.sdk.metrics.export.PeriodicMetricReader
 import io.opentelemetry.sdk.resources.Resource
 import io.opentelemetry.sdk.trace.export.SpanExporter
+import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_MESSAGE
 import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_STACKTRACE
 import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_TYPE
 import io.opentelemetry.semconv.incubating.EventIncubatingAttributes.EVENT_NAME
@@ -103,7 +104,7 @@ class Honeycomb {
 
         // This code is adapted from the OpenTelemetry crash auto-instrumentation, and should match
         // the format of the events there.
-        fun logException(otel: OpenTelemetryRum, throwable: Throwable, thread: Thread?) {
+        fun logException(otel: OpenTelemetryRum, throwable: Throwable, thread: Thread? = null) {
             // TODO: It would be nice to include the common RuntimeDetailsExtractor, in order to
             // augment the event with additional metadata, such as memory usage and battery percentage.
             // However, that might require changing this into an entire separate instrumentation
@@ -119,7 +120,7 @@ class Honeycomb {
                     .put(EXCEPTION_TYPE, throwable.javaClass.name)
 
             throwable.message?.let {
-                attributesBuilder.put(EXCEPTION_STACKTRACE, it)
+                attributesBuilder.put(EXCEPTION_MESSAGE, it)
             }
 
             thread?.let {

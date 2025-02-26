@@ -93,6 +93,21 @@ teardown_file() {
   assert_equal "$result" '"ANR"'
 }
 
+@test "SDK can log manual exceptions" {
+  result=$(attribute_for_log_key "io.honeycomb.crash" "event.name" "string")
+  assert_equal "$result" '"device.crash"'
+
+  result=$(attribute_for_log_key "io.honeycomb.crash" "exception.type" "string")
+  assert_equal "$result" '"java.lang.RuntimeException"'
+
+  result=$(attribute_for_log_key "io.honeycomb.crash" "exception.message" "string")
+  assert_equal "$result" '"This exception was intentional."'
+
+  result=$(attribute_for_log_key "io.honeycomb.crash" "exception.stacktrace" "string" \
+    | grep "example.CorePlaygroundKt.onLogException")
+  assert_not_empty "$result"
+}
+
 @test "SDK detects slow renders" {
   result=$(unique_span_names_for "io.opentelemetry.slow-rendering")
   assert_equal "$result" '"frozenRenders"

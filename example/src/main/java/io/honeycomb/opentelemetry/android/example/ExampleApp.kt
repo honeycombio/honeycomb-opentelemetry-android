@@ -30,8 +30,8 @@ class ExampleApp : Application() {
 
     fun flush() {
         val otel = otelRum?.openTelemetry as OpenTelemetrySdk
-        val tracerProvider = otel.sdkTracerProvider
-        tracerProvider.forceFlush()
+        otel.sdkTracerProvider.forceFlush()
+        otel.sdkLoggerProvider.forceFlush()
         otel.shutdown()
         this.otelRum = null
         // Theoretically, flushing and shutting down should be sufficient.

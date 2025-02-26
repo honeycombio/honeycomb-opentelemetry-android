@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import io.honeycomb.opentelemetry.android.Honeycomb
 import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetryAndroidTheme
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.api.baggage.Baggage
@@ -40,6 +41,16 @@ private fun onANR() {
     Thread.sleep(10000)
 }
 
+private fun onLogException(otelRum: OpenTelemetryRum?) {
+    try {
+        throw RuntimeException("This exception was intentional.")
+    } catch (e: Exception) {
+        if (otelRum != null) {
+            Honeycomb.logException(otelRum, e)
+        }
+    }
+}
+
 private fun onCrash() {
     throw RuntimeException("This crash was intentional.")
 }
@@ -64,6 +75,11 @@ internal fun CorePlayground(otel: OpenTelemetryRum? = null) {
         Button(modifier = Modifier.fillMaxWidth(), onClick = { onANR() }) {
             Text(
                 text = "Become Unresponsive (ANR)",
+            )
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = { onLogException(otel) }) {
+            Text(
+                text = "Log Exception",
             )
         }
         Button(modifier = Modifier.fillMaxWidth(), onClick = { onCrash() }) {
