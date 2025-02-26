@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Update instrumentation names to use reverse url notation (`io.honeycomb.instrumentation.*`) instead of `@honeycombio/instrumentation-*` notation.
+
 ## v0.0.5-alpha
 
 * Add a `setSpanProcessor()` function to `HoneycombOptions` builder to allow clients to supply custom span processors.
