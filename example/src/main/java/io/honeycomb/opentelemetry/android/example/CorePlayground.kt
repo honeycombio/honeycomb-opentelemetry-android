@@ -15,7 +15,7 @@ import io.opentelemetry.api.baggage.Baggage
 
 private fun onSendSpan(otelRum: OpenTelemetryRum?) {
     val otel = otelRum?.openTelemetry
-    val tracer = otel?.getTracer("@honeycombio/smoke-test")
+    val tracer = otel?.getTracer("io.honeycomb.smoke-test")
     val baggage =
         Baggage.builder()
             .put("baggage-key", "baggage-value")
@@ -29,7 +29,7 @@ private fun onSendSpan(otelRum: OpenTelemetryRum?) {
 
 private fun onSendMetrics(otelRum: OpenTelemetryRum?) {
     val otel = otelRum?.openTelemetry
-    val meter = otel?.getMeter("@honeycombio/smoke-test")
+    val meter = otel?.getMeter("io.honeycomb.smoke-test")
     val counter = meter?.counterBuilder("smoke-test.metric.int")?.build()
 
     counter?.add(1)
