@@ -137,12 +137,12 @@ teardown_file() {
 
 @test "Render Instrumentation attributes are correct" {
   # we got the spans we expect
-  result=$(span_names_for "io.honeycomb.render-instrumentation" | sort | uniq -c | tr -s ' ')
+  result=$(span_names_for "io.honeycomb.instrumentation.view" | sort | uniq -c | tr -s ' ')
   assert_equal "$result" ' 7 "View Body"
  7 "View Render"'
 
   # the View Render spans are tracking the views we expect
-  total_duration=$(attribute_for_span_key "io.honeycomb.render-instrumentation" "View Render" "view.name" string | sort | tr -s ' ')
+  total_duration=$(attribute_for_span_key "io.honeycomb.instrumentation.view" "View Render" "view.name" string | sort | tr -s ' ')
   assert_equal "$total_duration" '"expensive text 1"
 "expensive text 2"
 "expensive text 3"
