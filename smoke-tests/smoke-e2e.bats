@@ -105,16 +105,16 @@ teardown_file() {
 }
 
 @test "UI touch events are captured" {
-    assert_not_empty $(spans_on_view_named "io.honeycomb.instrumentation.ui" "Touch Began" "example_button")
-    assert_not_empty $(spans_on_view_named "io.honeycomb.instrumentation.ui" "Touch Ended" "example_button")
+    assert_not_empty $(spans_on_view_named "io.honeycomb.ui" "Touch Began" "example_button")
+    assert_not_empty $(spans_on_view_named "io.honeycomb.ui" "Touch Ended" "example_button")
 }
 
 @test "UI click events are captured" {
-    assert_not_empty $(spans_on_view_named "io.honeycomb.instrumentation.ui" "click" "example_button")
+    assert_not_empty $(spans_on_view_named "io.honeycomb.ui" "click" "example_button")
 }
 
 @test "UI touch events have all attributes" {
-    span=$(spans_on_view_named "io.honeycomb.instrumentation.ui" "click" "example_button")
+    span=$(spans_on_view_named "io.honeycomb.ui" "click" "example_button")
 
     name=$(echo "$span" | jq '.attributes[] | select(.key == "view.name").value.stringValue')
     assert_equal "$name" '"example_button"'
@@ -137,12 +137,12 @@ teardown_file() {
 
 @test "Render Instrumentation attributes are correct" {
   # we got the spans we expect
-  result=$(span_names_for "io.honeycomb.instrumentation.view" | sort | uniq -c | tr -s ' ')
+  result=$(span_names_for "io.honeycomb.view" | sort | uniq -c | tr -s ' ')
   assert_equal "$result" ' 7 "View Body"
  7 "View Render"'
 
   # the View Render spans are tracking the views we expect
-  total_duration=$(attribute_for_span_key "io.honeycomb.instrumentation.view" "View Render" "view.name" string | sort | tr -s ' ')
+  total_duration=$(attribute_for_span_key "io.honeycomb.view" "View Render" "view.name" string | sort | tr -s ' ')
   assert_equal "$total_duration" '"expensive text 1"
 "expensive text 2"
 "expensive text 3"

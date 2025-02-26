@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* Update instrumentation names to use reverse url notation (`io.honeycomb.instrumentation.*`) instead of `@honeycombio/instrumentation-*` notation.
+* Update instrumentation names to use reverse url notation (`io.honeycomb.*`) instead of `@honeycombio/instrumentation-*` notation.
 
 ## v0.0.5-alpha
 

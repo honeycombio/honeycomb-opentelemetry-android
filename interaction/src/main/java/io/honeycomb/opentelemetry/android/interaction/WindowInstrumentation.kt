@@ -26,7 +26,7 @@ import io.opentelemetry.android.instrumentation.AndroidInstrumentation
 import io.opentelemetry.api.trace.Span
 import kotlin.math.roundToInt
 
-private const val INSTRUMENTATION_NAME = "io.honeycomb.instrumentation.ui"
+private const val INSTRUMENTATION_NAME = "io.honeycomb.ui"
 
 enum class TouchEventType(val spanName: String) {
     TOUCH_BEGAN("Touch Began"),
