@@ -104,7 +104,11 @@ class Honeycomb {
 
         // This code is adapted from the OpenTelemetry crash auto-instrumentation, and should match
         // the format of the events there.
-        fun logException(otel: OpenTelemetryRum, throwable: Throwable, thread: Thread? = null) {
+        fun logException(
+            otel: OpenTelemetryRum,
+            throwable: Throwable,
+            thread: Thread? = null,
+        ) {
             // TODO: It would be nice to include the common RuntimeDetailsExtractor, in order to
             // augment the event with additional metadata, such as memory usage and battery percentage.
             // However, that might require changing this into an entire separate instrumentation
