@@ -2,9 +2,11 @@
 
 ## Unreleased
 
+* feat: Add logException function for manual error reporting.
+
 ## v0.0.5-alpha
 
-* Add a `setSpanProcessor()` function to `HoneycombOptions` builder to allow clients to supply custom span processors.
+* feat: Add a `setSpanProcessor()` function to `HoneycombOptions` builder to allow clients to supply custom span processors.
 
 ## v0.0.4-alpha
 
