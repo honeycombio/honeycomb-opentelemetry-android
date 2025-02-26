@@ -3,7 +3,7 @@
 load test_helpers/utilities
 
 CONTAINER_NAME="android-test"
-SMOKE_TEST_SCOPE="@honeycombio/smoke-test"
+SMOKE_TEST_SCOPE="io.honeycomb.smoke-test"
 
 setup_file() {
   echo "# 🚧 preparing test" >&3
@@ -105,16 +105,16 @@ teardown_file() {
 }
 
 @test "UI touch events are captured" {
-    assert_not_empty $(spans_on_view_named "@honeycombio/instrumentation-ui" "Touch Began" "example_button")
-    assert_not_empty $(spans_on_view_named "@honeycombio/instrumentation-ui" "Touch Ended" "example_button")
+    assert_not_empty $(spans_on_view_named "io.honeycomb.instrumentation.ui" "Touch Began" "example_button")
+    assert_not_empty $(spans_on_view_named "io.honeycomb.instrumentation.ui" "Touch Ended" "example_button")
 }
 
 @test "UI click events are captured" {
-    assert_not_empty $(spans_on_view_named "@honeycombio/instrumentation-ui" "click" "example_button")
+    assert_not_empty $(spans_on_view_named "io.honeycomb.instrumentation.ui" "click" "example_button")
 }
 
 @test "UI touch events have all attributes" {
-    span=$(spans_on_view_named "@honeycombio/instrumentation-ui" "click" "example_button")
+    span=$(spans_on_view_named "io.honeycomb.instrumentation.ui" "click" "example_button")
 
     name=$(echo "$span" | jq '.attributes[] | select(.key == "view.name").value.stringValue')
     assert_equal "$name" '"example_button"'
