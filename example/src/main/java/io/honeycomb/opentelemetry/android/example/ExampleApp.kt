@@ -5,7 +5,6 @@ import io.honeycomb.opentelemetry.android.Honeycomb
 import io.honeycomb.opentelemetry.android.HoneycombOptions
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.sdk.OpenTelemetrySdk
-import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor
 
 class ExampleApp : Application() {
     var otelRum: OpenTelemetryRum? = null
