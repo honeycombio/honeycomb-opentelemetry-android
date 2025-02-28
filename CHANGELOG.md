@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-* feat: Add logException function for manual error reporting.
+* feat: Add logException function for manual error reporting
+* cleanup: Update instrumentation names to use reverse url notation (`io.honeycomb.*`) instead of `@honeycombio/instrumentation-*` notation
 
 ## v0.0.5-alpha
 

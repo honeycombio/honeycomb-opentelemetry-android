@@ -93,7 +93,7 @@ jobs:
           java-version: << pipeline.parameters.java-version >>
       - run:
           name: "Publish Artifacts to Maven"
-          command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository --stacktrace --debug
+          command: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
 
 filters_main_only: &filters_main_only
   filters:
