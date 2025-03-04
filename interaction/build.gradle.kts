@@ -105,7 +105,8 @@ publishing {
             }
 
         signing {
-            if (version != "0.0.0-DEVELOPMENT") {
+            val isDevBuild: Boolean by rootProject.extra
+            if (!isDevBuild) {
                 val base64key = System.getenv("GPG_BASE64")
                 val pw = System.getenv("GPG_PASSPHRASE")
                 val key =
