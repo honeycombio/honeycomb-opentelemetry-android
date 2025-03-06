@@ -43,6 +43,8 @@ class HoneycombSmokeTest {
     companion object {
         @AfterClass @JvmStatic
         fun flush() {
+            // needs to be at least 33 seconds bc the offline buffering waits that long before reading
+            Thread.sleep(45000)
             val app = InstrumentationRegistry.getInstrumentation().targetContext.applicationContext as ExampleApp
             app.flush()
         }
