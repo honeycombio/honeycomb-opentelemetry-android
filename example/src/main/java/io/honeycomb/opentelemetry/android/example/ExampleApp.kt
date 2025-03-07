@@ -21,7 +21,6 @@ class ExampleApp : Application() {
                 .setServiceName("android-test")
                 .setMetricsDataset("android-test-metrics")
                 .setSpanProcessor(SimpleSpanProcessor())
-                .setOfflineCachingEnabled(true)
                 .setDebug(true)
                 .build()
 

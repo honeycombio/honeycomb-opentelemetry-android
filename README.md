@@ -81,7 +81,7 @@ To manually send a span:
 | `tracesProtocol`        | io.honeycomb.opentelemetry.android.OtlpProtocol | No        | Overrides `protocol` for trace data.                                                                                                        |
 | `metricsProtocol`       | io.honeycomb.opentelemetry.android.OtlpProtocol | No        | Overrides `protocol` for metrics data.                                                                                                      |
 | `logsProtocol`          | io.honeycomb.opentelemetry.android.OtlpProtocol | No        | Overrides `protocol` for logs data.                                                                                                         |
-| `offlineCachingEnabled` | Bool                                            | No        | Whether to enable offline caching for telemetry (default: false). May delay telemetry from being exported by 30 seconds or more.            |
+| `offlineCachingEnabled` | Bool                                            | No        | Whether to enable offline caching for telemetry (default: false)                                                                            |
 
 
 ## Auto-instrumentation

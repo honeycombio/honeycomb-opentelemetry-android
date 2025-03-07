@@ -73,7 +73,7 @@ teardown_file() {
 }
 
 @test "SDK can send spans" {
-  result=$(span_names_for ${SMOKE_TEST_SCOPE} | sort | uniq)
+  result=$(span_names_for ${SMOKE_TEST_SCOPE})
   assert_equal "$result" '"test-span"'
 
   sampleRate=$(attribute_for_span_key ${SMOKE_TEST_SCOPE} "test-span" SampleRate "double")
@@ -84,7 +84,7 @@ teardown_file() {
 }
 
 @test "SDK can send metrics" {
-  result=$(metric_names_for ${SMOKE_TEST_SCOPE} | sort | uniq)
+  result=$(metric_names_for ${SMOKE_TEST_SCOPE})
   assert_equal "$result" '"smoke-test.metric.int"'
 }
 
