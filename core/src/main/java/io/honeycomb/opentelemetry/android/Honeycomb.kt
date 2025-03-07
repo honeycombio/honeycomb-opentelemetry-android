@@ -79,7 +79,8 @@ class Honeycomb {
             val resource =
                 Resource.getDefault().toBuilder().putAll(createAttributes(options.resourceAttributes)).build()
             val rumConfig = OtelRumConfig()
-            rumConfig.setDiskBufferingConfiguration(DiskBufferingConfiguration.builder().setEnabled(options.offlineCachingEnabled).build())
+            val diskBufferingConfig = DiskBufferingConfiguration.builder().setEnabled(options.offlineCachingEnabled).build()
+            rumConfig.setDiskBufferingConfiguration(diskBufferingConfig)
 
             return OpenTelemetryRum.builder(app, rumConfig)
                 .setResource(resource)
