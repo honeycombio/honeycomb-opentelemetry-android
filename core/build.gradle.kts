@@ -70,10 +70,6 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.auto.service.annotations)
-    implementation(libs.instrumentation.activity)
-    implementation(libs.instrumentation.anr)
-    implementation(libs.instrumentation.crash)
-    implementation(libs.instrumentation.slowrendering)
     implementation(libs.opentelemetry.android.agent)
     implementation(libs.opentelemetry.api)
     implementation(libs.opentelemetry.sdk)
@@ -81,7 +77,6 @@ dependencies {
     implementation(libs.opentelemetry.semconv.incubating)
     implementation(libs.opentelemetry.exporter.logging.otlp)
     implementation(libs.opentelemetry.exporter.otlp)
-    implementation(libs.opentelemetry.instrumentation.api)
     implementation(libs.opentelemetry.baggage.processor)
 
     testImplementation(libs.junit)
