@@ -85,15 +85,18 @@ To manually send a span:
 
 ## Auto-instrumentation
 
-The following auto-instrumentation libraries are automatically included:
+To enable all OpenTelemetry auto-instrumentation, simply include `android-agent` as a dependency:
 * [`io.opentelemetry.android:android-agent`](https://github.com/open-telemetry/opentelemetry-android/tree/main)
+
+If you want to pick and choose which auto-instrumentation to include, you can instead add dependencies for whichever components you would like:
 * [`io.opentelemetry.android:instrumentation-activity`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/activity)
 * [`io.opentelemetry.android:instrumentation-anr`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/anr)
 * [`io.opentelemetry.android:instrumentation-crash`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/crash)
+* [`io.opentelemetry.android:instrumentation-fragment`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/fragment)
 * [`io.opentelemetry.android:instrumentation-slowrendering`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/slowrendering)
 
 The following additional auto-instrumentation is implemented in this library:
-* UI interaction in XML-based Activities.
+* `honeycomb-opentelemetry-android-interaction` &mdash; UI interaction in XML-based Activities.
 
 ### Activity Lifecycle Instrumentation
 

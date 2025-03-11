@@ -57,6 +57,7 @@ desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref 
 instrumentation-activity = { module = "io.opentelemetry.android:instrumentation-activity", version.ref = "opentelemetryAndroid"  }
 instrumentation-anr = { module = "io.opentelemetry.android:instrumentation-anr", version.ref = "opentelemetryAndroid"  }
 instrumentation-crash = { module = "io.opentelemetry.android:instrumentation-crash", version.ref = "opentelemetryAndroid"  }
+instrumentation-fragment = { module = "io.opentelemetry.android:instrumentation-fragment", version.ref = "opentelemetryAndroid"  }
 instrumentation-slowrendering = { module = "io.opentelemetry.android:instrumentation-slowrendering", version.ref = "opentelemetryAndroid"  }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junitParams"}
@@ -66,7 +67,7 @@ mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-agent = { module = "io.opentelemetry.android:okhttp-3.0-agent", version.ref = "opentelemetryAndroid" }
 okhttp-library = { module = "io.opentelemetry.android:okhttp-3.0-library", version.ref = "opentelemetryAndroid" }
-opentelemetry-android-agent = { module = "io.opentelemetry.android:android-agent", version.ref = "opentelemetryAndroid" }
+opentelemetry-android-core = { module = "io.opentelemetry.android:core", version.ref = "opentelemetryAndroid" }
 opentelemetry-api = { module = "io.opentelemetry:opentelemetry-api", version.ref = "opentelemetry"  }
 opentelemetry-baggage-processor = { module = "io.opentelemetry.contrib:opentelemetry-baggage-processor", version.ref = "opentelemetryBaggageProcessor"  }
 opentelemetry-sdk = { module = "io.opentelemetry:opentelemetry-sdk", version.ref = "opentelemetry"  }

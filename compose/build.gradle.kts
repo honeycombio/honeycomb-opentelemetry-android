@@ -70,11 +70,7 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.auto.service.annotations)
-    implementation(libs.instrumentation.activity)
-    implementation(libs.instrumentation.anr)
-    implementation(libs.instrumentation.crash)
-    implementation(libs.instrumentation.slowrendering)
-    implementation(libs.opentelemetry.android.agent)
+    implementation(libs.opentelemetry.android.core)
     implementation(libs.opentelemetry.api)
     implementation(libs.opentelemetry.sdk)
     implementation(libs.opentelemetry.exporter.logging.otlp)
@@ -89,7 +85,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.opentelemetry.api)
     androidTestImplementation(libs.opentelemetry.sdk)
-    androidTestImplementation(libs.opentelemetry.android.agent)
 }
 
 apply("${project.rootDir}/spotless.gradle")
