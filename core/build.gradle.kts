@@ -73,6 +73,8 @@ dependencies {
     implementation(libs.opentelemetry.android.core)
     implementation(libs.opentelemetry.api)
     implementation(libs.opentelemetry.sdk)
+    implementation(libs.opentelemetry.semconv)
+    implementation(libs.opentelemetry.semconv.incubating)
     implementation(libs.opentelemetry.exporter.logging.otlp)
     implementation(libs.opentelemetry.exporter.otlp)
     implementation(libs.opentelemetry.baggage.processor)
@@ -129,17 +131,20 @@ publishing {
             }
 
         signing {
-            val base64key = System.getenv("GPG_BASE64")
-            val pw = System.getenv("GPG_PASSPHRASE")
-            val key =
-                if (base64key != null && base64key != "") {
-                    String(Base64.getDecoder().decode(base64key)).trim()
-                } else {
-                    ""
-                }
+            val isDevBuild: Boolean by rootProject.extra
+            if (!isDevBuild) {
+                val base64key = System.getenv("GPG_BASE64")
+                val pw = System.getenv("GPG_PASSPHRASE")
+                val key =
+                    if (base64key != null && base64key != "") {
+                        String(Base64.getDecoder().decode(base64key)).trim()
+                    } else {
+                        ""
+                    }
 
-            useInMemoryPgpKeys(key, pw)
-            sign(maven)
+                useInMemoryPgpKeys(key, pw)
+                sign(maven)
+            }
         }
     }
 }

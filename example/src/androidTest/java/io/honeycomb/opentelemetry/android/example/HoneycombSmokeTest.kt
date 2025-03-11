@@ -83,6 +83,11 @@ class HoneycombSmokeTest {
     }
 
     @Test
+    fun exceptionLogging_works() {
+        rule.onNodeWithText("Log Exception").performClick()
+    }
+
+    @Test
     fun slowRendersDetection_works() {
         rule.onNodeWithText("UI").performClick()
         rule.onNodeWithText("Slow").performClick()

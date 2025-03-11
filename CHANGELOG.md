@@ -2,11 +2,12 @@
 
 ## Unreleased
 
-* Update instrumentation names to use reverse url notation (`io.honeycomb.*`) instead of `@honeycombio/instrumentation-*` notation.
+* feat: Add logException function for manual error reporting
+* cleanup: Update instrumentation names to use reverse url notation (`io.honeycomb.*`) instead of `@honeycombio/instrumentation-*` notation
 
 ## v0.0.5-alpha
 
-* Add a `setSpanProcessor()` function to `HoneycombOptions` builder to allow clients to supply custom span processors.
+* feat: Add a `setSpanProcessor()` function to `HoneycombOptions` builder to allow clients to supply custom span processors.
 
 ## v0.0.4-alpha
 

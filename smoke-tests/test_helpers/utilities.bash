@@ -60,6 +60,18 @@ attribute_for_span_key() {
         jq "select (.key == \"$3\").value.${4}Value"
 }
 
+# A single log attribute
+# Arguments:
+#   $1 - scope
+#   $2 - attribute key
+#   $3 - attribute type
+attribute_for_log_key() {
+	logs_from_scope_named $1 | \
+		jq ".attributes[]" | \
+		jq "select (.key == \"$2\").value" | \
+		jq ".${3}Value"
+}
+
 # All attributes from a span
 # Arguments:
 #   $1 - scope
@@ -84,9 +96,20 @@ spans_from_scope_named() {
 	spans_received | jq ".scopeSpans[] | select(.scope.name == \"$1\").spans[]"
 }
 
+# Logs for a given scope
+# Arguments: $1 - scope name
+logs_from_scope_named() {
+	logs_received | jq ".scopeLogs[] | select(.scope.name == \"$1\").logRecords[]"
+}
+
 # All spans received
 spans_received() {
 	jq ".resourceSpans[]?" ./collector/data.json
+}
+
+# All logs received
+logs_received() {
+	jq ".resourceLogs[]?" ./collector/data.json
 }
 
 metrics_received() {

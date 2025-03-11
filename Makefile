@@ -56,3 +56,6 @@ unsmoke:
 	@echo "+++ Spinning down the smokers."
 	@echo ""
 	docker compose down --volumes
+
+local-build:
+	./gradlew clean build publishToMavenLocal

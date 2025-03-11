@@ -6,12 +6,15 @@ plugins {
     alias(libs.plugins.publish.plugin)
 }
 
+var isDevBuild by extra { true }
+
 allprojects {
     val tag: String? = System.getenv("CIRCLE_TAG")
-    version = if (tag != null && tag.startsWith("v")) {
-        tag.slice(1 until tag.length)
+    if (tag != null && tag.startsWith("v")) {
+        version = tag.slice(1 until tag.length)
+        isDevBuild = false
     } else {
-        "0.0.0-DEVELOPMENT"
+        version = "0.0.0-DEVELOPMENT"
     }
 }
 
