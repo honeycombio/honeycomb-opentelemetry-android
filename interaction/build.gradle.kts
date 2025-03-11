@@ -53,7 +53,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
-    implementation(libs.opentelemetry.android.agent)
+    implementation(libs.opentelemetry.android.core)
 
     // This is required by opentelemetry-android.
     coreLibraryDesugaring(libs.desugar.jdk.libs)

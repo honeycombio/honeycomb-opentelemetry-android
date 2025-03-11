@@ -56,10 +56,11 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junitParams"}
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
-opentelemetry-android-agent = { module = "io.opentelemetry.android:android-agent", version.ref = "opentelemetryAndroid" }
+opentelemetry-android-core = { module = "io.opentelemetry.android:core", version.ref = "opentelemetryAndroid" }
 instrumentation-activity = { module = "io.opentelemetry.android:instrumentation-activity", version.ref = "opentelemetryAndroid"  }
 instrumentation-anr = { module = "io.opentelemetry.android:instrumentation-anr", version.ref = "opentelemetryAndroid"  }
 instrumentation-crash = { module = "io.opentelemetry.android:instrumentation-crash", version.ref = "opentelemetryAndroid"  }
+instrumentation-fragment = { module = "io.opentelemetry.android:instrumentation-fragment", version.ref = "opentelemetryAndroid"  }
 instrumentation-slowrendering = { module = "io.opentelemetry.android:instrumentation-slowrendering", version.ref = "opentelemetryAndroid"  }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
