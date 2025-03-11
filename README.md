@@ -81,7 +81,7 @@ To manually send a span:
 | `tracesProtocol`        | io.honeycomb.opentelemetry.android.OtlpProtocol | No        | Overrides `protocol` for trace data.                                                                                                                                                     |
 | `metricsProtocol`       | io.honeycomb.opentelemetry.android.OtlpProtocol | No        | Overrides `protocol` for metrics data.                                                                                                                                                   |
 | `logsProtocol`          | io.honeycomb.opentelemetry.android.OtlpProtocol | No        | Overrides `protocol` for logs data.                                                                                                                                                      |
-| `offlineCachingEnabled` | Bool                                            | No        | Whether to enable offline caching for telemetry (default: false). Warning: this feature is still in alpha and may be unstable. For more details, see [Offline Caching](#offline-caching) |
+| `offlineCachingEnabled` | Boolean                                         | No        | Whether to enable offline caching for telemetry (default: false). Warning: this feature is still in alpha and may be unstable. For more details, see [Offline Caching](#offline-caching) |
 
 
 ## Auto-instrumentation
@@ -261,6 +261,6 @@ Specifically, it will emit 2 kinds of span for each composable that is wrapped:
 
 ## Offline Caching
 
-Set the `offlineCachingEnable` option to enable disk buffering for outgoing telemetry. This will cache your telemetry in the event of network failures and continue to retry exporting your telemetry for up to 18 hours. You will also see a minimum delay in exporting telemetry, of at least 30 seconds.
+Set the `offlineCachingEnabled` option to enable disk buffering for outgoing telemetry. This will cache your telemetry in the event of network failures and continue to retry exporting your telemetry for up to 18 hours. You will also see a minimum delay in exporting telemetry, of at least 30 seconds.
 
 This feature is currently in alpha and may be unstable. It is currently off by default.
