@@ -46,6 +46,8 @@ private const val OTEL_EXPORTER_OTLP_TRACES_PROTOCOL_KEY = "OTEL_EXPORTER_OTLP_T
 private const val OTEL_EXPORTER_OTLP_METRICS_PROTOCOL_KEY = "OTEL_EXPORTER_OTLP_METRICS_PROTOCOL"
 private const val OTEL_EXPORTER_OTLP_LOGS_PROTOCOL_KEY = "OTEL_EXPORTER_OTLP_LOGS_PROTOCOL"
 
+private const val OFFLINE_CACHING_ENABLED = "OFFLINE_CACHING_ENABLED"
+
 /** The protocol for OTLP to use when talking to its backend. */
 enum class OtlpProtocol {
     GRPC,
@@ -165,6 +167,7 @@ data class HoneycombOptions(
     val tracesProtocol: OtlpProtocol,
     val metricsProtocol: OtlpProtocol,
     val logsProtocol: OtlpProtocol,
+    val offlineCachingEnabled: Boolean,
 ) {
     class Builder private constructor() {
         private var apiKey: String? = null
@@ -201,6 +204,8 @@ data class HoneycombOptions(
         private var tracesProtocol: OtlpProtocol? = null
         private var metricsProtocol: OtlpProtocol? = null
         private var logsProtocol: OtlpProtocol? = null
+
+        private var offlineCachingEnabled: Boolean = false
 
         constructor(context: Context) : this(HoneycombOptionsResourceSource(context)) {}
 
@@ -250,6 +255,7 @@ data class HoneycombOptions(
             tracesProtocol = source.getOtlpProtocol(OTEL_EXPORTER_OTLP_TRACES_PROTOCOL_KEY)
             metricsProtocol = source.getOtlpProtocol(OTEL_EXPORTER_OTLP_METRICS_PROTOCOL_KEY)
             logsProtocol = source.getOtlpProtocol(OTEL_EXPORTER_OTLP_LOGS_PROTOCOL_KEY)
+            offlineCachingEnabled = source.getBoolean(OFFLINE_CACHING_ENABLED) ?: offlineCachingEnabled
         }
 
         fun setApiKey(apiKey: String): Builder {
@@ -387,6 +393,11 @@ data class HoneycombOptions(
             return this
         }
 
+        fun setOfflineCachingEnabled(enabled: Boolean): Builder {
+            offlineCachingEnabled = enabled
+            return this
+        }
+
         fun build(): HoneycombOptions {
             // If any API key isn't set, consider it a fatal error.
             val defaultApiKey: () -> String = { ->
@@ -500,6 +511,7 @@ data class HoneycombOptions(
                 tracesProtocol ?: protocol,
                 metricsProtocol ?: protocol,
                 logsProtocol ?: protocol,
+                offlineCachingEnabled,
             )
         }
     }

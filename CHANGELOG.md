@@ -5,6 +5,7 @@
 * feat: Add logException function for manual error reporting
 * refactor: Change dependencies to require users to explicitly include auto-instrumentation.
 * cleanup: Update instrumentation names to use reverse url notation (`io.honeycomb.*`) instead of `@honeycombio/instrumentation-*` notation
+* feat: Enable telemetry caching for offline support.
 
 ## v0.0.5-alpha
 

@@ -3,6 +3,7 @@ package io.honeycomb.opentelemetry.android
 import android.app.Application
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.config.OtelRumConfig
+import io.opentelemetry.android.features.diskbuffering.DiskBufferingConfiguration
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.api.common.AttributesBuilder
 import io.opentelemetry.api.logs.Logger
@@ -78,6 +79,8 @@ class Honeycomb {
             val resource =
                 Resource.getDefault().toBuilder().putAll(createAttributes(options.resourceAttributes)).build()
             val rumConfig = OtelRumConfig()
+            val diskBufferingConfig = DiskBufferingConfiguration.builder().setEnabled(options.offlineCachingEnabled).build()
+            rumConfig.setDiskBufferingConfiguration(diskBufferingConfig)
 
             return OpenTelemetryRum.builder(app, rumConfig)
                 .setResource(resource)

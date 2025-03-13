@@ -88,6 +88,8 @@ class HoneycombOptionsUnitTest {
 
         assertEquals(1, options.sampleRate)
         assertFalse(options.debug)
+
+        assertFalse(options.offlineCachingEnabled)
     }
 
     @Test
@@ -212,6 +214,7 @@ class HoneycombOptionsUnitTest {
                 "OTEL_EXPORTER_OTLP_LOGS_HEADERS" to "header=lll",
                 "OTEL_EXPORTER_OTLP_LOGS_TIMEOUT" to 60000,
                 "OTEL_EXPORTER_OTLP_LOGS_PROTOCOL" to "http/json",
+                "OFFLINE_CACHING_ENABLED" to true,
             )
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
 
@@ -269,6 +272,7 @@ class HoneycombOptionsUnitTest {
 
         assertEquals(42, options.sampleRate)
         assertTrue(options.debug)
+        assertTrue(options.offlineCachingEnabled)
     }
 
     @Test
@@ -296,6 +300,7 @@ class HoneycombOptionsUnitTest {
                 .setTracesProtocol(OtlpProtocol.HTTP_JSON)
                 .setMetricsProtocol(OtlpProtocol.HTTP_JSON)
                 .setLogsProtocol(OtlpProtocol.HTTP_JSON)
+                .setOfflineCachingEnabled(true)
                 .build()
 
         assertEquals("service", options.serviceName)
@@ -352,6 +357,7 @@ class HoneycombOptionsUnitTest {
 
         assertEquals(42, options.sampleRate)
         assertTrue(options.debug)
+        assertTrue(options.offlineCachingEnabled)
     }
 
     @Test
