@@ -19,6 +19,7 @@ class ExampleApp : Application() {
                 .setApiKey("test-key")
                 .setApiEndpoint("http://10.0.2.2:4318")
                 .setServiceName("android-test")
+                .setServiceVersion("0.0.1")
                 .setMetricsDataset("android-test-metrics")
                 .setSpanProcessor(SimpleSpanProcessor())
                 .setDebug(true)

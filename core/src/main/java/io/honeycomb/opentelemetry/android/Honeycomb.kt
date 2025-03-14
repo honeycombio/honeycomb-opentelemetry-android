@@ -77,7 +77,10 @@ class Honeycomb {
                 }
 
             val resource =
-                Resource.getDefault().toBuilder().putAll(createAttributes(options.resourceAttributes)).build()
+                Resource.getDefault().toBuilder()
+                    .putAll(createAttributes(options.resourceAttributes))
+                    .build()
+
             val rumConfig = OtelRumConfig()
             val diskBufferingConfig = DiskBufferingConfiguration.builder().setEnabled(options.offlineCachingEnabled).build()
             rumConfig.setDiskBufferingConfiguration(diskBufferingConfig)
