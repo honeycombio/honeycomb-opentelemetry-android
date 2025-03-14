@@ -338,7 +338,11 @@ data class HoneycombOptions(
         }
 
         fun setResourceAttributes(resources: Map<String, String>): Builder {
-            resourceAttributes = resources
+            val mutable = resourceAttributes.toMutableMap()
+            for ((k,v) in resources) {
+                mutable[k] = v
+            }
+            resourceAttributes = mutable
 
             if (resourceAttributes.containsKey("service.name")) {
                 serviceName = resourceAttributes["service.name"]

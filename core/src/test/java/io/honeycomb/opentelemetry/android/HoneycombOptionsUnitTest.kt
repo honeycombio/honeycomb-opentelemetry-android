@@ -656,7 +656,7 @@ class HoneycombOptionsUnitTest {
         val data =
             mapOf<String, Any?>(
                 "HONEYCOMB_API_KEY" to "key",
-                "OTEL_RESOURCE_ATTRIBUTES" to "service.name=resource_name,service.version=1",
+                "OTEL_RESOURCE_ATTRIBUTES" to "service.name=resource_name,service.version=1,other.attr=1",
             )
 
         val resourceAttributes = HashMap<String, String>()
@@ -674,6 +674,7 @@ class HoneycombOptionsUnitTest {
             mapOf(
                 "service.name" to "service_name",
                 "service.version" to "2",
+                "other.attr" to "1",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
                 "telemetry.sdk.language" to "android",
