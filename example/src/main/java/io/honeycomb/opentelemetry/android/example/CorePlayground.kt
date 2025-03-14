@@ -52,10 +52,12 @@ private fun onLogException(otelRum: OpenTelemetryRum?) {
                 otelRum,
                 e,
                 Attributes.of(
-                    AttributeKey.stringKey("user.name"), "bufo",
-                    AttributeKey.longKey("user.id"), 1
+                    AttributeKey.stringKey("user.name"),
+                    "bufo",
+                    AttributeKey.longKey("user.id"),
+                    1,
                 ),
-                Thread.currentThread()
+                Thread.currentThread(),
             )
         }
     }
