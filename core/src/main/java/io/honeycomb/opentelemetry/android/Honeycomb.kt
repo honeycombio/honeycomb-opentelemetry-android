@@ -109,6 +109,7 @@ class Honeycomb {
         fun logException(
             otel: OpenTelemetryRum,
             throwable: Throwable,
+            attributes: Attributes? = null,
             thread: Thread? = null,
         ) {
             // TODO: It would be nice to include the common RuntimeDetailsExtractor, in order to
@@ -124,6 +125,10 @@ class Honeycomb {
                 Attributes.builder()
                     .put(EXCEPTION_STACKTRACE, stackTraceToString(throwable))
                     .put(EXCEPTION_TYPE, throwable.javaClass.name)
+
+            attributes?.let {
+                attributesBuilder.putAll(it)
+            }
 
             throwable.message?.let {
                 attributesBuilder.put(EXCEPTION_MESSAGE, it)

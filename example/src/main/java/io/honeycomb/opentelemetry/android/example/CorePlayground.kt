@@ -13,6 +13,8 @@ import io.honeycomb.opentelemetry.android.Honeycomb
 import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetryAndroidTheme
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.api.baggage.Baggage
+import io.opentelemetry.api.common.AttributeKey
+import io.opentelemetry.api.common.Attributes
 
 private fun onSendSpan(otelRum: OpenTelemetryRum?) {
     val otel = otelRum?.openTelemetry
@@ -46,7 +48,17 @@ private fun onLogException(otelRum: OpenTelemetryRum?) {
         throw RuntimeException("This exception was intentional.")
     } catch (e: Exception) {
         if (otelRum != null) {
-            Honeycomb.logException(otelRum, e)
+            Honeycomb.logException(
+                otelRum,
+                e,
+                Attributes.of(
+                    AttributeKey.stringKey("user.name"),
+                    "bufo",
+                    AttributeKey.longKey("user.id"),
+                    1,
+                ),
+                Thread.currentThread(),
+            )
         }
     }
 }
