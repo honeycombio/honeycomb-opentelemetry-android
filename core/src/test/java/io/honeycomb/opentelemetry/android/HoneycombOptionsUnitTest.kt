@@ -98,6 +98,7 @@ class HoneycombOptionsUnitTest {
             hashMapOf<String, Any?>(
                 "HONEYCOMB_API_KEY" to "key",
                 "OTEL_SERVICE_NAME" to "",
+                "OTEL_SERVICE_VERSION" to "1",
                 "OTEL_RESOURCE_ATTRIBUTES" to "",
                 "OTEL_EXPORTER_OTLP_HEADERS" to "",
                 "OTEL_EXPORTER_OTLP_TIMEOUT" to null,
@@ -106,9 +107,11 @@ class HoneycombOptionsUnitTest {
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
 
         assertEquals("unknown_service", options.serviceName)
+        assertEquals("1", options.serviceVersion)
         assertEquals(
             mapOf(
                 "service.name" to "unknown_service",
+                "service.version" to "1",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
                 "telemetry.sdk.language" to "android",
@@ -145,6 +148,7 @@ class HoneycombOptionsUnitTest {
                 "HONEYCOMB_API_KEY" to "key",
                 "HONEYCOMB_API_ENDPOINT" to "http://example.com:1234",
                 "OTEL_SERVICE_NAME" to "service",
+                "OTEL_SERVICE_VERSION" to "1",
                 "OTEL_RESOURCE_ATTRIBUTES" to "resource=aaa",
                 "OTEL_EXPORTER_OTLP_HEADERS" to "header=bbb",
                 "OTEL_EXPORTER_OTLP_TIMEOUT" to 30000,
@@ -152,9 +156,11 @@ class HoneycombOptionsUnitTest {
             )
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
         assertEquals("service", options.serviceName)
+        assertEquals("1", options.serviceVersion)
         assertEquals(
             mapOf(
                 "service.name" to "service",
+                "service.version" to "1",
                 "resource" to "aaa",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
@@ -202,6 +208,7 @@ class HoneycombOptionsUnitTest {
                 "SAMPLE_RATE" to 42,
                 "DEBUG" to true,
                 "OTEL_SERVICE_NAME" to "service",
+                "OTEL_SERVICE_VERSION" to "1",
                 "OTEL_RESOURCE_ATTRIBUTES" to "resource=aaa",
                 "OTEL_EXPORTER_OTLP_TIMEOUT" to 30000,
                 "OTEL_EXPORTER_OTLP_PROTOCOL" to "http/json",
@@ -219,9 +226,11 @@ class HoneycombOptionsUnitTest {
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
 
         assertEquals("service", options.serviceName)
+        assertEquals("1", options.serviceVersion)
         assertEquals(
             mapOf(
                 "service.name" to "service",
+                "service.version" to "1",
                 "resource" to "aaa",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
@@ -290,6 +299,7 @@ class HoneycombOptionsUnitTest {
                 .setSampleRate(42)
                 .setDebug(true)
                 .setServiceName("service")
+                .setServiceVersion("1")
                 .setResourceAttributes(mapOf("resource" to "aaa"))
                 .setTracesTimeout(40.seconds)
                 .setMetricsTimeout(50.seconds)
@@ -304,9 +314,11 @@ class HoneycombOptionsUnitTest {
                 .build()
 
         assertEquals("service", options.serviceName)
+        assertEquals("1", options.serviceVersion)
         assertEquals(
             mapOf(
                 "service.name" to "service",
+                "service.version" to "1",
                 "resource" to "aaa",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
@@ -582,13 +594,16 @@ class HoneycombOptionsUnitTest {
             mapOf<String, Any?>(
                 "HONEYCOMB_API_KEY" to "key",
                 "OTEL_SERVICE_NAME" to "explicit_name",
-                "OTEL_RESOURCE_ATTRIBUTES" to "service.name=resource_name",
+                "OTEL_SERVICE_VERSION" to "2",
+                "OTEL_RESOURCE_ATTRIBUTES" to "service.name=resource_name,service.version=1",
             )
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
         assertEquals("explicit_name", options.serviceName)
+        assertEquals("2", options.serviceVersion)
         assertEquals(
             mapOf(
                 "service.name" to "resource_name",
+                "service.version" to "1",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
                 "telemetry.sdk.language" to "android",
@@ -625,6 +640,32 @@ class HoneycombOptionsUnitTest {
         assertEquals(
             mapOf(
                 "service.name" to "unknown_service",
+                "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
+                "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
+            ),
+            options.resourceAttributes,
+        )
+    }
+
+    @Test
+    fun options_serviceNameSetterTakesPrecedence() {
+        val data =
+            mapOf<String, Any?>(
+                "HONEYCOMB_API_KEY" to "key",
+                "OTEL_SERVICE_NAME" to "explicit_name",
+                "OTEL_SERVICE_VERSION" to "1",
+            )
+        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
+            .setServiceName("override_service")
+            .setServiceVersion("2")
+            .build()
+        assertEquals("override_service", options.serviceName)
+        assertEquals("2", options.serviceVersion)
+        assertEquals(
+            mapOf(
+                "service.name" to "override_service",
+                "service.version" to "2",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
                 "telemetry.sdk.language" to "android",

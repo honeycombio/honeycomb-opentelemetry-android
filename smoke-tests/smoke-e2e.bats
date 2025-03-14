@@ -22,6 +22,7 @@ teardown_file() {
   assert_equal "$result" '"honeycomb.distro.runtime_version"
 "honeycomb.distro.version"
 "service.name"
+"service.version"
 "telemetry.sdk.language"
 "telemetry.sdk.name"
 "telemetry.sdk.version"'
