@@ -207,7 +207,7 @@ launch(Span.current().asContextElement()) {
 
 ### Manual Error Logging
 
-Exceptions may be recorded as Log records using the `log` method. This can be used for logging 
+Exceptions may be recorded as Log records using the `logException` method. This can be used for logging
 any caught exceptions in your own code that will not be logged by our crash instrumentation.
 
 Below is an example of logging an Exception object using several custom attributes.
