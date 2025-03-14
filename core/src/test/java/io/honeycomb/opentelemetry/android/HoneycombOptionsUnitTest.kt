@@ -656,10 +656,11 @@ class HoneycombOptionsUnitTest {
                 "OTEL_SERVICE_NAME" to "explicit_name",
                 "OTEL_SERVICE_VERSION" to "1",
             )
-        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
-            .setServiceName("override_service")
-            .setServiceVersion("2")
-            .build()
+        val options =
+            HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
+                .setServiceName("override_service")
+                .setServiceVersion("2")
+                .build()
         assertEquals("override_service", options.serviceName)
         assertEquals("2", options.serviceVersion)
         assertEquals(
