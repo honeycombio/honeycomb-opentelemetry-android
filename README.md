@@ -205,6 +205,35 @@ launch(Span.current().asContextElement()) {
 }
 ```
 
+### Manual Error Logging
+
+Exceptions may be recorded as Log records using the `log` method. This can be used for logging 
+any caught exceptions in your own code that will not be logged by our crash instrumentation.
+
+Below is an example of logging an Exception object using several custom attributes.
+
+```kotlin
+try {
+    // ...
+} catch (e: Exception) {
+    Honeycomb.logException(
+        otel,
+        e,
+        Attributes.of(
+            AttributeKey.stringKey("user.name"), "bufo",
+            AttributeKey.longKey("user.id"), 1
+        ),
+        Thread.currentThread())
+}
+```
+
+| Argument   | Type             | Is Required | Description                                                                       |
+|------------|------------------|-------------|-----------------------------------------------------------------------------------|
+| otel       | OpenTelemetryRum | true        | The exception itself. Attributes will be automatically added to the log record.   |
+| exception  | Throwable        | true        | The exception itself. Attributes will be automatically added to the log record.   |
+| attributes | Attributes       | false       | Additional attributes you would like to log along with the default ones provided. |
+| thread     | Thread?          | false       | Thread where the error occurred. Add this to include the thread as an attribute.  |
+
 ### Android Compose
 #### Setup
 Android Compose instrumentation is included in a standalone library. Add the following to your dependencies in `build.gradle.kts`:

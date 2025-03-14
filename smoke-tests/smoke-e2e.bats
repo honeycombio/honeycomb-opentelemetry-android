@@ -106,6 +106,18 @@ teardown_file() {
   result=$(attribute_for_log_key "io.honeycomb.crash" "exception.stacktrace" "string" \
     | grep "example.CorePlaygroundKt.onLogException")
   assert_not_empty "$result"
+
+  result=$(attribute_for_log_key "io.honeycomb.crash" "thread.name" "string")
+  assert_equal "$result" '"main"'
+
+  result=$(attribute_for_log_key "io.honeycomb.crash" "thread.id" "int")
+  assert_not_empty "$result"
+
+  result=$(attribute_for_log_key "io.honeycomb.crash" "user.name" "string")
+  assert_equal "$result" '"bufo"'
+
+  result=$(attribute_for_log_key "io.honeycomb.crash" "user.id" "int")
+  assert_equal "$result" '"1"'
 }
 
 @test "SDK detects slow renders" {
