@@ -229,10 +229,10 @@ try {
 
 | Argument   | Type             | Is Required | Description                                                                       |
 |------------|------------------|-------------|-----------------------------------------------------------------------------------|
-| otel       | OpenTelemetryRum | true        | The exception itself. Attributes will be automatically added to the log record.   |
+| otel       | OpenTelemetryRum | true        | The OpenTelemetryRum instance to use for logging.                                 |
 | exception  | Throwable        | true        | The exception itself. Attributes will be automatically added to the log record.   |
-| attributes | Attributes       | false       | Additional attributes you would like to log along with the default ones provided. |
-| thread     | Thread?          | false       | Thread where the error occurred. Add this to include the thread as an attribute.  |
+| attributes | Attributes?      | false       | Additional attributes you would like to log along with the default ones provided. |
+| thread     | Thread?          | false       | Thread where the error occurred. Add this to include the thread as attributes.    |
 
 ### Android Compose
 #### Setup
