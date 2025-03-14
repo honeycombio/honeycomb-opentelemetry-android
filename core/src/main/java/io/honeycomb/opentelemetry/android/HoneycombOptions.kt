@@ -339,6 +339,14 @@ data class HoneycombOptions(
 
         fun setResourceAttributes(resources: Map<String, String>): Builder {
             resourceAttributes = resources
+
+            if (resourceAttributes.containsKey("service.name")) {
+                serviceName = resourceAttributes["service.name"]
+            }
+            if (resourceAttributes.containsKey("service.version")) {
+                serviceVersion = resourceAttributes["service.version"]
+            }
+
             return this
         }
 
@@ -431,11 +439,11 @@ data class HoneycombOptions(
              */
 
             // Make sure the service name is in the resource attributes.
-            resourceAttributes.putIfAbsent("service.name", serviceName)
+            resourceAttributes["service.name"] = serviceName
 
             val serviceVersion: String? = this.serviceVersion ?: resourceAttributes["service.version"]
             serviceVersion?.let {
-                resourceAttributes.putIfAbsent("service.version", it)
+                resourceAttributes["service.version"] = it
             }
 
             // The SDK version is generated from build.gradle.kts.

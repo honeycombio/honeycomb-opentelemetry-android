@@ -589,54 +589,11 @@ class HoneycombOptionsUnitTest {
     }
 
     @Test
-    fun options_serviceNameTakesPrecedence() {
-        val data =
-            mapOf<String, Any?>(
-                "HONEYCOMB_API_KEY" to "key",
-                "OTEL_SERVICE_NAME" to "explicit_name",
-                "OTEL_SERVICE_VERSION" to "2",
-                "OTEL_RESOURCE_ATTRIBUTES" to "service.name=resource_name,service.version=1",
-            )
-        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
-        assertEquals("explicit_name", options.serviceName)
-        assertEquals("2", options.serviceVersion)
-        assertEquals(
-            mapOf(
-                "service.name" to "resource_name",
-                "service.version" to "1",
-                "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
-                "honeycomb.distro.runtime_version" to "unknown",
-                "telemetry.sdk.language" to "android",
-            ),
-            options.resourceAttributes,
-        )
-    }
-
-    @Test
-    fun options_fallsBackToServiceNameFromResourceAttributes() {
-        val data =
-            mapOf<String, Any?>(
-                "HONEYCOMB_API_KEY" to "key",
-                "OTEL_RESOURCE_ATTRIBUTES" to "service.name=better",
-            )
-        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
-        assertEquals("better", options.serviceName)
-        assertEquals(
-            mapOf(
-                "service.name" to "better",
-                "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
-                "honeycomb.distro.runtime_version" to "unknown",
-                "telemetry.sdk.language" to "android",
-            ),
-            options.resourceAttributes,
-        )
-    }
-
-    @Test
     fun options_hasServiceNameDefault() {
         val data = mapOf<String, Any?>("HONEYCOMB_API_KEY" to "key")
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
         assertEquals("unknown_service", options.serviceName)
+        assertNull(options.serviceVersion)
         assertEquals(
             mapOf(
                 "service.name" to "unknown_service",
@@ -649,47 +606,15 @@ class HoneycombOptionsUnitTest {
     }
 
     @Test
-    fun options_serviceNameSetterTakesPrecedence() {
+    fun options_serviceFromResourceAttributesSource() {
         val data =
             mapOf<String, Any?>(
                 "HONEYCOMB_API_KEY" to "key",
-                "OTEL_SERVICE_NAME" to "explicit_name",
-                "OTEL_SERVICE_VERSION" to "1",
-            )
-        val options =
-            HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
-                .setServiceName("override_service")
-                .setServiceVersion("2")
-                .build()
-        assertEquals("override_service", options.serviceName)
-        assertEquals("2", options.serviceVersion)
-        assertEquals(
-            mapOf(
-                "service.name" to "override_service",
-                "service.version" to "2",
-                "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
-                "honeycomb.distro.runtime_version" to "unknown",
-                "telemetry.sdk.language" to "android",
-            ),
-            options.resourceAttributes,
-        )
-    }
-
-    @Test
-    fun options_resourceAttributeSourceTakesPrecedenceOverSetters() {
-        val data =
-            mapOf<String, Any?>(
-                "HONEYCOMB_API_KEY" to "key",
-                "OTEL_SERVICE_NAME" to "explicit_name",
-                "OTEL_SERVICE_VERSION" to "2",
                 "OTEL_RESOURCE_ATTRIBUTES" to "service.name=resource_name,service.version=1",
             )
-        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
-            .setServiceName("override_name")
-            .setServiceVersion("3")
-            .build()
-        assertEquals("override_name", options.serviceName)
-        assertEquals("3", options.serviceVersion)
+        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
+        assertEquals("resource_name", options.serviceName)
+        assertEquals("1", options.serviceVersion)
         assertEquals(
             mapOf(
                 "service.name" to "resource_name",
@@ -703,26 +628,204 @@ class HoneycombOptionsUnitTest {
     }
 
     @Test
-    fun options_resourceAttributesTakePrecedenceOverSetters() {
+    fun options_individualSourceVariablesTakePrecedence() {
         val data =
             mapOf<String, Any?>(
                 "HONEYCOMB_API_KEY" to "key",
-                "OTEL_SERVICE_NAME" to "explicit_name",
+                "OTEL_SERVICE_NAME" to "service_name",
                 "OTEL_SERVICE_VERSION" to "2",
+                "OTEL_RESOURCE_ATTRIBUTES" to "service.name=resource_name,service.version=1",
+            )
+        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
+        assertEquals("service_name", options.serviceName)
+        assertEquals("2", options.serviceVersion)
+        assertEquals(
+            mapOf(
+                "service.name" to "service_name",
+                "service.version" to "2",
+                "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
+                "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
+            ),
+            options.resourceAttributes,
+        )
+    }
+
+    @Test
+    fun options_resourceAttributeSetterTakesPrecedenceOverResourceSource() {
+        val data =
+            mapOf<String, Any?>(
+                "HONEYCOMB_API_KEY" to "key",
+                "OTEL_RESOURCE_ATTRIBUTES" to "service.name=resource_name,service.version=1",
+            )
+
+        val resourceAttributes = HashMap<String, String>()
+        resourceAttributes["service.name"] = "service_name"
+        resourceAttributes["service.version"] = "2"
+
+        val options =
+            HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
+                .setResourceAttributes(resourceAttributes)
+                .build()
+
+        assertEquals("service_name", options.serviceName)
+        assertEquals("2", options.serviceVersion)
+        assertEquals(
+            mapOf(
+                "service.name" to "service_name",
+                "service.version" to "2",
+                "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
+                "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
+            ),
+            options.resourceAttributes,
+        )
+    }
+
+    @Test
+    fun options_resourceAttributeSetterTakesPrecedenceOverSource() {
+        val data =
+            mapOf<String, Any?>(
+                "HONEYCOMB_API_KEY" to "key",
+                "OTEL_SERVICE_NAME" to "resource_name",
+                "OTEL_SERVICE_VERSION" to "1",
+            )
+
+        val resourceAttributes = HashMap<String, String>()
+        resourceAttributes["service.name"] = "service_name"
+        resourceAttributes["service.version"] = "2"
+
+        val options =
+            HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
+                .setResourceAttributes(resourceAttributes)
+                .build()
+
+        assertEquals("service_name", options.serviceName)
+        assertEquals("2", options.serviceVersion)
+        assertEquals(
+            mapOf(
+                "service.name" to "service_name",
+                "service.version" to "2",
+                "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
+                "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
+            ),
+            options.resourceAttributes,
+        )
+    }
+
+    @Test
+    fun options_individualSettersTakePrecedenceOverSource() {
+        val data =
+            mapOf<String, Any?>(
+                "HONEYCOMB_API_KEY" to "key",
+                "OTEL_SERVICE_NAME" to "resource_name",
+                "OTEL_SERVICE_VERSION" to "1",
+            )
+
+        val options =
+            HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
+                .setServiceName("service_name")
+                .setServiceVersion("2")
+                .build()
+
+        assertEquals("service_name", options.serviceName)
+        assertEquals("2", options.serviceVersion)
+        assertEquals(
+            mapOf(
+                "service.name" to "service_name",
+                "service.version" to "2",
+                "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
+                "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
+            ),
+            options.resourceAttributes,
+        )
+    }
+
+    @Test
+    fun options_individualSettersTakePrecedenceOverSources() {
+        val data =
+            mapOf<String, Any?>(
+                "HONEYCOMB_API_KEY" to "key",
+                "OTEL_RESOURCE_ATTRIBUTES" to "service.name=resource_name,service.version=1",
+                "OTEL_SERVICE_NAME" to "service_name",
+                "OTEL_SERVICE_VERSION" to "2",
+            )
+
+        val options =
+            HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
+                .setServiceName("override_name")
+                .setServiceVersion("3")
+                .build()
+
+        assertEquals("override_name", options.serviceName)
+        assertEquals("3", options.serviceVersion)
+        assertEquals(
+            mapOf(
+                "service.name" to "override_name",
+                "service.version" to "3",
+                "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
+                "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
+            ),
+            options.resourceAttributes,
+        )
+    }
+
+    @Test
+    fun options_individualSettersTakePrecedenceOverResourceAttributeSetter() {
+        val data =
+            mapOf<String, Any?>(
+                "HONEYCOMB_API_KEY" to "key",
             )
 
         val resourceAttributes = HashMap<String, String>()
         resourceAttributes["service.name"] = "resource_name"
         resourceAttributes["service.version"] = "1"
 
-        val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
-            .setResourceAttributes(resourceAttributes)
-            .setServiceName("override_name")
-            .setServiceVersion("3")
-            .build()
+        val options =
+            HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
+                .setResourceAttributes(resourceAttributes)
+                .setServiceName("service_name")
+                .setServiceVersion("2")
+                .build()
 
-        assertEquals("override_name", options.serviceName)
-        assertEquals("3", options.serviceVersion)
+        assertEquals("service_name", options.serviceName)
+        assertEquals("2", options.serviceVersion)
+        assertEquals(
+            mapOf(
+                "service.name" to "service_name",
+                "service.version" to "2",
+                "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
+                "honeycomb.distro.runtime_version" to "unknown",
+                "telemetry.sdk.language" to "android",
+            ),
+            options.resourceAttributes,
+        )
+    }
+
+    // very similar to the test above, but note the ordering of the setResourceAttributes() call vs. the setServiceName() call
+    @Test
+    fun options_individualSettersTakePrecedenceOverResourceAttributeSetter_ordering() {
+        val data =
+            mapOf<String, Any?>(
+                "HONEYCOMB_API_KEY" to "key",
+            )
+
+        val resourceAttributes = HashMap<String, String>()
+        resourceAttributes["service.name"] = "resource_name"
+        resourceAttributes["service.version"] = "1"
+
+        val options =
+            HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
+                .setServiceName("service_name")
+                .setServiceVersion("2")
+                .setResourceAttributes(resourceAttributes)
+                .build()
+
+        assertEquals("resource_name", options.serviceName)
+        assertEquals("1", options.serviceVersion)
         assertEquals(
             mapOf(
                 "service.name" to "resource_name",
