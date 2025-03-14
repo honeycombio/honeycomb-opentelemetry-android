@@ -29,6 +29,9 @@ teardown_file() {
 
   result=$(resource_attribute_named "telemetry.sdk.language" "string" | uniq)
   assert_equal "$result" '"android"'
+
+  assert_equal $(resource_attribute_named "service.name" "string" | uniq) '"android-test"'
+  assert_equal $(resource_attribute_named "service.version" "string" | uniq) '"0.0.1"'
 }
 
 @test "SDK captures Activity Lifecycle events" {
