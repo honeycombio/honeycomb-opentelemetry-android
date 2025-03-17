@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## v0.0.6-beta
+## v0.0.6
 
 * feat: Add logException function for manual error reporting
 * refactor: Change dependencies to require users to explicitly include auto-instrumentation.
