@@ -339,7 +339,7 @@ data class HoneycombOptions(
 
         fun setResourceAttributes(resources: Map<String, String>): Builder {
             val mutable = resourceAttributes.toMutableMap()
-            for ((k,v) in resources) {
+            for ((k, v) in resources) {
                 mutable[k] = v
             }
             resourceAttributes = mutable
