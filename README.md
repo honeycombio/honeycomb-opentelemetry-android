@@ -5,14 +5,14 @@
 
 Honeycomb wrapper for [OpenTelemetry](https://opentelemetry.io) on Android.
 
-**STATUS: this library is EXPERIMENTAL.** Data shapes are unstable and not safe for production. We are actively seeking feedback to ensure usability.
+**STATUS: this library is in BETA.** Data shapes are stable and safe for production. We are actively seeking feedback to ensure usability.
 
 ## Getting started
 
 Add the following dependencies to your `build.gradle.kts`:
 ```
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.5-alpha")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.6")
 }
 ```
 
