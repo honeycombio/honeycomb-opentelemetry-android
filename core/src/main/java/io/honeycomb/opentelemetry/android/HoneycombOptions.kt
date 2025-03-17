@@ -24,6 +24,7 @@ private const val SAMPLE_RATE_KEY = "SAMPLE_RATE"
 private const val DEBUG_KEY = "DEBUG"
 
 private const val OTEL_SERVICE_NAME_KEY = "OTEL_SERVICE_NAME"
+private const val OTEL_SERVICE_VERSION_KEY = "OTEL_SERVICE_VERSION"
 private const val OTEL_SERVICE_NAME_DEFAULT = "unknown_service"
 private const val OTEL_RESOURCE_ATTRIBUTES_KEY = "OTEL_RESOURCE_ATTRIBUTES"
 
@@ -157,6 +158,7 @@ data class HoneycombOptions(
     val sampleRate: Int,
     val debug: Boolean,
     val serviceName: String,
+    val serviceVersion: String?,
     val resourceAttributes: Map<String, String>,
     val tracesHeaders: Map<String, String>,
     val metricsHeaders: Map<String, String>,
@@ -170,6 +172,7 @@ data class HoneycombOptions(
     val offlineCachingEnabled: Boolean,
 ) {
     class Builder private constructor() {
+        private var serviceVersion: String? = null
         private var apiKey: String? = null
         private var tracesApiKey: String? = null
         private var metricsApiKey: String? = null
@@ -242,6 +245,7 @@ data class HoneycombOptions(
             sampleRate = source.getInt(SAMPLE_RATE_KEY) ?: sampleRate
             debug = source.getBoolean(DEBUG_KEY) ?: debug
             serviceName = source.getString(OTEL_SERVICE_NAME_KEY) ?: serviceName
+            serviceVersion = source.getString(OTEL_SERVICE_VERSION_KEY) ?: serviceVersion
             resourceAttributes = source.getKeyValueList(OTEL_RESOURCE_ATTRIBUTES_KEY)
             headers = source.getKeyValueList(OTEL_EXPORTER_OTLP_HEADERS_KEY)
             tracesHeaders = source.getKeyValueList(OTEL_EXPORTER_OTLP_TRACES_HEADERS_KEY)
@@ -328,8 +332,25 @@ data class HoneycombOptions(
             return this
         }
 
+        fun setServiceVersion(appVersion: String): Builder {
+            this.serviceVersion = appVersion
+            return this
+        }
+
         fun setResourceAttributes(resources: Map<String, String>): Builder {
-            resourceAttributes = resources
+            val mutable = resourceAttributes.toMutableMap()
+            for ((k, v) in resources) {
+                mutable[k] = v
+            }
+            resourceAttributes = mutable
+
+            if (resourceAttributes.containsKey("service.name")) {
+                serviceName = resourceAttributes["service.name"]
+            }
+            if (resourceAttributes.containsKey("service.version")) {
+                serviceVersion = resourceAttributes["service.version"]
+            }
+
             return this
         }
 
@@ -422,7 +443,13 @@ data class HoneycombOptions(
              */
 
             // Make sure the service name is in the resource attributes.
-            resourceAttributes.putIfAbsent("service.name", serviceName)
+            resourceAttributes["service.name"] = serviceName
+
+            val serviceVersion: String? = this.serviceVersion ?: resourceAttributes["service.version"]
+            serviceVersion?.let {
+                resourceAttributes["service.version"] = it
+            }
+
             // The SDK version is generated from build.gradle.kts.
             resourceAttributes.putIfAbsent(
                 "honeycomb.distro.version",
@@ -501,6 +528,7 @@ data class HoneycombOptions(
                 sampleRate,
                 debug,
                 serviceName,
+                serviceVersion,
                 resourceAttributes,
                 tracesHeaders,
                 metricsHeaders,

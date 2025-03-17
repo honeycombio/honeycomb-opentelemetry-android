@@ -22,12 +22,16 @@ teardown_file() {
   assert_equal "$result" '"honeycomb.distro.runtime_version"
 "honeycomb.distro.version"
 "service.name"
+"service.version"
 "telemetry.sdk.language"
 "telemetry.sdk.name"
 "telemetry.sdk.version"'
 
   result=$(resource_attribute_named "telemetry.sdk.language" "string" | uniq)
   assert_equal "$result" '"android"'
+
+  assert_equal $(resource_attribute_named "service.name" "string" | uniq) '"android-test"'
+  assert_equal $(resource_attribute_named "service.version" "string" | uniq) '"0.0.1"'
 }
 
 @test "SDK captures Activity Lifecycle events" {
