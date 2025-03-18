@@ -461,6 +461,17 @@ data class HoneycombOptions(
                 Build.VERSION.RELEASE ?: "unknown",
             )
 
+            resourceAttributes.putIfAbsent("os.type", "android")
+            resourceAttributes.putIfAbsent("os.name", Build.VERSION.CODENAME)
+            resourceAttributes.putIfAbsent("os.version", Build.VERSION.RELEASE)
+            resourceAttributes.putIfAbsent("os.android.sdk", Build.VERSION.SDK_INT.toString())
+            if (Build.VERSION.SDK_INT >= 23) {
+                resourceAttributes.putIfAbsent("os.android.base_os", Build.VERSION.BASE_OS)
+            }
+
+            resourceAttributes.putIfAbsent("device.model", Build.MODEL)
+            resourceAttributes.putIfAbsent("device.manufacturer", Build.MANUFACTURER)
+
             // The language is technically Kotlin, but Android apps can be Java or Kotlin or both, so:
             resourceAttributes.putIfAbsent(
                 "telemetry.sdk.language",

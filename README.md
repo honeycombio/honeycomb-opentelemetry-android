@@ -84,6 +84,23 @@ To manually send a span:
 | `logsProtocol`          | io.honeycomb.opentelemetry.android.OtlpProtocol | No        | Overrides `protocol` for logs data.                                                                                                                                                      |
 | `offlineCachingEnabled` | Boolean                                         | No        | Whether to enable offline caching for telemetry (default: false). Warning: this feature is still in alpha and may be unstable. For more details, see [Offline Caching](#offline-caching) |
 
+## Standard Attributes
+All telemetry emitted will have the following resource attributes attached:
+
+- `device.manufacturer`: Manufacturer of the device, as reported by [`android.os.Build.MANUFACTURER`](https://developer.android.com/reference/android/os/Build#MANUFACTURER)
+- `device.model`: Model of the device, as reported by [`android.os.Build.MODEL`](https://developer.android.com/reference/android/os/Build#MODEL)
+- `honeycomb.distro.runtime_version`: Version of Android on the device. See also `os.version`.
+- `honeycomb.distro.version`: Version of the Honeycomb SDK being used.
+- `os.android.base_os`: The value of [`android.os.Build.VERSION.BASE_OS`](https://developer.android.com/reference/android/os/Build.VERSION#BASE_OS). Only available on Android SDK 23 and above.
+- `os.android.sdk`: The value of [`android.os.Build.VERSION.SDK_INT`](https://developer.android.com/reference/android/os/Build.VERSION#SDK_INT)
+- `os.name`: The value of [`android.os.Build.VERSION.CODENAME`](https://developer.android.com/reference/android/os/Build.VERSION#CODENAME)
+- `os.type`: "android"
+- `os.version`: The value of [`android.os.Build.VERSION.RELEASE`](https://developer.android.com/reference/android/os/Build.VERSION#RELEASE)
+- `service.name`: The name of your application, as provided via `setServiceName()`, or `unknown_service` if unset.
+- `service.version`: Optional. The version of your application, as provided via `setServiceVersion()
+- `telemetry.sdk.language`: "android"
+- `telemetry.sdk.name`: "opentelemetry"
+- `telemetry.sdk.version`: version of the OpenTelemetry SDK being used
 
 ## Auto-instrumentation
 
