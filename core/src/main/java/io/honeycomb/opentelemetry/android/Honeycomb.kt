@@ -46,6 +46,21 @@ private fun createAttributes(dict: Map<String, String>): Attributes {
     return builder.build()
 }
 
+private fun androidOSAttributes(): Attributes {
+    val builder = Attributes.builder()
+    builder.put("os.type", "Android")
+    builder.put("os.name", android.os.Build.VERSION.CODENAME)
+    builder.put("os.version", android.os.Build.VERSION.SDK_INT.toString())
+    if (android.os.Build.VERSION.SDK_INT >= 23) {
+        builder.put("os.base_os", android.os.Build.VERSION.BASE_OS)
+    }
+
+    builder.put("device.model", android.os.Build.MODEL)
+    builder.put("device.manufacturer", android.os.Build.MANUFACTURER)
+
+    return builder.build()
+}
+
 class Honeycomb {
     companion object {
         /**
@@ -78,6 +93,7 @@ class Honeycomb {
 
             val resource =
                 Resource.getDefault().toBuilder()
+                    .putAll(androidOSAttributes())
                     .putAll(createAttributes(options.resourceAttributes))
                     .build()
 
