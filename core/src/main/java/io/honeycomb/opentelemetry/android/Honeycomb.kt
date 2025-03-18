@@ -2,6 +2,7 @@ package io.honeycomb.opentelemetry.android
 
 import android.app.Application
 import io.opentelemetry.android.OpenTelemetryRum
+import io.opentelemetry.android.OpenTelemetryRumBuilder
 import io.opentelemetry.android.config.OtelRumConfig
 import io.opentelemetry.android.features.diskbuffering.DiskBufferingConfiguration
 import io.opentelemetry.api.common.Attributes
@@ -85,8 +86,8 @@ class Honeycomb {
             val diskBufferingConfig = DiskBufferingConfiguration.builder().setEnabled(options.offlineCachingEnabled).build()
             rumConfig.setDiskBufferingConfiguration(diskBufferingConfig)
 
-            return OpenTelemetryRum.builder(app, rumConfig)
-                .setResource(resource)
+            return OpenTelemetryRumBuilder.create(app, rumConfig)
+                .mergeResource(resource)
                 .addSpanExporterCustomizer { traceExporter }
                 .addTracerProviderCustomizer { builder, _ ->
                     val spanProcessor = CompositeSpanProcessor()

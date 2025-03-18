@@ -84,6 +84,24 @@ To manually send a span:
 | `logsProtocol`          | io.honeycomb.opentelemetry.android.OtlpProtocol | No        | Overrides `protocol` for logs data.                                                                                                                                                      |
 | `offlineCachingEnabled` | Boolean                                         | No        | Whether to enable offline caching for telemetry (default: false). Warning: this feature is still in alpha and may be unstable. For more details, see [Offline Caching](#offline-caching) |
 
+## Standard Attributes
+All telemetry emitted will have the following resource attributes attached:
+
+- `device.manufacturer`: Manufacturer of the device, as reported by [`android.os.Build.MANUFACTURER`](https://developer.android.com/reference/android/os/Build#MANUFACTURER)
+- `device.model.identifier`: Model of the device, as reported by [`android.os.Build.MODEL`](https://developer.android.com/reference/android/os/Build#MODEL)
+- `device.model.name`: see `device.model.identifier`
+- `honeycomb.distro.runtime_version`: Version of Android on the device. See also `os.version`.
+- `honeycomb.distro.version`: Version of the Honeycomb SDK being used.
+- `os.description`: String containing Android version, build ID, and SDK level.
+- `os.name`: "android"
+- `os.type`: "linux"
+- `os.version`: The value of [`android.os.Build.VERSION.RELEASE`](https://developer.android.com/reference/android/os/Build.VERSION#RELEASE)
+- `rum.sdk.version`: Version of the OpenTelemetry Android SDK being used.
+- `service.name`: The name of your application, as provided via `setServiceName()`, or `unknown_service` if unset.
+- `service.version`: Optional. The version of your application, as provided via `setServiceVersion()
+- `telemetry.sdk.language`: "android"
+- `telemetry.sdk.name`: "opentelemetry"
+- `telemetry.sdk.version`: version of the base OpenTelemetry SDK being used
 
 ## Auto-instrumentation
 

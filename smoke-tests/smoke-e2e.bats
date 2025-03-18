@@ -19,8 +19,16 @@ teardown_file() {
 
 @test "SDK sends correct resource attributes" {
   result=$(resource_attributes_received | sort | uniq)
-  assert_equal "$result" '"honeycomb.distro.runtime_version"
+  assert_equal "$result" '"device.manufacturer"
+"device.model.identifier"
+"device.model.name"
+"honeycomb.distro.runtime_version"
 "honeycomb.distro.version"
+"os.description"
+"os.name"
+"os.type"
+"os.version"
+"rum.sdk.version"
 "service.name"
 "service.version"
 "telemetry.sdk.language"

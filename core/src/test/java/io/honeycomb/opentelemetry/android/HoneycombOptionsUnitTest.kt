@@ -159,9 +159,9 @@ class HoneycombOptionsUnitTest {
         assertEquals("1", options.serviceVersion)
         assertEquals(
             mapOf(
+                "resource" to "aaa",
                 "service.name" to "service",
                 "service.version" to "1",
-                "resource" to "aaa",
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to "unknown",
                 "telemetry.sdk.language" to "android",

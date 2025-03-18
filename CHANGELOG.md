@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* feat: Add OS and Device resource attributes
+
 ## v0.0.6
 
 * feat: Add logException function for manual error reporting
