@@ -57,9 +57,7 @@ private fun getDeviceAttributes(): Attributes {
     val builder = Attributes.builder()
 
     builder.put(DEVICE_ID, Secure.ANDROID_ID)
-    builder.put(DEVICE_MODEL_NAME, Build.MODEL)
     builder.put(DEVICE_MANUFACTURER, Build.MANUFACTURER)
-    builder.put(DEVICE_MODEL_IDENTIFIER, Build.ID)
 
     return builder.build()
 }
