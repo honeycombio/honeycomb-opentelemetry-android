@@ -1,6 +1,8 @@
 package io.honeycomb.opentelemetry.android
 
 import android.app.Application
+import android.os.Build
+import android.provider.Settings.Secure
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.OpenTelemetryRumBuilder
 import io.opentelemetry.android.config.OtelRumConfig
@@ -29,6 +31,10 @@ import io.opentelemetry.sdk.trace.export.SpanExporter
 import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_MESSAGE
 import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_STACKTRACE
 import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_TYPE
+import io.opentelemetry.semconv.incubating.DeviceIncubatingAttributes.DEVICE_ID
+import io.opentelemetry.semconv.incubating.DeviceIncubatingAttributes.DEVICE_MANUFACTURER
+import io.opentelemetry.semconv.incubating.DeviceIncubatingAttributes.DEVICE_MODEL_NAME
+import io.opentelemetry.semconv.incubating.DeviceIncubatingAttributes.DEVICE_MODEL_IDENTIFIER
 import io.opentelemetry.semconv.incubating.EventIncubatingAttributes.EVENT_NAME
 import io.opentelemetry.semconv.incubating.ThreadIncubatingAttributes.THREAD_ID
 import io.opentelemetry.semconv.incubating.ThreadIncubatingAttributes.THREAD_NAME
@@ -44,6 +50,17 @@ private fun createAttributes(dict: Map<String, String>): Attributes {
     for (entry in dict) {
         builder.put(entry.key, entry.value)
     }
+    return builder.build()
+}
+
+private fun getDeviceAttributes(): Attributes {
+    val builder = Attributes.builder()
+
+    builder.put(DEVICE_ID, Secure.ANDROID_ID)
+    builder.put(DEVICE_MODEL_NAME, Build.MODEL)
+    builder.put(DEVICE_MANUFACTURER, Build.MANUFACTURER)
+    builder.put(DEVICE_MODEL_IDENTIFIER, Build.ID)
+
     return builder.build()
 }
 
@@ -80,6 +97,7 @@ class Honeycomb {
             val resource =
                 Resource.getDefault().toBuilder()
                     .putAll(createAttributes(options.resourceAttributes))
+                    .putAll(getDeviceAttributes())
                     .build()
 
             val rumConfig = OtelRumConfig()
