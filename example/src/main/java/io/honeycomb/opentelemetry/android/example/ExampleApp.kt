@@ -15,7 +15,8 @@ class ExampleApp : Application() {
         // To use this sample app with Honeycomb, change the api key to your own key, and remove
         // the call to setApiEndpoint.
         val options =
-            HoneycombOptions.builder(this)
+            HoneycombOptions
+                .builder(this)
                 .setApiKey("test-key")
                 .setApiEndpoint("http://10.0.2.2:4318")
                 .setServiceName("android-test")

@@ -105,9 +105,7 @@ class HoneycombSmokeTest {
         rule.onNodeWithText("Normal").performClick()
     }
 
-    private fun buttonSelector(text: String): BySelector {
-        return By.text(text.toUpperCase(Locale.current)).clazz("android.widget.Button")
-    }
+    private fun buttonSelector(text: String): BySelector = By.text(text.toUpperCase(Locale.current)).clazz("android.widget.Button")
 
     /**
      * Attempts to get the button with the given text, or else throws.

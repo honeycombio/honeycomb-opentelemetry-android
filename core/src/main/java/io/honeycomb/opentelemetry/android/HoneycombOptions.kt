@@ -57,15 +57,14 @@ enum class OtlpProtocol {
     ;
 
     companion object {
-        internal fun parse(s: String): OtlpProtocol? {
-            return when (s) {
+        internal fun parse(s: String): OtlpProtocol? =
+            when (s) {
                 "" -> null
                 "grpc" -> GRPC
                 "http/protobuf" -> HTTP_PROTOBUF
                 "http/json" -> HTTP_JSON
                 else -> throw IllegalArgumentException("invalid protocol $s")
             }
-        }
     }
 }
 
@@ -75,14 +74,13 @@ private val INGEST_CLASSIC_KEY_REGEX = Regex("hc[a-z]ic_[a-z0-9]*")
 /**
  * Returns whether the passed in API key is classic or not.
  */
-private fun isClassicKey(key: String): Boolean {
-    return when (key.length) {
+private fun isClassicKey(key: String): Boolean =
+    when (key.length) {
         0 -> false
         32 -> CLASSIC_KEY_REGEX.matches(key)
         64 -> INGEST_CLASSIC_KEY_REGEX.matches(key)
         else -> false
     }
-}
 
 /**
  * Gets the endpoint to use for a particular signal.
@@ -135,7 +133,9 @@ private fun getHeaders(
 }
 
 /** An error when configuring OpenTelemetry for Honeycomb. */
-class HoneycombException(message: String) : Exception(message)
+class HoneycombException(
+    message: String,
+) : Exception(message)
 
 /**
  * The set of options for how to configure Honeycomb.
@@ -421,7 +421,7 @@ data class HoneycombOptions(
 
         fun build(): HoneycombOptions {
             // If any API key isn't set, consider it a fatal error.
-            val defaultApiKey: () -> String = { ->
+            val defaultApiKey: () -> String = {
                 if (apiKey == null) {
                     throw HoneycombException("missing API key: call setApiKey()")
                 }
@@ -545,8 +545,6 @@ data class HoneycombOptions(
     }
 
     companion object {
-        fun builder(context: Context): HoneycombOptions.Builder {
-            return Builder(context)
-        }
+        fun builder(context: Context): HoneycombOptions.Builder = Builder(context)
     }
 }

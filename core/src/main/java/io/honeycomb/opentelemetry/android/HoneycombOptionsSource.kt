@@ -19,19 +19,13 @@ internal interface HoneycombOptionsSource {
     fun getBoolean(key: String): Boolean?
 
     /** Gets a Duration value, which is represented as an integer (in milliseconds). */
-    fun getDuration(key: String): Duration? {
-        return getInt(key)?.milliseconds
-    }
+    fun getDuration(key: String): Duration? = getInt(key)?.milliseconds
 
     /** Gets an OTLP protocol, */
-    fun getOtlpProtocol(key: String): OtlpProtocol? {
-        return getString(key)?.let { OtlpProtocol.parse(it) }
-    }
+    fun getOtlpProtocol(key: String): OtlpProtocol? = getString(key)?.let { OtlpProtocol.parse(it) }
 
     /** Gets and parses a comma-delimited list of key-value pairs. */
-    fun getKeyValueList(key: String): Map<String, String> {
-        return getString(key)?.let { parseKeyValueList(it) }.orEmpty()
-    }
+    fun getKeyValueList(key: String): Map<String, String> = getString(key)?.let { parseKeyValueList(it) }.orEmpty()
 
     /**
      * Parses a list of key-value pairs, as used in specifying resources and headers.

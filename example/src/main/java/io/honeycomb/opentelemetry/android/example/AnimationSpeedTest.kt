@@ -34,7 +34,9 @@ import androidx.compose.ui.unit.dp
 import io.honeycomb.opentelemetry.android.example.ui.theme.HoneycombOpenTelemetryAndroidTheme
 
 // This is used below, to make animation take certain lengths of time.
-enum class AnimationSpeed(val sleepTime: Long) {
+enum class AnimationSpeed(
+    val sleepTime: Long,
+) {
     NORMAL(0),
     SLOW(32),
     FROZEN(1400),

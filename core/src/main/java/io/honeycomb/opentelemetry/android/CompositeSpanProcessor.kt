@@ -21,9 +21,7 @@ class CompositeSpanProcessor : SpanProcessor {
         }
     }
 
-    override fun isStartRequired(): Boolean {
-        return spanProcessors.any { it.isStartRequired }
-    }
+    override fun isStartRequired(): Boolean = spanProcessors.any { it.isStartRequired }
 
     override fun onEnd(span: ReadableSpan) {
         for (spanProcessor in spanProcessors) {
@@ -31,7 +29,5 @@ class CompositeSpanProcessor : SpanProcessor {
         }
     }
 
-    override fun isEndRequired(): Boolean {
-        return spanProcessors.any { it.isEndRequired }
-    }
+    override fun isEndRequired(): Boolean = spanProcessors.any { it.isEndRequired }
 }

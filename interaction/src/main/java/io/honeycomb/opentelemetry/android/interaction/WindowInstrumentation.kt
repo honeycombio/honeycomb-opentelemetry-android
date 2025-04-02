@@ -28,13 +28,18 @@ import kotlin.math.roundToInt
 
 private const val INSTRUMENTATION_NAME = "io.honeycomb.ui"
 
-enum class TouchEventType(val spanName: String) {
+enum class TouchEventType(
+    val spanName: String,
+) {
     TOUCH_BEGAN("Touch Began"),
     TOUCH_ENDED("Touch Ended"),
     CLICK("click"),
 }
 
-private class ViewAttributes(activity: Activity, view: View) {
+private class ViewAttributes(
+    activity: Activity,
+    view: View,
+) {
     val className: String? = view.javaClass.canonicalName
 
     val text: String? = if (view is TextView) view.text.toString() else null
@@ -141,13 +146,9 @@ private class InteractionWindowCallback(
 ) : Window.Callback {
     val gestureDetector = GestureDetector(activity, InteractionGestureListener(otelRum, activity))
 
-    override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
-        return wrapped.dispatchKeyEvent(event)
-    }
+    override fun dispatchKeyEvent(event: KeyEvent?): Boolean = wrapped.dispatchKeyEvent(event)
 
-    override fun dispatchKeyShortcutEvent(event: KeyEvent?): Boolean {
-        return wrapped.dispatchKeyShortcutEvent(event)
-    }
+    override fun dispatchKeyShortcutEvent(event: KeyEvent?): Boolean = wrapped.dispatchKeyShortcutEvent(event)
 
     override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
         if (event != null) {
@@ -169,113 +170,75 @@ private class InteractionWindowCallback(
         return wrapped.dispatchTouchEvent(event)
     }
 
-    override fun dispatchTrackballEvent(event: MotionEvent?): Boolean {
-        return wrapped.dispatchTrackballEvent(event)
-    }
+    override fun dispatchTrackballEvent(event: MotionEvent?): Boolean = wrapped.dispatchTrackballEvent(event)
 
-    override fun dispatchGenericMotionEvent(event: MotionEvent?): Boolean {
-        return wrapped.dispatchGenericMotionEvent(event)
-    }
+    override fun dispatchGenericMotionEvent(event: MotionEvent?): Boolean = wrapped.dispatchGenericMotionEvent(event)
 
-    override fun dispatchPopulateAccessibilityEvent(event: AccessibilityEvent?): Boolean {
-        return wrapped.dispatchPopulateAccessibilityEvent(event)
-    }
+    override fun dispatchPopulateAccessibilityEvent(event: AccessibilityEvent?): Boolean = wrapped.dispatchPopulateAccessibilityEvent(event)
 
-    override fun onCreatePanelView(featureId: Int): View? {
-        return wrapped.onCreatePanelView(featureId)
-    }
+    override fun onCreatePanelView(featureId: Int): View? = wrapped.onCreatePanelView(featureId)
 
     override fun onCreatePanelMenu(
         featureId: Int,
         menu: Menu,
-    ): Boolean {
-        return wrapped.onCreatePanelMenu(featureId, menu)
-    }
+    ): Boolean = wrapped.onCreatePanelMenu(featureId, menu)
 
     override fun onPreparePanel(
         featureId: Int,
         view: View?,
         menu: Menu,
-    ): Boolean {
-        return wrapped.onPreparePanel(featureId, view, menu)
-    }
+    ): Boolean = wrapped.onPreparePanel(featureId, view, menu)
 
     override fun onMenuOpened(
         featureId: Int,
         menu: Menu,
-    ): Boolean {
-        return wrapped.onMenuOpened(featureId, menu)
-    }
+    ): Boolean = wrapped.onMenuOpened(featureId, menu)
 
     override fun onMenuItemSelected(
         featureId: Int,
         item: MenuItem,
-    ): Boolean {
-        return wrapped.onMenuItemSelected(featureId, item)
-    }
+    ): Boolean = wrapped.onMenuItemSelected(featureId, item)
 
-    override fun onWindowAttributesChanged(params: WindowManager.LayoutParams?) {
-        return wrapped.onWindowAttributesChanged(params)
-    }
+    override fun onWindowAttributesChanged(params: WindowManager.LayoutParams?) = wrapped.onWindowAttributesChanged(params)
 
-    override fun onContentChanged() {
-        return wrapped.onContentChanged()
-    }
+    override fun onContentChanged() = wrapped.onContentChanged()
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        return wrapped.onWindowFocusChanged(hasFocus)
-    }
+    override fun onWindowFocusChanged(hasFocus: Boolean) = wrapped.onWindowFocusChanged(hasFocus)
 
-    override fun onAttachedToWindow() {
-        return wrapped.onAttachedToWindow()
-    }
+    override fun onAttachedToWindow() = wrapped.onAttachedToWindow()
 
-    override fun onDetachedFromWindow() {
-        return wrapped.onDetachedFromWindow()
-    }
+    override fun onDetachedFromWindow() = wrapped.onDetachedFromWindow()
 
     override fun onPanelClosed(
         featureId: Int,
         menu: Menu,
-    ) {
-        return wrapped.onPanelClosed(featureId, menu)
-    }
+    ) = wrapped.onPanelClosed(featureId, menu)
 
-    override fun onSearchRequested(): Boolean {
-        return wrapped.onSearchRequested()
-    }
+    override fun onSearchRequested(): Boolean = wrapped.onSearchRequested()
 
-    override fun onSearchRequested(event: SearchEvent?): Boolean {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    override fun onSearchRequested(event: SearchEvent?): Boolean =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             wrapped.onSearchRequested(event)
         } else {
             // Do nothing
             false
         }
-    }
 
-    override fun onWindowStartingActionMode(callback: ActionMode.Callback?): ActionMode? {
-        return wrapped.onWindowStartingActionMode(callback)
-    }
+    override fun onWindowStartingActionMode(callback: ActionMode.Callback?): ActionMode? = wrapped.onWindowStartingActionMode(callback)
 
     override fun onWindowStartingActionMode(
         callback: ActionMode.Callback?,
         type: Int,
-    ): ActionMode? {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    ): ActionMode? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             wrapped.onWindowStartingActionMode(callback, type)
         } else {
             null
         }
-    }
 
-    override fun onActionModeStarted(mode: ActionMode?) {
-        return wrapped.onActionModeStarted(mode)
-    }
+    override fun onActionModeStarted(mode: ActionMode?) = wrapped.onActionModeStarted(mode)
 
-    override fun onActionModeFinished(mode: ActionMode?) {
-        return wrapped.onActionModeFinished(mode)
-    }
+    override fun onActionModeFinished(mode: ActionMode?) = wrapped.onActionModeFinished(mode)
 }
 
 private class InteractionLifecycleCallbacks(
