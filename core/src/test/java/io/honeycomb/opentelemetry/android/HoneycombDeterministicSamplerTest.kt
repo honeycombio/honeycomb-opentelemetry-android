@@ -13,7 +13,9 @@ import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
 
 @RunWith(Parameterized::class)
-class HoneycombDeterministicSamplerTest(private val args: TestArguments) {
+class HoneycombDeterministicSamplerTest(
+    private val args: TestArguments,
+) {
     companion object {
         @JvmStatic
         @Parameters
@@ -52,4 +54,7 @@ class HoneycombDeterministicSamplerTest(private val args: TestArguments) {
     }
 }
 
-data class TestArguments(val rate: Int, val decision: SamplingDecision)
+data class TestArguments(
+    val rate: Int,
+    val decision: SamplingDecision,
+)

@@ -64,13 +64,15 @@ class Honeycomb {
             val metricsExporter = buildMetricsExporter(options)
             val logsExporter =
                 if (options.logsProtocol == OtlpProtocol.GRPC) {
-                    OtlpGrpcLogRecordExporter.builder()
+                    OtlpGrpcLogRecordExporter
+                        .builder()
                         .setEndpoint(options.logsEndpoint)
                         .setTimeout(options.logsTimeout.toJavaDuration())
                         .setHeaders { options.logsHeaders }
                         .build()
                 } else {
-                    OtlpHttpLogRecordExporter.builder()
+                    OtlpHttpLogRecordExporter
+                        .builder()
                         .setEndpoint(options.logsEndpoint)
                         .setTimeout(options.logsTimeout.toJavaDuration())
                         .setHeaders { options.logsHeaders }
@@ -78,18 +80,23 @@ class Honeycomb {
                 }
 
             val resource =
-                Resource.getDefault().toBuilder()
+                Resource
+                    .getDefault()
+                    .toBuilder()
                     .putAll(createAttributes(options.resourceAttributes))
                     .build()
 
             val rumConfig = OtelRumConfig()
             val diskBufferingConfig =
-                DiskBufferingConfiguration.builder().setEnabled(
-                    options.offlineCachingEnabled,
-                ).build()
+                DiskBufferingConfiguration
+                    .builder()
+                    .setEnabled(
+                        options.offlineCachingEnabled,
+                    ).build()
             rumConfig.setDiskBufferingConfiguration(diskBufferingConfig)
 
-            return OpenTelemetryRumBuilder.create(app, rumConfig)
+            return OpenTelemetryRumBuilder
+                .create(app, rumConfig)
                 .mergeResource(resource)
                 .addSpanExporterCustomizer { traceExporter }
                 .addTracerProviderCustomizer { builder, _ ->
@@ -100,15 +107,13 @@ class Honeycomb {
                     }
                     builder.addSpanProcessor(spanProcessor)
                     builder.setSampler(HoneycombDeterministicSampler(options.sampleRate))
-                }
-                .addLogRecordExporterCustomizer { logsExporter }
+                }.addLogRecordExporterCustomizer { logsExporter }
                 .addMeterProviderCustomizer { builder, _ ->
                     builder.setResource(resource)
                     builder.registerMetricReader(
                         PeriodicMetricReader.builder(metricsExporter).build(),
                     )
-                }
-                .build()
+                }.build()
         }
 
         // This code is adapted from the OpenTelemetry crash auto-instrumentation, and should match
@@ -129,7 +134,8 @@ class Honeycomb {
             val logger: Logger = loggerProvider.loggerBuilder(CRASH_INSTRUMENTATION_NAME).build()
 
             val attributesBuilder: AttributesBuilder =
-                Attributes.builder()
+                Attributes
+                    .builder()
                     .put(EXCEPTION_STACKTRACE, stackTraceToString(throwable))
                     .put(EXCEPTION_TYPE, throwable.javaClass.name)
 
@@ -148,7 +154,8 @@ class Honeycomb {
             }
 
             attributesBuilder.put(EVENT_NAME, "device.crash")
-            logger.logRecordBuilder()
+            logger
+                .logRecordBuilder()
                 .setAllAttributes(attributesBuilder.build())
                 .emit()
         }
@@ -166,13 +173,15 @@ class Honeycomb {
         private fun buildSpanExporter(options: HoneycombOptions): SpanExporter {
             val traceExporter =
                 if (options.tracesProtocol == OtlpProtocol.GRPC) {
-                    OtlpGrpcSpanExporter.builder()
+                    OtlpGrpcSpanExporter
+                        .builder()
                         .setEndpoint(options.tracesEndpoint)
                         .setTimeout(options.tracesTimeout.toJavaDuration())
                         .setHeaders { options.tracesHeaders }
                         .build()
                 } else {
-                    OtlpHttpSpanExporter.builder()
+                    OtlpHttpSpanExporter
+                        .builder()
                         .setEndpoint(options.tracesEndpoint)
                         .setTimeout(options.tracesTimeout.toJavaDuration())
                         .setHeaders { options.tracesHeaders }
@@ -188,13 +197,15 @@ class Honeycomb {
         private fun buildMetricsExporter(options: HoneycombOptions): MetricExporter {
             val metricsExporter =
                 if (options.metricsProtocol == OtlpProtocol.GRPC) {
-                    OtlpGrpcMetricExporter.builder()
+                    OtlpGrpcMetricExporter
+                        .builder()
                         .setEndpoint(options.metricsEndpoint)
                         .setTimeout(options.metricsTimeout.toJavaDuration())
                         .setHeaders { options.metricsHeaders }
                         .build()
                 } else {
-                    OtlpHttpMetricExporter.builder()
+                    OtlpHttpMetricExporter
+                        .builder()
                         .setEndpoint(options.metricsEndpoint)
                         .setTimeout(options.metricsTimeout.toJavaDuration())
                         .setHeaders { options.metricsHeaders }
@@ -208,7 +219,9 @@ class Honeycomb {
         }
     }
 
-    private class CompositeMetricExporter(vararg val exporters: MetricExporter) : MetricExporter {
+    private class CompositeMetricExporter(
+        vararg val exporters: MetricExporter,
+    ) : MetricExporter {
         override fun getAggregationTemporality(instrumentType: InstrumentType): AggregationTemporality {
             return try {
                 exporters.first().getAggregationTemporality(instrumentType)

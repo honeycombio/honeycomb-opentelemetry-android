@@ -20,7 +20,8 @@ private fun onSendSpan(otelRum: OpenTelemetryRum?) {
     val otel = otelRum?.openTelemetry
     val tracer = otel?.getTracer("io.honeycomb.smoke-test")
     val baggage =
-        Baggage.builder()
+        Baggage
+            .builder()
             .put("baggage-key", "baggage-value")
             .build()
     baggage.makeCurrent().use {

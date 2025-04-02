@@ -10,7 +10,9 @@ import android.content.res.Resources
 @SuppressLint("DiscouragedApi")
 // Suppressed, because while it's not recommended to get an identifier by its string,
 // it's the only way for a library to look up an optional value resource.
-internal class HoneycombOptionsResourceSource(context: Context) : HoneycombOptionsSource {
+internal class HoneycombOptionsResourceSource(
+    context: Context,
+) : HoneycombOptionsSource {
     private val resources: Resources = context.resources
     private val packageName: String = context.packageName
 
