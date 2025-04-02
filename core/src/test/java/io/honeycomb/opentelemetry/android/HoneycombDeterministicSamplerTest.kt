@@ -34,9 +34,21 @@ class HoneycombDeterministicSamplerTest(private val args: TestArguments) {
         val context = Context.root()
 
         val sampler = HoneycombDeterministicSampler(args.rate)
-        val result = sampler.shouldSample(context, traceId, "test", SpanKind.CLIENT, Attributes.empty(), emptyList<LinkData>().toMutableList())
+        val result =
+            sampler.shouldSample(
+                context,
+                traceId,
+                "test",
+                SpanKind.CLIENT,
+                Attributes.empty(),
+                emptyList<LinkData>().toMutableList(),
+            )
 
-        assertEquals("[rate: ${args.rate}] expected: ${args.decision} but was: ${result.decision}", args.decision, result.decision)
+        assertEquals(
+            "[rate: ${args.rate}] expected: ${args.decision} but was: ${result.decision}",
+            args.decision,
+            result.decision,
+        )
     }
 }
 
