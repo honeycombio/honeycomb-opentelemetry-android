@@ -11,9 +11,7 @@ import io.opentelemetry.sdk.trace.samplers.SamplingResult
 
 private val TAG = "HoneycombDeterministicS"
 
-class HoneycombDeterministicSampler(
-    private val sampleRate: Int,
-) : Sampler {
+class HoneycombDeterministicSampler(private val sampleRate: Int) : Sampler {
     private val inner: Sampler =
         if (sampleRate < 1) {
             Log.d(TAG, "Sample rate too low, not emitting any spans!")
@@ -37,16 +35,14 @@ class HoneycombDeterministicSampler(
         var result = this.inner.shouldSample(context, traceId, name, spanKind, attributes, parentLinks)
 
         if (result.decision != SamplingDecision.DROP) {
-            val attrs =
-                result.attributes
-                    .toBuilder()
-                    .put("SampleRate", sampleRate.toDouble())
-                    .build()
+            val attrs = result.attributes.toBuilder().put("SampleRate", sampleRate.toDouble()).build()
             result = SamplingResult.create(result.decision, attrs)
         }
 
         return result
     }
 
-    override fun getDescription(): String = "DeterministicSampler"
+    override fun getDescription(): String {
+        return "DeterministicSampler"
+    }
 }

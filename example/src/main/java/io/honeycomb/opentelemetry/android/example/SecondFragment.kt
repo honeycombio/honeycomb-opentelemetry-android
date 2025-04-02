@@ -17,7 +17,9 @@ class SecondFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? = inflater.inflate(R.layout.fragment_second, container, false)
+    ): View? {
+        return inflater.inflate(R.layout.fragment_second, container, false)
+    }
 
     companion object {
         @JvmStatic

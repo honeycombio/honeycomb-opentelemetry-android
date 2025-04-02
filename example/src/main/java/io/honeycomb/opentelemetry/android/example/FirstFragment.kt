@@ -22,7 +22,9 @@ class FirstFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? = inflater.inflate(R.layout.fragment_first, container, false)
+    ): View? {
+        return inflater.inflate(R.layout.fragment_first, container, false)
+    }
 
     companion object {
         @JvmStatic

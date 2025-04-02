@@ -20,8 +20,7 @@ private fun onSendSpan(otelRum: OpenTelemetryRum?) {
     val otel = otelRum?.openTelemetry
     val tracer = otel?.getTracer("io.honeycomb.smoke-test")
     val baggage =
-        Baggage
-            .builder()
+        Baggage.builder()
             .put("baggage-key", "baggage-value")
             .build()
     baggage.makeCurrent().use {
@@ -64,7 +63,9 @@ private fun onLogException(otelRum: OpenTelemetryRum?) {
     }
 }
 
-private fun onCrash(): Unit = throw RuntimeException("This crash was intentional.")
+private fun onCrash() {
+    throw RuntimeException("This crash was intentional.")
+}
 
 @Composable
 internal fun CorePlayground(otel: OpenTelemetryRum? = null) {

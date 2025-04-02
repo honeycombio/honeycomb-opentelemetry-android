@@ -29,8 +29,7 @@ private fun onSendNetworkRequest(setResponse: (str: String) -> Unit) {
 
     val client = OkHttpClient.Builder().build()
     val request =
-        Request
-            .Builder()
+        Request.Builder()
             .url("http://10.0.2.2:1080/simple-api")
             .headers(Headers.headersOf("content-type", "application/json", "accept", "application/json"))
             .build()
