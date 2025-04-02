@@ -33,8 +33,6 @@ import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_STACKTRACE
 import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_TYPE
 import io.opentelemetry.semconv.incubating.DeviceIncubatingAttributes.DEVICE_ID
 import io.opentelemetry.semconv.incubating.DeviceIncubatingAttributes.DEVICE_MANUFACTURER
-import io.opentelemetry.semconv.incubating.DeviceIncubatingAttributes.DEVICE_MODEL_NAME
-import io.opentelemetry.semconv.incubating.DeviceIncubatingAttributes.DEVICE_MODEL_IDENTIFIER
 import io.opentelemetry.semconv.incubating.EventIncubatingAttributes.EVENT_NAME
 import io.opentelemetry.semconv.incubating.ThreadIncubatingAttributes.THREAD_ID
 import io.opentelemetry.semconv.incubating.ThreadIncubatingAttributes.THREAD_NAME
