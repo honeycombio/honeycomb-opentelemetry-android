@@ -205,7 +205,7 @@ These events may have the following attributes.
 
 ### Navigation Instrumentation
 
-The library tracks navigation between Activities and Fragments in your Android application. It automatically sets the `screen.name` attribute on spans to the name of the current Activity or Fragment that a user is viewing. This provides visibility into user navigation patterns and helps correlate other telemetry with the specific screen where events occurred.
+If you have included the activity or fragment auto-instrumentation, that library will track navigation between Activities and Fragments in your Android application. It automatically sets the `screen.name` attribute on spans to the name of the current Activity or Fragment that a user is viewing. This provides visibility into user navigation patterns and helps correlate other telemetry with the specific screen where events occurred.
 
 ## Manual Instrumentation
 
@@ -341,13 +341,9 @@ class MyCustomSpanProcessor : SpanProcessor {
         return CompletableResultCode.ofSuccess()
     }
 
-    override fun isStartRequired(): Boolean {
-        return true
-    }
+    override fun isStartRequired(): Boolean = true
 
-    override fun isEndRequired(): Boolean {
-        return true
-    }
+    override fun isEndRequired(): Boolean = true
 }
 
 // Then when configuring the SDK, add your processor:
