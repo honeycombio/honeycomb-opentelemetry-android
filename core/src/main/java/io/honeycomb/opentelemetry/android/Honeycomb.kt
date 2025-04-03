@@ -25,6 +25,7 @@ import io.opentelemetry.sdk.metrics.data.MetricData
 import io.opentelemetry.sdk.metrics.export.MetricExporter
 import io.opentelemetry.sdk.metrics.export.PeriodicMetricReader
 import io.opentelemetry.sdk.resources.Resource
+import io.opentelemetry.sdk.trace.SpanProcessor
 import io.opentelemetry.sdk.trace.export.SpanExporter
 import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_MESSAGE
 import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_STACKTRACE
@@ -100,11 +101,13 @@ class Honeycomb {
                 .mergeResource(resource)
                 .addSpanExporterCustomizer { traceExporter }
                 .addTracerProviderCustomizer { builder, _ ->
-                    val spanProcessor = CompositeSpanProcessor()
-                    spanProcessor.addSpanProcessor(BaggageSpanProcessor.allowAllBaggageKeys())
+                    val spanProcessors = ArrayList<SpanProcessor>()
+                    spanProcessors.add(BaggageSpanProcessor.allowAllBaggageKeys())
                     options.spanProcessor?.let {
-                        spanProcessor.addSpanProcessor(options.spanProcessor)
+                        spanProcessors.add(options.spanProcessor)
                     }
+
+                    val spanProcessor = SpanProcessor.composite(spanProcessors)
                     builder.addSpanProcessor(spanProcessor)
                     builder.setSampler(HoneycombDeterministicSampler(options.sampleRate))
                 }.addLogRecordExporterCustomizer { logsExporter }
