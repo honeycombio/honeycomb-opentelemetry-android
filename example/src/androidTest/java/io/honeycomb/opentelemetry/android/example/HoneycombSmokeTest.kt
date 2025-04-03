@@ -29,7 +29,8 @@ import kotlin.time.DurationUnit
 val UI_WAIT_TIMEOUT = 5.seconds
 
 // This is a special directory that will be saved to the build directory after the test finishes.
-const val ADDITIONAL_TEST_OUTPUT_DIRECTORY = "/sdcard/Android/media/io.honeycomb.opentelemetry.android.example/additional_test_output"
+const val ADDITIONAL_TEST_OUTPUT_DIRECTORY =
+    "/sdcard/Android/media/io.honeycomb.opentelemetry.android.example/additional_test_output"
 
 /**
  * Instrumented test, which will execute on an Android device.

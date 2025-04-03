@@ -28,13 +28,18 @@ import kotlin.math.roundToInt
 
 private const val INSTRUMENTATION_NAME = "io.honeycomb.ui"
 
-enum class TouchEventType(val spanName: String) {
+enum class TouchEventType(
+    val spanName: String,
+) {
     TOUCH_BEGAN("Touch Began"),
     TOUCH_ENDED("Touch Ended"),
     CLICK("click"),
 }
 
-private class ViewAttributes(activity: Activity, view: View) {
+private class ViewAttributes(
+    activity: Activity,
+    view: View,
+) {
     val className: String? = view.javaClass.canonicalName
 
     val text: String? = if (view is TextView) view.text.toString() else null

@@ -135,7 +135,9 @@ private fun getHeaders(
 }
 
 /** An error when configuring OpenTelemetry for Honeycomb. */
-class HoneycombException(message: String) : Exception(message)
+class HoneycombException(
+    message: String,
+) : Exception(message)
 
 /**
  * The set of options for how to configure Honeycomb.
@@ -421,7 +423,7 @@ data class HoneycombOptions(
 
         fun build(): HoneycombOptions {
             // If any API key isn't set, consider it a fatal error.
-            val defaultApiKey: () -> String = { ->
+            val defaultApiKey: () -> String = {
                 if (apiKey == null) {
                     throw HoneycombException("missing API key: call setApiKey()")
                 }

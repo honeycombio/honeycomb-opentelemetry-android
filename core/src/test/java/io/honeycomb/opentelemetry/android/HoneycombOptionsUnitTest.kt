@@ -8,7 +8,9 @@ import kotlin.time.Duration.Companion.seconds
  * An implementation of OpenTelemetryConfigSource that reads from a HashMap, so that unit tests can
  * run in the JVM, rather than requiring Android-specific classes.
  */
-class HoneycombOptionsMapSource(private val data: Map<String, Any?>) : HoneycombOptionsSource {
+class HoneycombOptionsMapSource(
+    private val data: Map<String, Any?>,
+) : HoneycombOptionsSource {
     override fun getString(key: String): String? {
         val value = data[key] ?: return null
         if (value !is String) {
@@ -287,7 +289,8 @@ class HoneycombOptionsUnitTest {
     @Test
     fun options_usesSetValues() {
         val options =
-            HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
+            HoneycombOptions
+                .Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
                 .setDataset("dataset")
                 .setMetricsDataset("metrics")
                 .setTracesApiKey("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
@@ -375,7 +378,8 @@ class HoneycombOptionsUnitTest {
     @Test
     fun options_usesFallbackSetValues() {
         val options =
-            HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
+            HoneycombOptions
+                .Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
                 .setDataset("dataset")
                 .setMetricsDataset("metrics")
                 .setApiKey("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
@@ -449,7 +453,8 @@ class HoneycombOptionsUnitTest {
     fun classicKey_causesDatasetHeader() {
         val key = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         val options =
-            HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
+            HoneycombOptions
+                .Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
                 .setDataset("dataset")
                 .setMetricsDataset("metrics")
                 .setApiKey(key)
@@ -486,7 +491,8 @@ class HoneycombOptionsUnitTest {
     fun ingestClassicKey_causesDatasetHeader() {
         val key = "hcaic_7890123456789012345678901234567890123456789012345678901234"
         val options =
-            HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
+            HoneycombOptions
+                .Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
                 .setDataset("dataset")
                 .setMetricsDataset("metrics")
                 .setApiKey(key)
@@ -523,7 +529,8 @@ class HoneycombOptionsUnitTest {
     fun newKey_precludesDatasetHeader() {
         val key = "not_classic"
         val options =
-            HoneycombOptions.Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
+            HoneycombOptions
+                .Builder(HoneycombOptionsMapSource(emptyMap<String, Any?>()))
                 .setDataset("dataset")
                 .setMetricsDataset("metrics")
                 .setApiKey(key)
@@ -664,7 +671,8 @@ class HoneycombOptionsUnitTest {
         resourceAttributes["service.version"] = "2"
 
         val options =
-            HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
+            HoneycombOptions
+                .Builder(HoneycombOptionsMapSource(data))
                 .setResourceAttributes(resourceAttributes)
                 .build()
 
@@ -697,7 +705,8 @@ class HoneycombOptionsUnitTest {
         resourceAttributes["service.version"] = "2"
 
         val options =
-            HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
+            HoneycombOptions
+                .Builder(HoneycombOptionsMapSource(data))
                 .setResourceAttributes(resourceAttributes)
                 .build()
 
@@ -725,7 +734,8 @@ class HoneycombOptionsUnitTest {
             )
 
         val options =
-            HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
+            HoneycombOptions
+                .Builder(HoneycombOptionsMapSource(data))
                 .setServiceName("service_name")
                 .setServiceVersion("2")
                 .build()
@@ -755,7 +765,8 @@ class HoneycombOptionsUnitTest {
             )
 
         val options =
-            HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
+            HoneycombOptions
+                .Builder(HoneycombOptionsMapSource(data))
                 .setServiceName("override_name")
                 .setServiceVersion("3")
                 .build()
@@ -786,7 +797,8 @@ class HoneycombOptionsUnitTest {
         resourceAttributes["service.version"] = "1"
 
         val options =
-            HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
+            HoneycombOptions
+                .Builder(HoneycombOptionsMapSource(data))
                 .setResourceAttributes(resourceAttributes)
                 .setServiceName("service_name")
                 .setServiceVersion("2")
@@ -819,7 +831,8 @@ class HoneycombOptionsUnitTest {
         resourceAttributes["service.version"] = "1"
 
         val options =
-            HoneycombOptions.Builder(HoneycombOptionsMapSource(data))
+            HoneycombOptions
+                .Builder(HoneycombOptionsMapSource(data))
                 .setServiceName("service_name")
                 .setServiceVersion("2")
                 .setResourceAttributes(resourceAttributes)

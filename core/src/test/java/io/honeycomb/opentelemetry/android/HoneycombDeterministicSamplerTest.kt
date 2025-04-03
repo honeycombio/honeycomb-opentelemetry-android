@@ -13,7 +13,9 @@ import org.junit.runners.Parameterized
 import org.junit.runners.Parameterized.Parameters
 
 @RunWith(Parameterized::class)
-class HoneycombDeterministicSamplerTest(private val args: TestArguments) {
+class HoneycombDeterministicSamplerTest(
+    private val args: TestArguments,
+) {
     companion object {
         @JvmStatic
         @Parameters
@@ -34,10 +36,25 @@ class HoneycombDeterministicSamplerTest(private val args: TestArguments) {
         val context = Context.root()
 
         val sampler = HoneycombDeterministicSampler(args.rate)
-        val result = sampler.shouldSample(context, traceId, "test", SpanKind.CLIENT, Attributes.empty(), emptyList<LinkData>().toMutableList())
+        val result =
+            sampler.shouldSample(
+                context,
+                traceId,
+                "test",
+                SpanKind.CLIENT,
+                Attributes.empty(),
+                emptyList<LinkData>().toMutableList(),
+            )
 
-        assertEquals("[rate: ${args.rate}] expected: ${args.decision} but was: ${result.decision}", args.decision, result.decision)
+        assertEquals(
+            "[rate: ${args.rate}] expected: ${args.decision} but was: ${result.decision}",
+            args.decision,
+            result.decision,
+        )
     }
 }
 
-data class TestArguments(val rate: Int, val decision: SamplingDecision)
+data class TestArguments(
+    val rate: Int,
+    val decision: SamplingDecision,
+)
