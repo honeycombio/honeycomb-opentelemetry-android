@@ -97,6 +97,7 @@ All telemetry emitted will have the following resource attributes attached:
 - `os.type`: "linux"
 - `os.version`: The value of [`android.os.Build.VERSION.RELEASE`](https://developer.android.com/reference/android/os/Build.VERSION#RELEASE)
 - `rum.sdk.version`: Version of the OpenTelemetry Android SDK being used.
+- `screen.name`: Name of the current Activity or Fragment (see [Navigation](#navigation-instrumentation) section below)
 - `service.name`: The name of your application, as provided via `setServiceName()`, or `unknown_service` if unset.
 - `service.version`: Optional. The version of your application, as provided via `setServiceVersion()
 - `telemetry.sdk.language`: "android"
@@ -202,6 +203,10 @@ These events may have the following attributes.
 * `view.id.package` - The package for the XML ID of the view.
 * `view.name` - The "best" available name of the view, given the other identifiers. Usually the same as `view.id.entry`.
 
+### Navigation Instrumentation
+
+The library tracks navigation between Activities and Fragments in your Android application. It automatically sets the `screen.name` attribute on spans to the name of the current Activity or Fragment that a user is viewing. This provides visibility into user navigation patterns and helps correlate other telemetry with the specific screen where events occurred.
+
 ## Manual Instrumentation
 
 ### Context Propagation
@@ -306,6 +311,79 @@ Specifically, it will emit 2 kinds of span for each composable that is wrapped:
 
 `View Body` spans encompass just the contents of the `HoneycombInstrumentedView`, and include the following attributes:
 - `view.name` (string): the name passed to `HoneycombInstrumentedComposable`
+
+### Adding a Custom Span Processor
+
+You can implement and register your own custom span processor with the Honeycomb SDK. This allows you to perform custom operations on spans before they are exported, such as adding application-specific attributes or filtering certain spans at the application level.
+
+```kotlin
+import io.opentelemetry.context.Context
+import io.opentelemetry.sdk.common.CompletableResultCode
+import io.opentelemetry.sdk.trace.ReadWriteSpan
+import io.opentelemetry.sdk.trace.ReadableSpan
+import io.opentelemetry.sdk.trace.SpanProcessor
+
+// Create a custom span processor
+class MyCustomSpanProcessor : SpanProcessor {
+    override fun onStart(parentContext: Context, span: ReadWriteSpan) {
+        // Add custom logic when a span starts
+        // For example, add a custom attribute to every span:
+        span.setAttribute("custom.attribute", "custom_value")
+    }
+
+
+    override fun onEnd(span: ReadableSpan) {
+        // Add custom logic when a span ends
+    }
+
+    override fun shutdown(): CompletableResultCode {
+        // Clean up any resources
+        return CompletableResultCode.ofSuccess()
+    }
+
+    override fun isStartRequired(): Boolean {
+        return true
+    }
+
+    override fun isEndRequired(): Boolean {
+        return true
+    }
+}
+
+// Then when configuring the SDK, add your processor:
+val options = HoneycombOptions.builder(this)
+    .setApiKey("YOUR-API-KEY")
+    .setServiceName("YOUR-SERVICE-NAME")
+    .setSpanProcessor(MyCustomSpanProcessor())
+    .build()
+
+otelRum = Honeycomb.configure(this, options)
+```
+
+To use multiple custom span processors, you can combine them using OpenTelemetry's `SpanProcessor.composite()` helper:
+
+```kotlin
+import io.opentelemetry.context.Context
+import io.opentelemetry.sdk.common.CompletableResultCode
+import io.opentelemetry.sdk.trace.ReadWriteSpan
+import io.opentelemetry.sdk.trace.ReadableSpan
+import io.opentelemetry.sdk.trace.SpanProcessor
+
+// Combine multiple span processors
+val combinedProcessor = SpanProcessor.composite(
+    FirstSpanProcessor(),
+    SecondSpanProcessor(),
+)
+
+// Add the combined processor to your options
+val options = HoneycombOptions.builder(this)
+    .setApiKey("YOUR-API-KEY")
+    .setServiceName("YOUR-SERVICE-NAME")
+    .setSpanProcessor(combinedProcessor)
+    .build()
+
+otelRum = Honeycomb.configure(this, options)
+```
 
 ## Offline Caching
 
