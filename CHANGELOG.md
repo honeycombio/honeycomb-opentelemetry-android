@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## v0.0.7
+
+* feat: install.id added to all spans
 * feat: Add OS and Device resource attributes
 
 ## v0.0.6
