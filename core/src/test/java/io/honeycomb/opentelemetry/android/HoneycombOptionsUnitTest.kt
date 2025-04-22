@@ -879,4 +879,16 @@ class HoneycombOptionsUnitTest {
             HoneycombOptions.Builder(source).build()
         }
     }
+
+    @Test
+    fun options_throwsOnMissingApiKey() {
+        val source =
+            HoneycombOptionsMapSource(
+                mapOf<String, Any?>(
+                ),
+            )
+        assertThrows(HoneycombException::class.java) {
+            HoneycombOptions.Builder(source).build()
+        }
+    }
 }
