@@ -891,4 +891,15 @@ class HoneycombOptionsUnitTest {
             HoneycombOptions.Builder(source).build()
         }
     }
+
+    @Test
+    fun options_noThrowsOnMissingApiKeyWithCustomEndpoint() {
+        val source =
+            HoneycombOptionsMapSource(
+                mapOf<String, Any?>(
+                    "HONEYCOMB_API_ENDPOINT" to "http://example.com:1234",
+                ),
+            )
+        HoneycombOptions.Builder(source).build()
+    }
 }
