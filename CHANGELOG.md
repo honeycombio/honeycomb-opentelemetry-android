@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* feat: Allow optional API key for custom endpoint
+
 ## v0.0.7
 
 * feat: install.id added to all spans
@@ -44,4 +46,3 @@
 
 * Initial release
 * Basic configuration helpers
-
