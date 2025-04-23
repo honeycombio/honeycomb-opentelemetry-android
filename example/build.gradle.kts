@@ -70,11 +70,7 @@ dependencies {
     implementation(libs.opentelemetry.android.core)
     implementation(libs.opentelemetry.api)
     implementation(libs.opentelemetry.sdk)
-    implementation(libs.instrumentation.activity)
-    implementation(libs.instrumentation.anr)
-    implementation(libs.instrumentation.crash)
-    implementation(libs.instrumentation.fragment)
-    implementation(libs.instrumentation.slowrendering)
+    implementation(libs.android.agent)
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)

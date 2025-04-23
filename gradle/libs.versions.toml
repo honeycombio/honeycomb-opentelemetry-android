@@ -20,7 +20,7 @@ material = "1.12.0"
 mockitoCore = "4.11.0"
 mockitoKotlin = "4.1.0"
 okhttp = "4.12.0"
-opentelemetry = "1.49.0"
+opentelemetry = "1.43.0"
 opentelemetryAndroid = "0.8.0-alpha"
 opentelemetryBaggageProcessor = "1.42.0-alpha"
 opentelemetryInstrumentation = "2.9.0"
@@ -33,6 +33,7 @@ uiautomator = "2.4.0-alpha01"
 [libraries]
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+android-agent = { module = "io.opentelemetry.android:android-agent", version.ref = "opentelemetryAndroid" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
@@ -54,11 +55,6 @@ auto-service-processor = { module = "com.google.auto.service:auto-service", vers
 auto-service-annotations = { module = "com.google.auto.service:auto-service-annotations", version.ref = "autoService" }
 bytebuddy = { module = "net.bytebuddy:byte-buddy", version.ref = "bytebuddy" }
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarLibs" }
-instrumentation-activity = { module = "io.opentelemetry.android:instrumentation-activity", version.ref = "opentelemetryAndroid"  }
-instrumentation-anr = { module = "io.opentelemetry.android:instrumentation-anr", version.ref = "opentelemetryAndroid"  }
-instrumentation-crash = { module = "io.opentelemetry.android:instrumentation-crash", version.ref = "opentelemetryAndroid"  }
-instrumentation-fragment = { module = "io.opentelemetry.android:instrumentation-fragment", version.ref = "opentelemetryAndroid"  }
-instrumentation-slowrendering = { module = "io.opentelemetry.android:instrumentation-slowrendering", version.ref = "opentelemetryAndroid"  }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junitParams"}
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
