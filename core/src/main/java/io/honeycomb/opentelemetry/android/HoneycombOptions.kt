@@ -2,9 +2,9 @@ package io.honeycomb.opentelemetry.android
 
 import android.content.Context
 import android.os.Build
-import android.webkit.URLUtil
 import io.opentelemetry.sdk.trace.SpanProcessor
 import java.net.URI
+import java.net.URISyntaxException
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -91,13 +91,12 @@ private fun isClassicKey(key: String?): Boolean {
 }
 
 private fun isHoneycombEndpoint(endpoint: String): Boolean {
-    if (URLUtil.isValidUrl(endpoint)) {
+    try {
         val uri = URI(endpoint)
-
         return uri.host.endsWith(".honeycomb.io")
+    } catch (_: URISyntaxException) {
+        return false
     }
-
-    return false
 }
 
 /**
