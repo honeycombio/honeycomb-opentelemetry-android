@@ -1,6 +1,7 @@
 # Honeycomb Android SDK changelog
 
 ## Unreleased
+refactor: Switch to using android agent as dependency
 
 ## v0.0.7
 
