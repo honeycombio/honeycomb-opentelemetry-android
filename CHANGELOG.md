@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## 0.0.8
+## v0.0.8
 * refactor: Switch to using android agent as dependency
 * feat: Allow optional API key for custom endpoint
 
