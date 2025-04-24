@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.bytebuddy)
     alias(libs.plugins.spotless)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -53,9 +54,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
-    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -67,14 +65,10 @@ dependencies {
     // This is required by opentelemetry-android.
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
+    implementation(libs.opentelemetry.android.agent)
     implementation(libs.opentelemetry.android.core)
     implementation(libs.opentelemetry.api)
     implementation(libs.opentelemetry.sdk)
-    implementation(libs.instrumentation.activity)
-    implementation(libs.instrumentation.anr)
-    implementation(libs.instrumentation.crash)
-    implementation(libs.instrumentation.fragment)
-    implementation(libs.instrumentation.slowrendering)
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)

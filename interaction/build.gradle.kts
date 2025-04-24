@@ -54,6 +54,7 @@ dependencies {
     implementation(libs.material)
 
     implementation(libs.opentelemetry.android.core)
+    implementation(libs.opentelemetry.android.instrumentation)
 
     // This is required by opentelemetry-android.
     coreLibraryDesugaring(libs.desugar.jdk.libs)

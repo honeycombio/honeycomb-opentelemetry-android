@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* maint: upgrade OpenTelemetry Android to 0.11.0-alpha
+
 ## v0.0.7
 
 * feat: install.id added to all spans

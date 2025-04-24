@@ -6,7 +6,7 @@ import android.provider.Settings.Secure
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.OpenTelemetryRumBuilder
 import io.opentelemetry.android.config.OtelRumConfig
-import io.opentelemetry.android.features.diskbuffering.DiskBufferingConfiguration
+import io.opentelemetry.android.features.diskbuffering.DiskBufferingConfig
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.api.common.AttributesBuilder
 import io.opentelemetry.api.logs.Logger
@@ -102,13 +102,8 @@ class Honeycomb {
                     .build()
 
             val rumConfig = OtelRumConfig()
-            val diskBufferingConfig =
-                DiskBufferingConfiguration
-                    .builder()
-                    .setEnabled(
-                        options.offlineCachingEnabled,
-                    ).build()
-            rumConfig.setDiskBufferingConfiguration(diskBufferingConfig)
+            val diskBufferingConfig = DiskBufferingConfig.create(options.offlineCachingEnabled)
+            rumConfig.setDiskBufferingConfig(diskBufferingConfig)
 
             return OpenTelemetryRumBuilder
                 .create(app, rumConfig)
