@@ -3,6 +3,8 @@ package io.honeycomb.opentelemetry.android
 import android.content.Context
 import android.os.Build
 import io.opentelemetry.sdk.trace.SpanProcessor
+import java.net.URI
+import java.net.URISyntaxException
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
@@ -75,12 +77,25 @@ private val INGEST_CLASSIC_KEY_REGEX = Regex("hc[a-z]ic_[a-z0-9]*")
 /**
  * Returns whether the passed in API key is classic or not.
  */
-private fun isClassicKey(key: String): Boolean {
+private fun isClassicKey(key: String?): Boolean {
+    if (key == null) {
+        return false
+    }
+
     return when (key.length) {
         0 -> false
         32 -> CLASSIC_KEY_REGEX.matches(key)
         64 -> INGEST_CLASSIC_KEY_REGEX.matches(key)
         else -> false
+    }
+}
+
+private fun isHoneycombEndpoint(endpoint: String): Boolean {
+    try {
+        val uri = URI(endpoint)
+        return uri.host.endsWith(".honeycomb.io")
+    } catch (_: URISyntaxException) {
+        return false
     }
 }
 
@@ -121,14 +136,15 @@ private fun getHoneycombEndpoint(
  * Gets the headers to use for a particular exporter.
  */
 private fun getHeaders(
-    apiKey: String,
+    apiKey: String?,
     dataset: String?,
     generalHeaders: Map<String, String>,
     signalHeaders: Map<String, String>,
 ): Map<String, String> {
     val otlpVersion = io.opentelemetry.android.BuildConfig.OTEL_ANDROID_VERSION
     val baseHeaders = mapOf("x-otlp-version" to otlpVersion)
-    val signalBaseHeaders = mutableMapOf("x-honeycomb-team" to apiKey)
+    val signalBaseHeaders = mutableMapOf<String, String>()
+    apiKey?.let { signalBaseHeaders["x-honeycomb-team"] = apiKey }
     dataset?.let { signalBaseHeaders["x-honeycomb-dataset"] = it }
 
     return baseHeaders + generalHeaders + signalBaseHeaders + signalHeaders
@@ -148,9 +164,9 @@ class HoneycombException(
  * https://opentelemetry.io/docs/languages/sdk-configuration/otlp-exporter/
  */
 data class HoneycombOptions(
-    val tracesApiKey: String,
-    val metricsApiKey: String,
-    val logsApiKey: String,
+    val tracesApiKey: String?,
+    val metricsApiKey: String?,
+    val logsApiKey: String?,
     val dataset: String?,
     val metricsDataset: String?,
     val tracesEndpoint: String,
@@ -422,14 +438,6 @@ data class HoneycombOptions(
         }
 
         fun build(): HoneycombOptions {
-            // If any API key isn't set, consider it a fatal error.
-            val defaultApiKey: () -> String = {
-                if (apiKey == null) {
-                    throw HoneycombException("missing API key: call setApiKey()")
-                }
-                apiKey as String
-            }
-
             // Collect the non-exporter-specific values.
             val resourceAttributes = resourceAttributes.toMutableMap()
             // Any explicit service name overrides the one in the resource attributes.
@@ -469,9 +477,43 @@ data class HoneycombOptions(
                 "android",
             )
 
-            val tracesApiKey = this.tracesApiKey ?: defaultApiKey()
-            val metricsApiKey = this.metricsApiKey ?: defaultApiKey()
-            val logsApiKey = this.logsApiKey ?: defaultApiKey()
+            val tracesEndpoint =
+                getHoneycombEndpoint(
+                    this.tracesEndpoint,
+                    apiEndpoint,
+                    tracesProtocol ?: protocol,
+                    "v1/traces",
+                )
+            val metricsEndpoint =
+                getHoneycombEndpoint(
+                    this.metricsEndpoint,
+                    apiEndpoint,
+                    metricsProtocol ?: protocol,
+                    "v1/metrics",
+                )
+            val logsEndpoint =
+                getHoneycombEndpoint(
+                    this.logsEndpoint,
+                    apiEndpoint,
+                    logsProtocol ?: protocol,
+                    "v1/logs",
+                )
+
+            val tracesApiKey = this.tracesApiKey ?: this.apiKey
+            val metricsApiKey = this.metricsApiKey ?: this.apiKey
+            val logsApiKey = this.logsApiKey ?: this.apiKey
+
+            if (isHoneycombEndpoint(tracesEndpoint) && tracesApiKey == null) {
+                throw HoneycombException("missing API key: call setApiKey() or setTracesApiKey()")
+            }
+
+            if (isHoneycombEndpoint(metricsEndpoint) && metricsApiKey == null) {
+                throw HoneycombException("missing API key: call setApiKey() or setMetricsApiKey()")
+            }
+
+            if (isHoneycombEndpoint(logsEndpoint) && logsApiKey == null) {
+                throw HoneycombException("missing API key: call setApiKey() or setLogsApiKey()")
+            }
 
             val tracesHeaders =
                 getHeaders(
@@ -493,28 +535,6 @@ data class HoneycombOptions(
                     if (isClassicKey(tracesApiKey)) dataset else null,
                     headers,
                     this.logsHeaders,
-                )
-
-            val tracesEndpoint =
-                getHoneycombEndpoint(
-                    this.tracesEndpoint,
-                    apiEndpoint,
-                    tracesProtocol ?: protocol,
-                    "v1/traces",
-                )
-            val metricsEndpoint =
-                getHoneycombEndpoint(
-                    this.metricsEndpoint,
-                    apiEndpoint,
-                    metricsProtocol ?: protocol,
-                    "v1/metrics",
-                )
-            val logsEndpoint =
-                getHoneycombEndpoint(
-                    this.logsEndpoint,
-                    apiEndpoint,
-                    logsProtocol ?: protocol,
-                    "v1/logs",
                 )
 
             return HoneycombOptions(
