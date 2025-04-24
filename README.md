@@ -12,7 +12,7 @@ Honeycomb wrapper for [OpenTelemetry](https://opentelemetry.io) on Android.
 Add the following dependencies to your `build.gradle.kts`:
 ```
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.7")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.8")
 }
 ```
 
@@ -263,7 +263,7 @@ try {
 Android Compose instrumentation is included in a standalone library. Add the following to your dependencies in `build.gradle.kts`:
 ```
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android-compose:0.0.3-alpha")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android-compose:0.0.8")
 }
 ```
 

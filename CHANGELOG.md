@@ -1,8 +1,11 @@
 # Honeycomb Android SDK changelog
 
 ## Unreleased
-
 * maint: upgrade OpenTelemetry Android to 0.11.0-alpha
+
+## v0.0.8
+* refactor: Switch to using android agent as dependency
+* feat: Allow optional API key for custom endpoint
 
 ## v0.0.7
 
@@ -46,4 +49,3 @@
 
 * Initial release
 * Basic configuration helpers
-
