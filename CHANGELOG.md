@@ -1,8 +1,9 @@
 # Honeycomb Android SDK changelog
 
 ## Unreleased
-refactor: Switch to using android agent as dependency
 
+## 0.0.8
+* refactor: Switch to using android agent as dependency
 * feat: Allow optional API key for custom endpoint
 
 ## v0.0.7
