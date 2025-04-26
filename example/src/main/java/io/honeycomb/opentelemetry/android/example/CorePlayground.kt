@@ -68,6 +68,16 @@ private fun onCrash() {
     throw RuntimeException("This crash was intentional.")
 }
 
+private fun onSimulateCrash() {
+    // If we throw the exception, there is no way to avoid a crash.
+    // But if we call the uncaught exception handler directly, we can intercept the exception
+    // before the app is killed.
+    val handler = Thread.getDefaultUncaughtExceptionHandler()
+    val thread = Thread.currentThread()
+    val exception = SmokeTestException("This crash was intentional.")
+    handler?.uncaughtException(thread, exception)
+}
+
 @Composable
 internal fun CorePlayground(otel: OpenTelemetryRum? = null) {
     Column(
@@ -98,6 +108,11 @@ internal fun CorePlayground(otel: OpenTelemetryRum? = null) {
         Button(modifier = Modifier.fillMaxWidth(), onClick = { onCrash() }) {
             Text(
                 text = "Crash",
+            )
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = { onSimulateCrash() }) {
+            Text(
+                text = "Simulate Crash",
             )
         }
     }
