@@ -5,7 +5,25 @@
 
 Honeycomb wrapper for [OpenTelemetry](https://opentelemetry.io) on Android.
 
-**STATUS: this library is in BETA.** Data shapes are stable and safe for production. We are actively seeking feedback to ensure usability.
+**STATUS: this library is in BETA.**
+We are actively seeking feedback to ensure usability.
+
+Honeycomb APIs and data shapes are stable and safe for production.
+However, this SDK depends on the OpenTelemetry Android SDK, which is still
+experimental and subject to change. Therefore, when updating, it is possible to
+encounter breaking changes in other dependencies.
+
+These are the current versions of libraries we have tested for compatibility:
+
+  | Dependency                                             | Version       |
+  | ------------------------------------------------------ | ------------- |
+  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `0.0.8`       |
+  | `io.opentelemetry.android:core`                        | `0.8.0-alpha` |
+  | `io.opentelemetry.android:android-agent`               | `0.8.0-alpha` |
+  | `io.opentelemetry:opentelemetry-api`                   | `1.43.0`      |
+
+For a complete list of tested dependencies and versions, see
+[libs.versions.toml](gradle/libs.versions.toml).
 
 ## Getting started
 
