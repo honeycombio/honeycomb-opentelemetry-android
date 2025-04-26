@@ -1,6 +1,7 @@
 # Honeycomb Android SDK changelog
 
 ## Unreleased
+* fix: Fix a bug in unhandled exception instrumentation that caused hangs instead of crashes
 
 ## v0.0.8
 * refactor: Switch to using android agent as dependency
@@ -14,14 +15,14 @@
 ## v0.0.6
 
 * feat: Add logException function for manual error reporting
-* refactor: Change dependencies to require users to explicitly include auto-instrumentation.
+* refactor: Change dependencies to require users to explicitly include auto-instrumentation
 * cleanup: Update instrumentation names to use reverse url notation (`io.honeycomb.*`) instead of `@honeycombio/instrumentation-*` notation
-* feat: Enable telemetry caching for offline support.
-* feat: Add `setServiceVersion()` function to `HoneycombOptions` to allow clients to supply current application version.
+* feat: Enable telemetry caching for offline support
+* feat: Add `setServiceVersion()` function to `HoneycombOptions` to allow clients to supply current application version
 
 ## v0.0.5-alpha
 
-* feat: Add a `setSpanProcessor()` function to `HoneycombOptions` builder to allow clients to supply custom span processors.
+* feat: Add a `setSpanProcessor()` function to `HoneycombOptions` builder to allow clients to supply custom span processors
 
 ## v0.0.4-alpha
 
