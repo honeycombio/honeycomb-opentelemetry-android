@@ -104,6 +104,10 @@ teardown_file() {
 @test "SDK detects ANRs" {
   result=$(unique_span_names_for "io.opentelemetry.anr")
   assert_equal "$result" '"ANR"'
+
+  stacktrace=$(attribute_for_span_key "io.opentelemetry.anr" "ANR" "exception.stacktrace" "string" \
+    | grep "java.lang.Thread.sleep")
+  assert_not_empty "$stacktrace"
 }
 
 @test "SDK can log manual exceptions" {
@@ -131,6 +135,24 @@ teardown_file() {
 
   result=$(attribute_for_log_key "io.honeycomb.crash" "user.id" "int")
   assert_equal "$result" '"1"'
+}
+
+@test "SDK can log unhandled exceptions" {
+  result=$(attribute_for_log_key "io.opentelemetry.crash" "exception.type" "string")
+  assert_equal "$result" '"io.honeycomb.opentelemetry.android.example.SmokeTestException"'
+
+  result=$(attribute_for_log_key "io.opentelemetry.crash" "exception.message" "string")
+  assert_equal "$result" '"This crash was intentional."'
+
+  result=$(attribute_for_log_key "io.opentelemetry.crash" "exception.stacktrace" "string" \
+    | grep "example.CorePlaygroundKt.onSimulateCrash")
+  assert_not_empty "$result"
+
+  result=$(attribute_for_log_key "io.opentelemetry.crash" "thread.name" "string")
+  assert_equal "$result" '"main"'
+
+  result=$(attribute_for_log_key "io.opentelemetry.crash" "thread.id" "int")
+  assert_not_empty "$result"
 }
 
 @test "SDK detects slow renders" {

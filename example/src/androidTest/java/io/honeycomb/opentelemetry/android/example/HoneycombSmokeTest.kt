@@ -84,6 +84,11 @@ class HoneycombSmokeTest {
     }
 
     @Test
+    fun crashDetection_works() {
+        rule.onNodeWithText("Simulate Crash").performClick()
+    }
+
+    @Test
     fun exceptionLogging_works() {
         rule.onNodeWithText("Log Exception").performClick()
     }
