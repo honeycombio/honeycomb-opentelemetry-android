@@ -1,6 +1,9 @@
 # Honeycomb Android SDK changelog
 
 ## Unreleased
+
+## v0.0.9
+* maint: bump androidx.core:core-ktx from 1.15.0 to 1.16.0
 * fix: Fix a bug in unhandled exception instrumentation that caused hangs instead of crashes
 
 ## v0.0.8
