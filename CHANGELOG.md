@@ -1,6 +1,8 @@
 # Honeycomb Android SDK changelog
 
 ## Unreleased
+
+## v0.0.9
 * fix: Fix a bug in unhandled exception instrumentation that caused hangs instead of crashes
 
 ## v0.0.8
