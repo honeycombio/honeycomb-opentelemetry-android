@@ -333,7 +333,7 @@ data class HoneycombOptions(
             return this
         }
 
-        fun setLogRecordProcessor(logRecordProcessor: LogRecordProcessor) : Builder {
+        fun setLogRecordProcessor(logRecordProcessor: LogRecordProcessor): Builder {
             this.logRecordProcessor = logRecordProcessor
             return this
         }

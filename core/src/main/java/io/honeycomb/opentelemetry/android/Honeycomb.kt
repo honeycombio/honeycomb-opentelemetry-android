@@ -129,8 +129,7 @@ class Honeycomb {
                     options.logRecordProcessor?.let {
                         builder.addLogRecordProcessor(options.logRecordProcessor)
                     }
-                }
-                .addMeterProviderCustomizer { builder, _ ->
+                }.addMeterProviderCustomizer { builder, _ ->
                     builder.setResource(resource)
                     builder.registerMetricReader(
                         PeriodicMetricReader.builder(metricsExporter).build(),
