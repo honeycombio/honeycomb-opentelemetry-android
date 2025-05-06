@@ -4,3 +4,6 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    ignore:
+      # While OTel Android is experimental and has frequent breaking changes, don't upgrade it.
+      - dependency-name: "io.opentelemetry*"

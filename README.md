@@ -30,7 +30,7 @@ For a complete list of tested dependencies and versions, see
 Add the following dependencies to your `build.gradle.kts`:
 ```
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.8")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.9")
 }
 ```
 
@@ -83,6 +83,7 @@ To manually send a span:
 | `metricsEndpoint`       | String                                          | No        | API endpoint to send metrics to. Overrides `apiEndpoint` for metrics data.                                                                                                               |
 | `logsEndpoint`          | String                                          | No        | API endpoint to send trace to. Overrides `apiEndpoint` for logs data.                                                                                                                    |
 | `spanProcessor`         | io.opentelemetry.sdk.trace.SpanProcessor        | No        | Additional span processor to use.                                                                                                                                                        |
+| `logRecordProcessor`     | io.opentelemetry.sdk.logs.LogRecordProcessor    | No       | Log Record processor to use.                                                                                                                                                             |
 | `sampleRate`            | Int                                             | No        | Sample rate to apply (ie. a value of `40` means 1 in 40 traces will be exported).                                                                                                        |
 | `debug`                 | Boolean                                         | No        | Enable debug logging.                                                                                                                                                                    |
 | `serviceName`           | String?                                         | No        | This determines the Honeycomb service to send data to, and also appears as the contents of the `service.name` resource attribute.                                                        |

@@ -217,3 +217,8 @@ teardown_file() {
 @test "Span Processor gets added correctly" {
     result=$(spans_received | jq ".attributes[] | select (.key == \"app.metadata\").value.stringValue" "app.metadata" string | uniq)
 }
+
+@test "Log Record Processor gets added correctly" {
+    result=$(attribute_for_log_key "otel.initialization.events" "app.metadata" "string" | uniq)
+    assert_equal "$result" '"extra metadata"'
+}
