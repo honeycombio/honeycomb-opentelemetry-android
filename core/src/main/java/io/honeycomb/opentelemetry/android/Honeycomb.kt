@@ -125,6 +125,11 @@ class Honeycomb {
                     builder.addSpanProcessor(spanProcessor)
                     builder.setSampler(HoneycombDeterministicSampler(options.sampleRate))
                 }.addLogRecordExporterCustomizer { logsExporter }
+                .addLoggerProviderCustomizer { builder, _ ->
+                    options.logRecordProcessor?.let {
+                        builder.addLogRecordProcessor(options.logRecordProcessor)
+                    }
+                }
                 .addMeterProviderCustomizer { builder, _ ->
                     builder.setResource(resource)
                     builder.registerMetricReader(
