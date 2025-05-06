@@ -4,9 +4,6 @@ updates:
     directory: /
     schedule:
       interval: weekly
-ignore:
-  # While OTel Android is experimental and has frequent breaking changes, don't upgrade it.
-  - dependency-name: "io.opentelemetry:*"
-  - dependency-name: "io.opentelemetry.android:*"
-  - dependency-name: "io.opentelemetry.contrib:*"
-  - dependency-name: "io.opentelemetry.semconv:*"
+    ignore:
+      # While OTel Android is experimental and has frequent breaking changes, don't upgrade it.
+      - dependency-name: "io.opentelemetry*"
