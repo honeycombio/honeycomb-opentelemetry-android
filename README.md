@@ -15,12 +15,12 @@ encounter breaking changes in other dependencies.
 
 These are the current versions of libraries we have tested for compatibility:
 
-  | Dependency                                             | Version       |
-  | ------------------------------------------------------ | ------------- |
-  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `0.0.8`       |
-  | `io.opentelemetry.android:core`                        | `0.8.0-alpha` |
-  | `io.opentelemetry.android:android-agent`               | `0.8.0-alpha` |
-  | `io.opentelemetry:opentelemetry-api`                   | `1.43.0`      |
+  | Dependency                                             | Version        |
+  | ------------------------------------------------------ | -------------- |
+  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `0.0.9`        |
+  | `io.opentelemetry.android:core`                        | `0.11.0-alpha` |
+  | `io.opentelemetry.android:android-agent`               | `0.11.0-alpha` |
+  | `io.opentelemetry:opentelemetry-api`                   | `1.49.0`       |
 
 For a complete list of tested dependencies and versions, see
 [libs.versions.toml](gradle/libs.versions.toml).
