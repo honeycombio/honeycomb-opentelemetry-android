@@ -2,6 +2,7 @@ package io.honeycomb.opentelemetry.android
 
 import android.content.Context
 import android.os.Build
+import io.opentelemetry.sdk.logs.LogRecordProcessor
 import io.opentelemetry.sdk.trace.SpanProcessor
 import java.net.URI
 import java.net.URISyntaxException
@@ -173,6 +174,7 @@ data class HoneycombOptions(
     val metricsEndpoint: String,
     val logsEndpoint: String,
     val spanProcessor: SpanProcessor?,
+    val logRecordProcessor: LogRecordProcessor?,
     val sampleRate: Int,
     val debug: Boolean,
     val serviceName: String,
@@ -205,6 +207,7 @@ data class HoneycombOptions(
         private var logsEndpoint: String? = null
 
         private var spanProcessor: SpanProcessor? = null
+        private var logRecordProcessor: LogRecordProcessor? = null
         private var sampleRate: Int = 1
         private var debug: Boolean = false
 
@@ -327,6 +330,11 @@ data class HoneycombOptions(
 
         fun setLogsApiEndpoint(endpoint: String): Builder {
             logsEndpoint = endpoint
+            return this
+        }
+
+        fun setLogRecordProcessor(logRecordProcessor: LogRecordProcessor): Builder {
+            this.logRecordProcessor = logRecordProcessor
             return this
         }
 
@@ -547,6 +555,7 @@ data class HoneycombOptions(
                 metricsEndpoint,
                 logsEndpoint,
                 spanProcessor,
+                logRecordProcessor,
                 sampleRate,
                 debug,
                 serviceName,
