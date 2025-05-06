@@ -55,6 +55,7 @@ class ExampleApp : Application() {
                 .setServiceVersion("0.0.1")
                 .setMetricsDataset("android-test-metrics")
                 .setSpanProcessor(SimpleSpanProcessor())
+                .setLogRecordProcessor(SimpleLogRecordProcessor())
                 .setDebug(true)
                 .build()
 
