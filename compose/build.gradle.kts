@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.spotless)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -38,14 +39,9 @@ android {
     }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.15"
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
+    kotlin {
+        jvmToolchain(21)
     }
     testOptions {
         managedDevices {

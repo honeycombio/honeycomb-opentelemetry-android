@@ -49,19 +49,19 @@ teardown_file() {
     # This test is primarily to test that OTel integration is working, and the exact order of
     # events depends on the order the tests were run. So, just check that all types are present.
 
-    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Created "activityName" "string" | sort | uniq)
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Created "activity.name" "string" | sort | uniq)
     assert_equal "$result" '"ClassicActivity"
 "MainActivity"'
 
-    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Paused "activityName" "string" | sort | uniq)
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Paused "activity.name" "string" | sort | uniq)
     assert_equal "$result" '"ClassicActivity"
 "MainActivity"'
 
-    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Stopped "activityName" "string" | sort | uniq)
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Stopped "activity.name" "string" | sort | uniq)
     assert_equal "$result" '"ClassicActivity"
 "MainActivity"'
 
-    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Destroyed "activityName" "string" | sort | uniq)
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Destroyed "activity.name" "string" | sort | uniq)
     assert_equal "$result" '"ClassicActivity"
 "MainActivity"'
 }
@@ -70,19 +70,19 @@ teardown_file() {
     # This test is primarily to test that OTel integration is working, and the exact order of
     # events depends on the order the tests were run. So, just check that all types are present.
 
-    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Created "fragmentName" "string" | sort | uniq)
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Created "fragment.name" "string" | sort | uniq)
     assert_equal "$result" '"FirstFragment"
 "SecondFragment"'
 
-    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Paused "fragmentName" "string" | sort | uniq)
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Paused "fragment.name" "string" | sort | uniq)
     assert_equal "$result" '"FirstFragment"
 "SecondFragment"'
 
-    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Stopped "fragmentName" "string" | sort | uniq)
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Stopped "fragment.name" "string" | sort | uniq)
     assert_equal "$result" '"FirstFragment"
 "SecondFragment"'
 
-    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Destroyed "fragmentName" "string" | sort | uniq)
+    result=$(attribute_for_span_key "io.opentelemetry.lifecycle" Destroyed "fragment.name" "string" | sort | uniq)
     assert_equal "$result" '"FirstFragment"
 "SecondFragment"'
 }

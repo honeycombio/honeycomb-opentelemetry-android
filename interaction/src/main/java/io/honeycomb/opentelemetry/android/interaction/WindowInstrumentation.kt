@@ -21,8 +21,9 @@ import android.view.accessibility.AccessibilityEvent
 import android.widget.TextView
 import androidx.core.view.children
 import com.google.auto.service.AutoService
-import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.instrumentation.AndroidInstrumentation
+import io.opentelemetry.android.instrumentation.InstallationContext
+import io.opentelemetry.api.OpenTelemetry
 import io.opentelemetry.api.trace.Span
 import kotlin.math.roundToInt
 
@@ -70,7 +71,7 @@ private class ViewAttributes(
 }
 
 private fun recordTouchEvent(
-    otelRum: OpenTelemetryRum,
+    openTelemetry: OpenTelemetry,
     type: TouchEventType,
     activity: Activity,
     x: Int,
@@ -79,7 +80,7 @@ private fun recordTouchEvent(
     val contentView = activity.findViewById<View>(android.R.id.content)
     val textView = findTextViewAtPosition(contentView, x, y)
     if (textView != null) {
-        val otel = otelRum.openTelemetry
+        val otel = openTelemetry
         val tracer = otel.getTracer(INSTRUMENTATION_NAME)
         val span = tracer.spanBuilder(type.spanName).startSpan()
         ViewAttributes(activity, textView).setAttributes(span)
@@ -128,19 +129,19 @@ private fun findTextViewAtPosition(
 }
 
 private class InteractionGestureListener(
-    val otelRum: OpenTelemetryRum,
+    val openTelemetry: OpenTelemetry,
     val activity: Activity,
 ) : SimpleOnGestureListener() {
     override fun onSingleTapUp(event: MotionEvent): Boolean {
         val x = event.x.roundToInt()
         val y = event.y.roundToInt()
-        recordTouchEvent(otelRum, TouchEventType.CLICK, activity, x, y)
+        recordTouchEvent(openTelemetry, TouchEventType.CLICK, activity, x, y)
         return super.onSingleTapUp(event)
     }
 }
 
 private class InteractionWindowCallback(
-    val otelRum: OpenTelemetryRum,
+    val otelRum: OpenTelemetry,
     val activity: Activity,
     val wrapped: Window.Callback,
 ) : Window.Callback {
@@ -284,13 +285,13 @@ private class InteractionWindowCallback(
 }
 
 private class InteractionLifecycleCallbacks(
-    val otelRum: OpenTelemetryRum,
+    val openTelemetry: OpenTelemetry,
 ) : Application.ActivityLifecycleCallbacks {
     override fun onActivityCreated(
         activity: Activity,
         bundle: Bundle?,
     ) {
-        activity.window.callback = InteractionWindowCallback(otelRum, activity, activity.window.callback)
+        activity.window.callback = InteractionWindowCallback(openTelemetry, activity, activity.window.callback)
     }
 
     override fun onActivityStarted(p0: Activity) {}
@@ -311,10 +312,9 @@ private class InteractionLifecycleCallbacks(
 
 @AutoService(AndroidInstrumentation::class)
 class WindowInstrumentation : AndroidInstrumentation {
-    override fun install(
-        application: Application,
-        openTelemetryRum: OpenTelemetryRum,
-    ) {
-        application.registerActivityLifecycleCallbacks(InteractionLifecycleCallbacks(openTelemetryRum))
+    override val name: String = "interaction"
+
+    override fun install(ctx: InstallationContext) {
+        ctx.application.registerActivityLifecycleCallbacks(InteractionLifecycleCallbacks(ctx.openTelemetry))
     }
 }
