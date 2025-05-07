@@ -30,6 +30,8 @@ class HoneycombOptionsInstrumentedTest {
                 "honeycomb.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
                 "honeycomb.distro.runtime_version" to Build.VERSION.RELEASE,
                 "telemetry.sdk.language" to "android",
+                "telemetry.distro.version" to BuildConfig.HONEYCOMB_DISTRO_VERSION,
+                "telemetry.distro.name" to "io.honeycomb.opentelemetry.android",
             ),
             options.resourceAttributes,
         )
