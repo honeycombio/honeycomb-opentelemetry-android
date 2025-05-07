@@ -4,6 +4,7 @@
 * maint: upgrade OpenTelemetry Android to 0.11.0-alpha
 * feat: add `BaggageLogRecordProcessor`
 * feat: Add a `setLogRecordProcessor()` function to `HoneycombOptions` builder to allow clients to supply custom log record processors.
+* feat: telemetry distro attrs
 
 ## v0.0.9
 * maint: bump androidx.core:core-ktx from 1.15.0 to 1.16.0
