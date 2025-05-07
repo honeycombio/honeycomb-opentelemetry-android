@@ -64,6 +64,11 @@ class HoneycombSmokeTest {
     }
 
     @Test
+    fun log_works() {
+        rule.onNodeWithText("Send Log").performClick()
+    }
+
+    @Test
     fun metric_works() {
         rule.onNodeWithText("Send Metric").performClick()
     }

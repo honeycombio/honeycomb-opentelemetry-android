@@ -10,6 +10,7 @@ import io.opentelemetry.android.features.diskbuffering.DiskBufferingConfig
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.api.common.AttributesBuilder
 import io.opentelemetry.api.logs.Logger
+import io.opentelemetry.contrib.baggage.processor.BaggageLogRecordProcessor
 import io.opentelemetry.contrib.baggage.processor.BaggageSpanProcessor
 import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingMetricExporter
 import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingSpanExporter
@@ -21,6 +22,7 @@ import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter
 import io.opentelemetry.sdk.OpenTelemetrySdk
 import io.opentelemetry.sdk.common.CompletableResultCode
+import io.opentelemetry.sdk.logs.LogRecordProcessor
 import io.opentelemetry.sdk.metrics.InstrumentType
 import io.opentelemetry.sdk.metrics.data.AggregationTemporality
 import io.opentelemetry.sdk.metrics.data.MetricData
@@ -121,10 +123,13 @@ class Honeycomb {
                     builder.setSampler(HoneycombDeterministicSampler(options.sampleRate))
                 }.addLogRecordExporterCustomizer { logsExporter }
                 .addLoggerProviderCustomizer { builder, _ ->
+                    val logRecordProcessors = ArrayList<LogRecordProcessor>()
+                    logRecordProcessors.add(BaggageLogRecordProcessor.allowAllBaggageKeys())
                     options.logRecordProcessor?.let {
-                        builder.addLogRecordProcessor(it)
+                        logRecordProcessors.add(it)
                     }
-                    builder
+                    val logRecordProcessor = LogRecordProcessor.composite(logRecordProcessors)
+                    builder.addLogRecordProcessor(logRecordProcessor)
                 }.addMeterProviderCustomizer { builder, _ ->
                     builder.setResource(resource)
                     builder.registerMetricReader(
