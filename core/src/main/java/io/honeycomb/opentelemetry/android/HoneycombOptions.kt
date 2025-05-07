@@ -2,9 +2,9 @@ package io.honeycomb.opentelemetry.android
 
 import android.content.Context
 import android.os.Build
-import io.opentelemetry.semconv.incubating.TelemetryIncubatingAttributes
 import io.opentelemetry.sdk.logs.LogRecordProcessor
 import io.opentelemetry.sdk.trace.SpanProcessor
+import io.opentelemetry.semconv.incubating.TelemetryIncubatingAttributes
 import java.net.URI
 import java.net.URISyntaxException
 import kotlin.time.Duration
@@ -487,7 +487,7 @@ data class HoneycombOptions(
 
             resourceAttributes.putIfAbsent(
                 TelemetryIncubatingAttributes.TELEMETRY_DISTRO_NAME.key,
-                "io.honeycomb.opentelemetry.android"
+                "io.honeycomb.opentelemetry.android",
             )
 
             // The language is technically Kotlin, but Android apps can be Java or Kotlin or both, so:
