@@ -101,6 +101,8 @@ All telemetry emitted will have the following resource attributes attached:
 - `screen.name`: Name of the current Activity or Fragment (see [Navigation](#navigation-instrumentation) section below)
 - `service.name`: The name of your application, as provided via `setServiceName()`, or `unknown_service` if unset.
 - `service.version`: Optional. The version of your application, as provided via `setServiceVersion()
+- `telemetry.distro.version`: Version of the Honeycomb SDK being used.
+- `telemetry.distro.name`: "io.honeycomb.opentelemetry.android"
 - `telemetry.sdk.language`: "android"
 - `telemetry.sdk.name`: "opentelemetry"
 - `telemetry.sdk.version`: version of the base OpenTelemetry SDK being used
