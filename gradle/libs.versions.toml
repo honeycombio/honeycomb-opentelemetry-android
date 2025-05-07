@@ -12,7 +12,6 @@ coreKtx = "1.16.0"
 desugarLibs = "2.1.5"
 espressoCore = "3.6.1"
 junit = "4.13.2"
-junitParams = "5.12.2"
 junitVersion = "1.2.1"
 kotlin = "2.1.20"
 lifecycleRuntimeKtx = "2.9.0"
@@ -52,10 +51,8 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 auto-service-processor = { module = "com.google.auto.service:auto-service", version.ref = "autoService" }
 auto-service-annotations = { module = "com.google.auto.service:auto-service-annotations", version.ref = "autoService" }
-bytebuddy = { module = "net.bytebuddy:byte-buddy", version.ref = "bytebuddy" }
 desugar-jdk-libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarLibs" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junitParams"}
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
