@@ -15,6 +15,8 @@ import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.api.baggage.Baggage
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
+import io.opentelemetry.api.logs.Logger
+import io.opentelemetry.sdk.OpenTelemetrySdk
 
 private fun onSendSpan(otelRum: OpenTelemetryRum?) {
     val otel = otelRum?.openTelemetry
@@ -28,6 +30,20 @@ private fun onSendSpan(otelRum: OpenTelemetryRum?) {
         val span = tracer?.spanBuilder("test-span")?.startSpan()
         Thread.sleep(50)
         span?.end()
+    }
+}
+
+private fun onSendLog(otelRum: OpenTelemetryRum?) {
+    val sdk = otelRum?.openTelemetry as OpenTelemetrySdk
+    val loggerProvider = sdk.sdkLoggerProvider
+    val logger: Logger = loggerProvider.loggerBuilder("io.honeycomb.smoke-test").build()
+    val baggage =
+        Baggage
+            .builder()
+            .put("baggage-key", "baggage-value")
+            .build()
+    baggage.makeCurrent().use {
+        logger.logRecordBuilder().emit()
     }
 }
 
@@ -88,6 +104,11 @@ internal fun CorePlayground(otel: OpenTelemetryRum? = null) {
         Button(modifier = Modifier.fillMaxWidth(), onClick = { onSendSpan(otel) }) {
             Text(
                 text = "Send Span",
+            )
+        }
+        Button(modifier = Modifier.fillMaxWidth(), onClick = { onSendLog(otel) }) {
+            Text(
+                text = "Send Log"
             )
         }
         Button(modifier = Modifier.fillMaxWidth(), onClick = { onSendMetrics(otel) }) {

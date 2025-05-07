@@ -110,6 +110,11 @@ teardown_file() {
   assert_not_empty "$stacktrace"
 }
 
+@test "SDK adds baggage to logs" {
+    result=$(attribute_for_log_key ${SMOKE_TEST_SCOPE} "baggage-key" "string")
+    assert_equal "$result" '"baggage-value"' 
+}
+
 @test "SDK can log manual exceptions" {
   result=$(attribute_for_log_key "io.honeycomb.crash" "event.name" "string")
   assert_equal "$result" '"device.crash"'
