@@ -32,6 +32,8 @@ teardown_file() {
 "rum.sdk.version"
 "service.name"
 "service.version"
+"telemetry.distro.name"
+"telemetry.distro.version"
 "telemetry.sdk.language"
 "telemetry.sdk.name"
 "telemetry.sdk.version"'
