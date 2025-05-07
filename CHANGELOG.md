@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* feat: add `BaggageLogRecordProcessor`
 * feat: Add a `setLogRecordProcessor()` function to `HoneycombOptions` builder to allow clients to supply custom log record processors.
 
 ## v0.0.9
