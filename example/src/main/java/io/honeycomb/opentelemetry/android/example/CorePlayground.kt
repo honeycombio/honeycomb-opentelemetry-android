@@ -108,7 +108,7 @@ internal fun CorePlayground(otel: OpenTelemetryRum? = null) {
         }
         Button(modifier = Modifier.fillMaxWidth(), onClick = { onSendLog(otel) }) {
             Text(
-                text = "Send Log"
+                text = "Send Log",
             )
         }
         Button(modifier = Modifier.fillMaxWidth(), onClick = { onSendMetrics(otel) }) {
