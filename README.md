@@ -284,7 +284,7 @@ try {
 Android Compose instrumentation is included in a standalone library. Add the following to your dependencies in `build.gradle.kts`:
 ```
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android-compose:0.0.9")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android-compose:0.0.10")
 }
 ```
 
