@@ -335,7 +335,7 @@ Specifically, it will emit 2 kinds of span for each composable that is wrapped:
 
 ### Adding a Custom Span Processor
 
-You can implement and register your own custom span processor with the Honeycomb SDK. This allows you to perform custom operations on spans before they are exported, such as adding application-specific attributes or filtering certain spans at the application level.
+You can implement and register your own custom span processor with the Honeycomb SDK. This allows you to perform custom operations on spans before they are exported, such as adding application-specific attributes.
 
 ```kotlin
 import io.opentelemetry.context.Context
