@@ -54,10 +54,10 @@ private fun createAttributes(dict: Map<String, String>): Attributes {
     return builder.build()
 }
 
-private fun getDeviceAttributes(): Attributes {
+private fun getDeviceAttributes(app: Application): Attributes {
     val builder = Attributes.builder()
 
-    builder.put(DEVICE_ID, Secure.ANDROID_ID)
+    builder.put(DEVICE_ID, Secure.getString(app.applicationContext.contentResolver, Secure.ANDROID_ID))
     builder.put(DEVICE_MANUFACTURER, Build.MANUFACTURER)
 
     return builder.build()
@@ -100,7 +100,7 @@ class Honeycomb {
                     .getDefault()
                     .toBuilder()
                     .putAll(createAttributes(options.resourceAttributes))
-                    .putAll(getDeviceAttributes())
+                    .putAll(getDeviceAttributes(app))
                     .build()
 
             val rumConfig = OtelRumConfig()

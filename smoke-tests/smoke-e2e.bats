@@ -41,6 +41,9 @@ teardown_file() {
   result=$(resource_attribute_named "telemetry.sdk.language" "string" | uniq)
   assert_equal "$result" '"android"'
 
+  result=$(resource_attribute_named "device.id" "string" | uniq)
+  assert_not_empty_string "$result"
+
   assert_equal $(resource_attribute_named "service.name" "string" | uniq) '"android-test"'
   assert_equal $(resource_attribute_named "service.version" "string" | uniq) '"0.0.1"'
 }

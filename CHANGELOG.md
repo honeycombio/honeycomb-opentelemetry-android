@@ -1,6 +1,7 @@
 # Honeycomb Android SDK changelog
 
 ## Unreleased
+* fix: Device ID is now the android id and not the string `android_id`
 
 ## v0.0.10
 
