@@ -1,6 +1,7 @@
 package io.honeycomb.opentelemetry.android
 
 import android.app.Application
+import android.content.Context
 import android.os.Build
 import android.provider.Settings.Secure
 import io.opentelemetry.android.OpenTelemetryRum
@@ -54,10 +55,10 @@ private fun createAttributes(dict: Map<String, String>): Attributes {
     return builder.build()
 }
 
-private fun getDeviceAttributes(): Attributes {
+private fun getDeviceAttributes(appContext: Context): Attributes {
     val builder = Attributes.builder()
 
-    builder.put(DEVICE_ID, Secure.ANDROID_ID)
+    builder.put(DEVICE_ID, Secure.getString(appContext.contentResolver, Secure.ANDROID_ID))
     builder.put(DEVICE_MANUFACTURER, Build.MANUFACTURER)
 
     return builder.build()
@@ -100,7 +101,7 @@ class Honeycomb {
                     .getDefault()
                     .toBuilder()
                     .putAll(createAttributes(options.resourceAttributes))
-                    .putAll(getDeviceAttributes())
+                    .putAll(getDeviceAttributes(app.applicationContext))
                     .build()
 
             val rumConfig = OtelRumConfig()
