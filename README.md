@@ -16,8 +16,8 @@ encounter breaking changes in other dependencies.
 These are the current versions of libraries we have tested for compatibility:
 
   | Dependency                                             | Version        |
-  | ------------------------------------------------------ | -------------- |
-  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `0.0.11`        |
+  |--------------------------------------------------------|----------------|
+  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `0.0.11`       |
   | `io.opentelemetry.android:core`                        | `0.11.0-alpha` |
   | `io.opentelemetry.android:android-agent`               | `0.11.0-alpha` |
   | `io.opentelemetry:opentelemetry-api`                   | `1.49.0`       |
@@ -83,7 +83,7 @@ To manually send a span:
 | `metricsEndpoint`       | String                                          | No        | API endpoint to send metrics to. Overrides `apiEndpoint` for metrics data.                                                                                                               |
 | `logsEndpoint`          | String                                          | No        | API endpoint to send trace to. Overrides `apiEndpoint` for logs data.                                                                                                                    |
 | `spanProcessor`         | io.opentelemetry.sdk.trace.SpanProcessor        | No        | Additional span processor to use.                                                                                                                                                        |
-| `logRecordProcessor`     | io.opentelemetry.sdk.logs.LogRecordProcessor    | No       | Log Record processor to use.                                                                                                                                                             |
+| `logRecordProcessor`    | io.opentelemetry.sdk.logs.LogRecordProcessor    | No        | Log Record processor to use.                                                                                                                                                             |
 | `sampleRate`            | Int                                             | No        | Sample rate to apply (ie. a value of `40` means 1 in 40 traces will be exported).                                                                                                        |
 | `debug`                 | Boolean                                         | No        | Enable debug logging.                                                                                                                                                                    |
 | `serviceName`           | String?                                         | No        | This determines the Honeycomb service to send data to, and also appears as the contents of the `service.name` resource attribute.                                                        |
@@ -206,6 +206,41 @@ Network instrumentation is not included by default but can be configured on top 
 * [`io.opentelemetry.android:okhttp-3.0`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/okhttp/okhttp-3.0)
 
 Configuration of each of these packages is described in their respective READMEs.
+
+#### Trace Propagation
+If you are connecting your app to a backend service that you wish to view as a unified trace with your app, you will need to manually add headers to all your outgoing requests. You must also create a span and set it as the active span. The span's context will be used to generate the headers needed for trace propagation.
+
+Below is an example of adding the headers to a network request, using okhttp.
+
+```kotlin
+private suspend fun doRequest(request: Request): String {
+    val client =  OkHttpClient.Builder().build()
+
+    val result: Result<String> = suspendCoroutine { cont ->
+        val callback = object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                // handle failure
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                // handle successful request
+            }
+        }
+
+        // inject otel context onto the request headers
+        val requestWithHeaders = request.newBuilder()
+        otelRum?.openTelemetry?.propagators?.textMapPropagator?.inject(
+            OtelContext.current(),
+            builder,
+            TEXT_MAP_SETTER
+        ).build()
+
+        client.newCall(requestWithHeaders).enqueue(callback)
+    }
+
+    return result.getOrThrow()
+}
+```
 
 ### UI Interaction Instrumentation
 
