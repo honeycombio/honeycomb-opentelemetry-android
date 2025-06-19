@@ -27,7 +27,7 @@ opentelemetrySemConv = "1.32.0"
 opentelemetrySemConvAlpha = "1.30.0-alpha"
 publish = "2.0.0"
 spotless = "7.0.4"
-uiautomator = "2.4.0-alpha03"
+uiautomator = "2.4.0-alpha05"
 
 [libraries]
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
