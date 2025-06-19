@@ -66,6 +66,11 @@ dependencies {
     // This is required by opentelemetry-android.
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
+    implementation(libs.opentelemetry.android.agent)
+    implementation(libs.opentelemetry.android.core)
+    implementation(libs.opentelemetry.api)
+    implementation(libs.opentelemetry.sdk)
+
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
