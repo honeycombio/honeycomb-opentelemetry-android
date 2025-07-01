@@ -17,7 +17,7 @@ These are the current versions of libraries we have tested for compatibility:
 
   | Dependency                                             | Version        |
   |--------------------------------------------------------|----------------|
-  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `0.0.11`       |
+  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `0.0.12`       |
   | `io.opentelemetry.android:core`                        | `0.11.0-alpha` |
   | `io.opentelemetry.android:android-agent`               | `0.11.0-alpha` |
   | `io.opentelemetry:opentelemetry-api`                   | `1.49.0`       |
@@ -30,7 +30,7 @@ For a complete list of tested dependencies and versions, see
 Add the following dependencies to your `build.gradle.kts`:
 ```
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.11")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.12")
 }
 ```
 
@@ -319,7 +319,7 @@ try {
 Android Compose instrumentation is included in a standalone library. Add the following to your dependencies in `build.gradle.kts`:
 ```
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android-compose:0.0.11")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android-compose:0.0.12")
 }
 ```
 
