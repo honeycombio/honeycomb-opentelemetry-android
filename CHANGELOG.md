@@ -2,7 +2,27 @@
 
 ## Unreleased
 
+## v0.0.12
+
+* chore(deps): bump kotlin from 2.1.21 to 2.2.0 (#129)
+* chore(deps): bump agp from 8.10.1 to 8.11.0 (#128)
+* chore(deps): bump net.bytebuddy.byte-buddy-gradle-plugin from 1.17.5 to 1.17.6 (#127)
+* chore(deps): bump androidx.compose.runtime:runtime-android from 1.8.2 to 1.8.3 (#126)
+* chore(deps): bump androidx.appcompat:appcompat from 1.7.0 to 1.7.1 (#122)
+* chore(deps): bump androidx.test.uiautomator:uiautomator from 2.4.0-alpha03 to 2.4.0-alpha04 (#121)
+* chore(deps): bump androidx.compose:compose-bom from 2025.05.01 to 2025.06.00 (#120)
+* chore(deps): bump com.diffplug.spotless from 7.0.3 to 7.0.4 (#119)
+* chore(deps): bump agp from 8.10.0 to 8.10.1 (#118)
+* chore(deps): bump androidx.lifecycle:lifecycle-runtime-ktx from 2.9.0 to 2.9.1 (#123)
+* docs: add section on trace propagation to readme (#124) | Mustafa Haddara
+* chore(deps): bump androidx.test.uiautomator:uiautomator from 2.4.0-alpha02 to 2.4.0-alpha03 (#117)
+* chore(deps): bump androidx.compose.runtime:runtime-android from 1.8.1 to 1.8.2 (#116)
+* chore(deps): bump org.mockito:mockito-core from 5.17.0 to 5.18.0 (#115)
+* chore(deps): bump androidx.compose:compose-bom from 2025.05.00 to 2025.05.01 (#114)
+* chore(deps): bump kotlin from 2.1.20 to 2.1.21 (#113)
+
 ## v0.0.11
+
 * fix: Device ID is now the android id and not the string `android_id`
 
 ## v0.0.10
