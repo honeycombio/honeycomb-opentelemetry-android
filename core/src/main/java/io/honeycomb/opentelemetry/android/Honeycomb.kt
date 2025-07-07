@@ -181,7 +181,6 @@ class Honeycomb {
                 .put(AttributeKey.stringArrayKey("exception.structured_stacktrace.methods"), methods)
                 .put(AttributeKey.longArrayKey("exception.structured_stacktrace.lines"), lines)
 
-
             thread?.let {
                 attributesBuilder
                     .put(THREAD_ID, it.id)
