@@ -172,14 +172,10 @@ class Honeycomb {
 
             // Populate structured stacktrace fields
             val stackFrames = throwable.stackTrace
-            val classes = ArrayList<String>()
-            val methods = ArrayList<String>()
-            val lines = ArrayList<Long>()
-            for (frame in stackFrames) {
-                classes.add(frame.className)
-                methods.add(frame.methodName)
-                lines.add(frame.lineNumber.toLong())
-            }
+            val classes = stackFrames.map { it.className }
+            val methods = stackFrames.map { it.methodName }
+            val lines = stackFrames.map { it.lineNumber.toLong() }
+
             attributesBuilder
                 .put(AttributeKey.stringArrayKey("exception.structured_stacktrace.classes"), classes)
                 .put(AttributeKey.stringArrayKey("exception.structured_stacktrace.methods"), methods)
