@@ -137,7 +137,7 @@ teardown_file() {
   result=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.classes" "stringArray")
   assert_not_empty "$result"
 
-  result=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.methods" "stringArray" \
+  result=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.classes" "stringArray" \
     | grep "CorePlaygroundKt")
   assert_not_empty "$result"
 
