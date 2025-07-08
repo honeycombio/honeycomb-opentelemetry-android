@@ -314,6 +314,12 @@ try {
 | attributes | Attributes?      | false       | Additional attributes you would like to log along with the default ones provided. |
 | thread     | Thread?          | false       | Thread where the error occurred. Add this to include the thread as attributes.    |
 
+Additionally, you will receive the exception broken down into classes, methods, and lines through the following structured stack trace attributes:
+
+- `exception.structured_stacktrace.classes` - Array of class names from each stack frame
+- `exception.structured_stacktrace.methods` - Array of method names from each stack frame
+- `exception.structured_stacktrace.lines` - Array of line numbers from each stack frame
+
 ### Android Compose
 #### Setup
 Android Compose instrumentation is included in a standalone library. Add the following to your dependencies in `build.gradle.kts`:
