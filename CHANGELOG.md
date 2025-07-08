@@ -1,6 +1,7 @@
 # Honeycomb Android SDK changelog
 
 ## Unreleased
+
 * feat: Create structured stack trace fields
 
 ## v0.0.12
