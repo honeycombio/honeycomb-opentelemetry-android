@@ -7,6 +7,7 @@ import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.OpenTelemetryRumBuilder
 import io.opentelemetry.android.config.OtelRumConfig
 import io.opentelemetry.android.features.diskbuffering.DiskBufferingConfig
+import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.api.common.AttributesBuilder
 import io.opentelemetry.api.logs.Logger
@@ -168,6 +169,17 @@ class Honeycomb {
             throwable.message?.let {
                 attributesBuilder.put(EXCEPTION_MESSAGE, it)
             }
+
+            // Populate structured stacktrace fields
+            val stackFrames = throwable.stackTrace
+            val classes = stackFrames.map { it.className }
+            val methods = stackFrames.map { it.methodName }
+            val lines = stackFrames.map { it.lineNumber.toLong() }
+
+            attributesBuilder
+                .put(AttributeKey.stringArrayKey("exception.structured_stacktrace.classes"), classes)
+                .put(AttributeKey.stringArrayKey("exception.structured_stacktrace.methods"), methods)
+                .put(AttributeKey.longArrayKey("exception.structured_stacktrace.lines"), lines)
 
             thread?.let {
                 attributesBuilder

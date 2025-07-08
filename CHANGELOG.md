@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* feat: Create structured stack trace fields
+
 ## v0.0.12
 
 * chore(deps): bump kotlin from 2.1.21 to 2.2.0 (#129)

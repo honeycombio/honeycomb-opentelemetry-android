@@ -134,6 +134,22 @@ teardown_file() {
     | grep "example.CorePlaygroundKt.onLogException")
   assert_not_empty "$result"
 
+  result=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.classes" "stringArray")
+  assert_not_empty "$result"
+
+  result=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.methods" "stringArray")
+  assert_not_empty "$result"
+
+  result=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.lines" "longArray")
+  assert_not_empty "$result"
+
+  classes_count=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.classes" "stringArray" | jq 'length')
+  methods_count=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.methods" "stringArray" | jq 'length')
+  lines_count=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.lines" "longArray" | jq 'length')
+
+  assert_equal "$classes_count" "$methods_count"
+  assert_equal "$methods_count" "$lines_count"
+
   result=$(attribute_for_log_key "io.honeycomb.crash" "thread.name" "string")
   assert_equal "$result" '"main"'
 
