@@ -1,5 +1,8 @@
 package io.honeycomb.gradle
 
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.dsl.LibraryExtension
+import org.gradle.kotlin.dsl.findByType
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import java.util.UUID
@@ -22,7 +25,7 @@ class HoneycombProguardUuidPlugin : Plugin<Project> {
     }
 
     private fun setPlaceholder(project: Project, uuid: String) {
-        val android = project.extensions.getByName("android") as com.android.build.gradle.BaseExtension
-        android.defaultConfig.manifestPlaceholders["PLACEHOLDER_UUID"] = uuid
+        project.extensions.findByType<ApplicationExtension>()?.defaultConfig?.manifestPlaceholders?.put("PLACEHOLDER_UUID", uuid)
+        project.extensions.findByType<LibraryExtension>()?.defaultConfig?.manifestPlaceholders?.put("PLACEHOLDER_UUID", uuid)
     }
 }
