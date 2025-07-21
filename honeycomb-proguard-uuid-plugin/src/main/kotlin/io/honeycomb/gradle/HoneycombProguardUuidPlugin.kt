@@ -25,7 +25,15 @@ class HoneycombProguardUuidPlugin : Plugin<Project> {
     }
 
     private fun setPlaceholder(project: Project, uuid: String) {
-        project.extensions.findByType<ApplicationExtension>()?.defaultConfig?.manifestPlaceholders?.put("PLACEHOLDER_UUID", uuid)
-        project.extensions.findByType<LibraryExtension>()?.defaultConfig?.manifestPlaceholders?.put("PLACEHOLDER_UUID", uuid)
+        val appExtension = project.extensions.findByType<ApplicationExtension>()
+        val libExtension = project.extensions.findByType<LibraryExtension>()
+
+        if (appExtension != null) {
+            appExtension.defaultConfig.manifestPlaceholders["PLACEHOLDER_UUID"] = uuid
+        }
+
+        if (libExtension != null) {
+            libExtension.defaultConfig.manifestPlaceholders["PLACEHOLDER_UUID"] = uuid
+        }
     }
 }
