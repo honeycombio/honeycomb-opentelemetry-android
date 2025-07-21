@@ -26,7 +26,7 @@
 
         <meta-data
             android:name="io.honeycomb.proguard.uuid"
-            android:value="da510904-8130-4228-93fb-648a867e6a2c" />
+            android:value="${PLACEHOLDER_UID}" />
     </application>
 
 </manifest>
