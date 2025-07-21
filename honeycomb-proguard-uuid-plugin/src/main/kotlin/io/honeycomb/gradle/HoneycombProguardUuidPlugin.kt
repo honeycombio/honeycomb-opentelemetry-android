@@ -2,43 +2,45 @@ package io.honeycomb.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import java.io.File
 import java.util.UUID
 
 /**
- * Super simple Honeycomb ProGuard UUID plugin that prints messages.
+ * Super simple Honeycomb ProGuard UUID plugin that injects UUIDs into Android manifests.
  */
 class HoneycombProguardUuidPlugin : Plugin<Project> {
-    
+
     override fun apply(project: Project) {
-        println("🍯 Honeycomb ProGuard UUID Plugin applied to project: ${project.name}")
-        
-        // Register a simple task that prints UUID info
-        project.tasks.register("printProguardUuid") {
+        // Generate UUID once for this project
+        val projectUuid = UUID.randomUUID().toString()
+
+        // Simple task that replaces placeholder with actual UUID
+        val injectTask = project.tasks.register("injectProguardUuid") {
             group = "honeycomb"
-            description = "Prints ProGuard UUID information"
-            
+            description = "Replaces UUID placeholder with actual UUID in the Android manifest file"
+
             doLast {
-                val uuid = UUID.randomUUID().toString()
-                println("🔑 Generated ProGuard UUID: $uuid")
-                println("📦 Project: ${project.name}")
-                println("📁 Build directory: ${project.layout.buildDirectory.get()}")
-                println("🏗️  This UUID would be used for ProGuard mapping correlation!")
-                println("✨ Honeycomb ProGuard UUID Plugin - Simple and Sweet! ✨")
+                // Find the main AndroidManifest.xml
+                val manifestFile = File(project.projectDir, "src/main/AndroidManifest.xml")
+
+                if (manifestFile.exists()) {
+                    var content = manifestFile.readText()
+
+                    // Replace placeholder with actual UUID
+                    if (content.contains("HONEYCOMB_PROGUARD_UUID_PLACEHOLDER")) {
+                        content = content.replace("HONEYCOMB_PROGUARD_UUID_PLACEHOLDER", projectUuid)
+                        manifestFile.writeText(content)
+                    } else {
+                        println("⚠️ Placeholder 'HONEYCOMB_PROGUARD_UUID_PLACEHOLDER' not found in AndroidManifest.xml")
+                    }
+                } else {
+                    println("⚠️ AndroidManifest.xml not found at: ${manifestFile.absolutePath}")
+                }
             }
         }
-        
-        // Also register a simpler hello task
-        project.tasks.register("honeycombHello") {
-            group = "honeycomb"
-            description = "Says hello from Honeycomb"
-            
-            doLast {
-                println("👋 Hello from Honeycomb ProGuard UUID Plugin!")
-                println("🍯 Sweet as honey, simple as can be!")
-                println("📱 Ready to handle your Android ProGuard UUIDs!")
-            }
+
+        project.afterEvaluate {
+            project.tasks.findByName("preBuild")?.dependsOn(injectTask)
         }
-        
-        println("✅ Honeycomb ProGuard UUID Plugin setup complete!")
     }
 }
