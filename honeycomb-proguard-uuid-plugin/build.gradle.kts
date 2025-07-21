@@ -4,10 +4,10 @@ plugins {
 }
 
 group = "io.honeycomb"
-version = "1.0.0"
+version = "0.0.1"
 
 dependencies {
-    implementation("com.android.tools.build:gradle:8.11.0")
+    implementation("com.android.tools.build:gradle:8.11.1")
 }
 
 gradlePlugin {

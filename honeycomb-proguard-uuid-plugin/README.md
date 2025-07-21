@@ -11,7 +11,7 @@ A simple Gradle plugin that automatically injects unique UUIDs into Android mani
 
 ### 1. Apply the plugin
 
-In your app's `build.gradle.kts` plugins:
+In your app's `build.gradle.kts` plugins block:
 
 ```kotlin
 plugins {
@@ -50,16 +50,6 @@ However, you will still see the placeholder in your app's android manifest file.
 ## Reading the UUID in your app
 
 ```kotlin
-val packageManager = packageManager
-val applicationInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+val applicationInfo = app.packageManager.getApplicationInfo(app.packageName, PackageManager.GET_META_DATA)
 val uuid = applicationInfo.metaData?.getString("io.honeycomb.proguard.uuid")
-Log.d("ProGuard", "Build UUID: $uuid")
 ```
-
-## Use case
-
-When your app crashes in production, you can:
-
-1. Read the UUID from the crash report
-2. Find the corresponding ProGuard mapping file: `mapping-{uuid}.txt`
-3. Deobfuscate the stack trace with the exact mapping used for that build
