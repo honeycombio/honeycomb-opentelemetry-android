@@ -15,7 +15,6 @@ class HoneycombProguardUuidPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val projectUuid = UUID.randomUUID().toString()
 
-        // Wait for Android plugin to be applied, then set the placeholder
         project.plugins.withId("com.android.application") {
             setPlaceholder(project, projectUuid)
         }
@@ -29,11 +28,11 @@ class HoneycombProguardUuidPlugin : Plugin<Project> {
         val libExtension = project.extensions.findByType<LibraryExtension>()
 
         if (appExtension != null) {
-            appExtension.defaultConfig.manifestPlaceholders["PLACEHOLDER_UUID"] = uuid
+            appExtension.defaultConfig.manifestPlaceholders["PROGUARD_UUID"] = uuid
         }
 
         if (libExtension != null) {
-            libExtension.defaultConfig.manifestPlaceholders["PLACEHOLDER_UUID"] = uuid
+            libExtension.defaultConfig.manifestPlaceholders["PROGUARD_UUID"] = uuid
         }
     }
 }
