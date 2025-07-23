@@ -19,7 +19,8 @@ teardown_file() {
 
 @test "SDK sends correct resource attributes" {
   result=$(resource_attributes_received | sort | uniq)
-  assert_equal "$result" '"device.id"
+  assert_equal "$result" '"app.debug.proguard_uuid"
+"device.id"
 "device.manufacturer"
 "device.model.identifier"
 "device.model.name"
@@ -117,7 +118,7 @@ teardown_file() {
 
 @test "SDK adds baggage to logs" {
     result=$(attribute_for_log_key ${SMOKE_TEST_SCOPE} "baggage-key" "string")
-    assert_equal "$result" '"baggage-value"' 
+    assert_equal "$result" '"baggage-value"'
 }
 
 @test "SDK can log manual exceptions" {
