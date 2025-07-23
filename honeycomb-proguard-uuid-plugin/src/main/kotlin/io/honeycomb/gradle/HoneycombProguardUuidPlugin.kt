@@ -5,6 +5,7 @@ import com.android.build.api.dsl.LibraryExtension
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import java.io.File
 import java.util.UUID
 
 /**
@@ -14,7 +15,16 @@ class HoneycombProguardUuidPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         val projectUuid = UUID.randomUUID().toString()
+        val uuidPropertiesOutputFile = project.layout.buildDirectory
+            .file("generated/honeycomb/proguard-uuid.properties")
+            .get()
+            .asFile
 
+        // Write the generated UUID to a properties file
+        uuidPropertiesOutputFile.parentFile?.mkdirs()
+        uuidPropertiesOutputFile.writeText("io.honeycomb.proguard.uuid=$projectUuid")
+
+        // Update manifest placeholders to the generated UUID
         project.plugins.withId("com.android.application") {
             setPlaceholder(project, projectUuid)
         }
