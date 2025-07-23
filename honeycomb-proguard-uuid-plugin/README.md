@@ -42,10 +42,12 @@ The plugin automatically runs and injects a UUID to the **merged** android manif
 ```xml
 <meta-data
     android:name="io.honeycomb.proguard.uuid"
-    android:value="12345678-1234-1234-1234-123456789012" />
+    android:value="6A8CB813-45F6-3652-AD33-778FD1EAB196" />
 ```
 
-However, you will still see the placeholder in your app's android manifest file.
+You may see that your `src/main/AndroidManifest.xml` file still has the `PROGUARD_UUID` placeholder.
+This is expected. The generated manifest file after the app builds will be the one to include the
+meta-data tag with the actual uuid value.
 
 ## Reading the UUID in your app
 
@@ -53,3 +55,10 @@ However, you will still see the placeholder in your app's android manifest file.
 val applicationInfo = app.packageManager.getApplicationInfo(app.packageName, PackageManager.GET_META_DATA)
 val uuid = applicationInfo.metaData?.getString("io.honeycomb.proguard.uuid")
 ```
+
+## Use cases for the plugin
+
+This plugin is intended to be used alongside the Honeycomb Android SDK. The UUID generated from this plugin
+will be collected by the Android SDK and emitted as a value to the `app.debug.proguard_uuid` attribute.
+Proguard files are also expected to be versioned with the generated UUID. For example,
+`6A8CB813-45F6-3652-AD33-778FD1EAB196.txt`.
