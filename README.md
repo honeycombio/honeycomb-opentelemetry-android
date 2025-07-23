@@ -106,6 +106,8 @@ To manually send a span:
 ## Standard Attributes
 All telemetry emitted will have the following resource attributes attached:
 
+- `app.debug.proguard_uuid`: Unique UUID for correlating ProGuard mapping files with builds.
+  - Only available when the [Honeycomb ProGuard UUID Plugin](honeycomb-proguard-uuid-plugin/README.md) is used and the metadata is found in the Android manifest.
 - `device.manufacturer`: Manufacturer of the device, as reported by [`android.os.Build.MANUFACTURER`](https://developer.android.com/reference/android/os/Build#MANUFACTURER)
 - `device.model.identifier`: Model of the device, as reported by [`android.os.Build.MODEL`](https://developer.android.com/reference/android/os/Build#MODEL)
 - `device.model.name`: see `device.model.identifier`
