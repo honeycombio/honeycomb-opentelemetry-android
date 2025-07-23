@@ -71,10 +71,11 @@ private fun getDeviceAttributes(app: Application): Attributes {
  */
 private fun getProguardUuid(app: Application): String? {
     val packageManager = app.packageManager
-    val applicationInfo = packageManager.getApplicationInfo(
-        app.packageName,
-        PackageManager.GET_META_DATA
-    )
+    val applicationInfo =
+        packageManager.getApplicationInfo(
+            app.packageName,
+            PackageManager.GET_META_DATA,
+        )
     return applicationInfo.metaData?.getString("io.honeycomb.proguard.uuid")
 }
 
@@ -120,8 +121,7 @@ class Honeycomb {
                         getProguardUuid(app)?.let { uuid ->
                             put("app.debug.proguard_uuid", uuid)
                         }
-                    }
-                    .build()
+                    }.build()
 
             val rumConfig = OtelRumConfig()
             val diskBufferingConfig = DiskBufferingConfig.create(options.offlineCachingEnabled)
