@@ -6,6 +6,7 @@ A simple Gradle plugin that automatically injects unique UUIDs into Android mani
 
 - Generates a unique UUID for each build
 - Injects the UUID into your Android manifest as metadata
+- Creates a properties file containing the generated UUID
 
 ## Setup
 
@@ -49,11 +50,21 @@ You may see that your `src/main/AndroidManifest.xml` file still has the `PROGUAR
 This is expected. The generated manifest file after the app builds will be the one to include the
 meta-data tag with the actual uuid value.
 
-## Reading the UUID in your app
+## Accessing the generated UUID
 
+Within the app, you can access the metadata:
 ```kotlin
+val app = application as ExampleApp
 val applicationInfo = app.packageManager.getApplicationInfo(app.packageName, PackageManager.GET_META_DATA)
 val uuid = applicationInfo.metaData?.getString("io.honeycomb.proguard.uuid")
+```
+
+The plugin also generates a properties file containing the generated UUID for the build. You can find the
+UUID under your `build` directory in the `generated/honeycomb/proguard-uuid.properties` file. The file will
+contain a key and a value:
+
+```
+io.honeycomb.proguard.uuid=6A8CB813-45F6-3652-AD33-778FD1EAB196
 ```
 
 ## Use cases for the plugin
