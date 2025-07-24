@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-* feat: Create structured stack trace fields
+* feat: emit the proguard uuid as a resource attribute (#137)
+* feat: Create structured stack trace fields (#132)
 
 ## v0.0.12
 
