@@ -27,15 +27,19 @@ For a complete list of tested dependencies and versions, see
 
 ## Getting started
 
+### build.gradle
+
 Add the following dependencies to your `build.gradle.kts`:
-```
+```kotlin
 dependencies {
   implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.12")
 }
 ```
 
+### Initializing the SDK
+
 To configure the SDK in your Application class:
-```
+```kotlin
 import io.honeycomb.opentelemetry.android.Honeycomb
 import io.honeycomb.opentelemetry.android.HoneycombOptions
 import io.opentelemetry.android.OpenTelemetryRum
@@ -376,7 +380,7 @@ Specifically, it will emit 2 kinds of span for each composable that is wrapped:
 `View Body` spans encompass just the contents of the `HoneycombInstrumentedView`, and include the following attributes:
 - `view.name` (string): the name passed to `HoneycombInstrumentedComposable`
 
-### Adding a Custom Span Processor
+## Adding a Custom Span Processor
 
 You can implement and register your own custom span processor with the Honeycomb SDK. This allows you to perform custom operations on spans before they are exported, such as adding application-specific attributes.
 
