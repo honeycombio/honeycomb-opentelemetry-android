@@ -320,6 +320,12 @@ try {
 | attributes | Attributes?      | false       | Additional attributes you would like to log along with the default ones provided. |
 | thread     | Thread?          | false       | Thread where the error occurred. Add this to include the thread as attributes.    |
 
+
+The following attributes are automatically attached to the log entry.
+
+ * `exception.stacktrace` - The unstructured stacktrace of the exception
+ * `exception.type` - The runtime resolvable classname of the exception
+
 Additionally, you will receive the exception broken down into classes, methods, and lines through the following structured stack trace attributes:
 
 - `exception.structured_stacktrace.classes` - Array of class names from each stack frame
