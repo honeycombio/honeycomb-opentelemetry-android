@@ -4,6 +4,7 @@
 
 * feat: emit the proguard uuid as a resource attribute (#137)
 * feat: Create structured stack trace fields (#132)
+* fix: desugaring is no longer required for SDK > 26.
 
 ## v0.0.12
 
