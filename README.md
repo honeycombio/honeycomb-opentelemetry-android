@@ -27,15 +27,19 @@ For a complete list of tested dependencies and versions, see
 
 ## Getting started
 
+### build.gradle
+
 Add the following dependencies to your `build.gradle.kts`:
-```
+```kotlin
 dependencies {
   implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.12")
 }
 ```
 
+### Initializing the SDK
+
 To configure the SDK in your Application class:
-```
+```kotlin
 import io.honeycomb.opentelemetry.android.Honeycomb
 import io.honeycomb.opentelemetry.android.HoneycombOptions
 import io.opentelemetry.android.OpenTelemetryRum
@@ -106,6 +110,8 @@ To manually send a span:
 ## Standard Attributes
 All telemetry emitted will have the following resource attributes attached:
 
+- `app.debug.proguard_uuid`: Unique UUID for correlating ProGuard mapping files with builds.
+  - Only available when the [Honeycomb ProGuard UUID Plugin](honeycomb-proguard-uuid-plugin/README.md) is used and the metadata is found in the Android manifest.
 - `device.manufacturer`: Manufacturer of the device, as reported by [`android.os.Build.MANUFACTURER`](https://developer.android.com/reference/android/os/Build#MANUFACTURER)
 - `device.model.identifier`: Model of the device, as reported by [`android.os.Build.MODEL`](https://developer.android.com/reference/android/os/Build#MODEL)
 - `device.model.name`: see `device.model.identifier`
@@ -314,6 +320,12 @@ try {
 | attributes | Attributes?      | false       | Additional attributes you would like to log along with the default ones provided. |
 | thread     | Thread?          | false       | Thread where the error occurred. Add this to include the thread as attributes.    |
 
+
+The following attributes are automatically attached to the log entry.
+
+ * `exception.stacktrace` - The unstructured stacktrace of the exception
+ * `exception.type` - The runtime resolvable classname of the exception
+
 Additionally, you will receive the exception broken down into classes, methods, and lines through the following structured stack trace attributes:
 
 - `exception.structured_stacktrace.classes` - Array of class names from each stack frame
@@ -374,7 +386,7 @@ Specifically, it will emit 2 kinds of span for each composable that is wrapped:
 `View Body` spans encompass just the contents of the `HoneycombInstrumentedView`, and include the following attributes:
 - `view.name` (string): the name passed to `HoneycombInstrumentedComposable`
 
-### Adding a Custom Span Processor
+## Adding a Custom Span Processor
 
 You can implement and register your own custom span processor with the Honeycomb SDK. This allows you to perform custom operations on spans before they are exported, such as adding application-specific attributes.
 
