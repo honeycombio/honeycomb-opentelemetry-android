@@ -36,9 +36,6 @@ android {
             )
         }
     }
-    compileOptions {
-        //isCoreLibraryDesugaringEnabled = true
-    }
     kotlin {
         jvmToolchain(21)
     }
@@ -61,7 +58,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
 
     // This is required by opentelemetry-android.
-    //coreLibraryDesugaring(libs.desugar.jdk.libs)
+    // coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.auto.service.annotations)
