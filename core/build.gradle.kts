@@ -57,9 +57,6 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
 
-    // This is required by opentelemetry-android.
-    // coreLibraryDesugaring(libs.desugar.jdk.libs)
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.auto.service.annotations)
     implementation(libs.opentelemetry.android.core)
