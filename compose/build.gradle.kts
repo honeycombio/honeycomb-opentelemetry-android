@@ -15,6 +15,7 @@ android {
 
     defaultConfig {
         minSdk = 21
+
         aarMetadata {
             minCompileSdk = 21
         }
@@ -37,9 +38,7 @@ android {
             )
         }
     }
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
+
     kotlin {
         jvmToolchain(21)
     }
@@ -60,9 +59,6 @@ dependencies {
     implementation(libs.androidx.runtime.compose)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-
-    // This is required by opentelemetry-android.
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.auto.service.annotations)
