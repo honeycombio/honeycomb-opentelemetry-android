@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.bytebuddy)
     alias(libs.plugins.spotless)
     alias(libs.plugins.compose.compiler)
-    id("io.honeycomb.proguard-uuid")
 }
 
 android {
