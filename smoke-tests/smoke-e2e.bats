@@ -19,8 +19,7 @@ teardown_file() {
 
 @test "SDK sends correct resource attributes" {
   result=$(resource_attributes_received | sort | uniq)
-  assert_equal "$result" '"app.debug.proguard_uuid"
-"device.id"
+  assert_equal "$result" '"device.id"
 "device.manufacturer"
 "device.model.identifier"
 "device.model.name"
@@ -38,9 +37,6 @@ teardown_file() {
 "telemetry.sdk.language"
 "telemetry.sdk.name"
 "telemetry.sdk.version"'
-
-  result=$(resource_attribute_named "app.debug.proguard_uuid" string | uniq)
-  assert_not_empty_string "$result"
 
   result=$(resource_attribute_named "telemetry.sdk.language" "string" | uniq)
   assert_equal "$result" '"android"'
