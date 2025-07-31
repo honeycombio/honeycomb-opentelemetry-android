@@ -25,6 +25,4 @@ include(":compose")
 include(":core")
 include(":example")
 include(":interaction")
-
-// Include the honeycomb proguard uuid plugin as a composite build
-includeBuild("honeycomb-proguard-uuid-plugin")
+include(":honeycomb-proguard-uuid-plugin")
