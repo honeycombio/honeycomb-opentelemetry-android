@@ -2,9 +2,18 @@
 
 ## Unreleased
 
+## v0.0.13
+
+* chore: set up distribution for gradle plugin (#140)
+* fix: desugaring is no longer required for SDK > 26. (#139)
+* chore(deps): bump agp from 8.11.0 to 8.11.1 (#134)
+* chore(deps): bump com.diffplug.spotless from 7.0.4 to 7.1.0 (#135)
+* chore(deps): bump com.squareup.okhttp3:okhttp from 4.12.0 to 5.1.0 (#133)
+* docs: improve consistency between Android and iOS (#138)
 * feat: emit the proguard uuid as a resource attribute (#137)
+* feat: setup a gradle plugin that generates and injects UUID (#136)
 * feat: Create structured stack trace fields (#132)
-* fix: desugaring is no longer required for SDK > 26.
+* chore: Update sonatype configuration because of OSSRH sunset 🌅. (#131)
 
 ## v0.0.12
 
