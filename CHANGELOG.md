@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.0.14
+
+* fix: fix plugin config when publishing to maven central (#142)
+
 ## v0.0.13
 
 * chore: set up distribution for gradle plugin (#140)
