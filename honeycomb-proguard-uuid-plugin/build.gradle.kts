@@ -7,7 +7,8 @@ plugins {
     signing
 }
 
-group   = "io.honeycomb.android"
+group = "io.honeycomb.android"
+version = project.version.toString()
 
 dependencies {
     compileOnly(gradleApi())
@@ -29,39 +30,42 @@ gradlePlugin {
     }
 }
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 publishing {
     publications {
-        create<MavenPublication>("release") {
-            groupId = "io.honeycomb.android"
-            artifactId = "honeycomb-opentelemetry-android-proguard-uuid-plugin"
-            version = project.version.toString()
+        configureEach {
+            if (this is MavenPublication) {
+                pom {
+                    name.set("Honeycomb ProGuard UUID Plugin")
+                    url.set("https://github.com/honeycombio/honeycomb-opentelemetry-android")
+                    description.set("Automatically injects unique UUIDs into Android manifests for ProGuard mapping correlation")
 
-            from(components["java"])
+                    licenses {
+                        license {
+                            name.set("The Apache License, Version 2.0")
+                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        }
+                    }
 
-            pom {
-                name = "Honeycomb ProGuard UUID Plugin"
-                url = "https://github.com/honeycombio/honeycomb-opentelemetry-android"
-                description =
-                    "Automatically injects unique UUIDs into Android manifests for ProGuard mapping correlation"
-                licenses {
-                    license {
-                        name = "The Apache License, Version 2.0"
-                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    developers {
+                        developer {
+                            id.set("Honeycomb")
+                            name.set("Honeycomb")
+                            email.set("support@honeycomb.io")
+                            organization.set("Honeycomb")
+                            organizationUrl.set("https://honeycomb.io")
+                        }
                     }
-                }
-                developers {
-                    developer {
-                        id = "Honeycomb"
-                        name = "Honeycomb"
-                        email = "support@honeycomb.io"
-                        organization = "Honeycomb"
-                        organizationUrl = "https://honeycomb.io"
+
+                    scm {
+                        url.set("https://github.com/honeycombio/honeycomb-opentelemetry-android")
+                        connection.set("scm:git:git@github.com:honeycombio/honeycomb-opentelemetry-android.git")
+                        developerConnection.set("scm:git:git@github.com:honeycombio/honeycomb-opentelemetry-android.git")
                     }
-                }
-                scm {
-                    url = "https://github.com/honeycombio/honeycomb-opentelemetry-android"
-                    connection = "scm:git:git@github.com:honeycombio/honeycomb-opentelemetry-android.git"
-                    developerConnection = "scm:git:git@github.com:honeycombio/honeycomb-opentelemetry-android.git"
                 }
             }
         }
@@ -73,12 +77,11 @@ signing {
     if (!isDevBuild) {
         val base64key = System.getenv("GPG_BASE64")
         val pw = System.getenv("GPG_PASSPHRASE")
-        val key =
-            if (base64key != null && base64key != "") {
-                String(Base64.getDecoder().decode(base64key)).trim()
-            } else {
-                ""
-            }
+        val key = if (base64key != null && base64key != "") {
+            String(Base64.getDecoder().decode(base64key)).trim()
+        } else {
+            ""
+        }
 
         useInMemoryPgpKeys(key, pw)
         sign(publishing.publications)
