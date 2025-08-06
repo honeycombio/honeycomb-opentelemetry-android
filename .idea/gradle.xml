@@ -13,10 +13,10 @@
             <option value="$PROJECT_DIR$/compose" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/example" />
+            <option value="$PROJECT_DIR$/honeycomb-proguard-uuid-plugin" />
             <option value="$PROJECT_DIR$/interaction" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>
