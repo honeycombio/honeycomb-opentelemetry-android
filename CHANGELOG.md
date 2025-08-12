@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* feat: Make `HoneycombOptions` Builder extendable
+
 ## v0.0.14
 
 * fix: fix plugin config when publishing to maven central (#142)
