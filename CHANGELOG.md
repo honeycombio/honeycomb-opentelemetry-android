@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.0.15
+
 * feat: Make `HoneycombOptions` Builder extendable
 
 ## v0.0.14
