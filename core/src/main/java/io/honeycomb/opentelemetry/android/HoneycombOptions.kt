@@ -192,7 +192,7 @@ data class HoneycombOptions(
     val logsProtocol: OtlpProtocol,
     val offlineCachingEnabled: Boolean,
 ) {
-    class Builder private constructor() {
+    open class Builder private constructor() {
         private var serviceVersion: String? = null
         private var apiKey: String? = null
         private var tracesApiKey: String? = null
