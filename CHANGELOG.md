@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* fix: revert kotlin version to maintain compatibility with React Native
+
 ## v0.0.15
 
 * feat: Make `HoneycombOptions` Builder extendable
