@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.compositionLocalOf
 import io.opentelemetry.android.OpenTelemetryRum
-import java.time.Instant
+import java.util.concurrent.TimeUnit
 import kotlin.time.DurationUnit
 import kotlin.time.TimeSource.Monotonic.markNow
 
@@ -44,7 +44,7 @@ fun HoneycombInstrumentedComposable(
         bodySpan.makeCurrent().use {
             val start = markNow()
             composable()
-            val endTime = Instant.now()
+            val endTime = System.currentTimeMillis()
 
             val bodyDuration = start.elapsedNow()
             // bodyDuration is in seconds
@@ -52,7 +52,7 @@ fun HoneycombInstrumentedComposable(
             span.setAttribute("view.renderDuration", bodyDuration.toDouble(DurationUnit.SECONDS))
 
             SideEffect {
-                bodySpan.end(endTime)
+                bodySpan.end(endTime, TimeUnit.MILLISECONDS)
                 val renderDuration = start.elapsedNow()
                 span.setAttribute("view.totalDuration", renderDuration.toDouble(DurationUnit.SECONDS))
                 span.end()
