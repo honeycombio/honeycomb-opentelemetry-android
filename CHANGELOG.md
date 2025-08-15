@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.0.16
+
 * fix: revert kotlin version to maintain compatibility with React Native
 
 ## v0.0.15
