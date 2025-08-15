@@ -92,6 +92,12 @@ private fun isClassicKey(key: String?): Boolean {
     }
 }
 
+private fun <Key,Value>putIfAbsent(resourceAttributes: MutableMap<Key, Value>, key: Key, value: Value) {
+    if(!resourceAttributes.containsKey(key)) {
+        resourceAttributes[key] = value
+    }
+}
+
 private fun isHoneycombEndpoint(endpoint: String): Boolean {
     try {
         val uri = URI(endpoint)
@@ -470,28 +476,28 @@ data class HoneycombOptions(
             }
 
             // The SDK version is generated from build.gradle.kts.
-            resourceAttributes.putIfAbsent(
+            putIfAbsent(resourceAttributes,
                 "honeycomb.distro.version",
                 BuildConfig.HONEYCOMB_DISTRO_VERSION,
             )
             // Use the display version of Android. This is "unknown" when running tests in the JVM.
-            resourceAttributes.putIfAbsent(
+            putIfAbsent(resourceAttributes,
                 "honeycomb.distro.runtime_version",
                 Build.VERSION.RELEASE ?: "unknown",
             )
 
-            resourceAttributes.putIfAbsent(
+            putIfAbsent(resourceAttributes,
                 TelemetryIncubatingAttributes.TELEMETRY_DISTRO_VERSION.key,
                 BuildConfig.HONEYCOMB_DISTRO_VERSION,
             )
 
-            resourceAttributes.putIfAbsent(
+            putIfAbsent(resourceAttributes,
                 TelemetryIncubatingAttributes.TELEMETRY_DISTRO_NAME.key,
                 "io.honeycomb.opentelemetry.android",
             )
 
             // The language is technically Kotlin, but Android apps can be Java or Kotlin or both, so:
-            resourceAttributes.putIfAbsent(
+            putIfAbsent(resourceAttributes,
                 "telemetry.sdk.language",
                 "android",
             )
