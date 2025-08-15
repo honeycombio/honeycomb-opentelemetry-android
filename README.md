@@ -32,7 +32,7 @@ For a complete list of tested dependencies and versions, see
 Add the following dependencies to your `build.gradle.kts`:
 ```kotlin
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.15")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.16")
 }
 ```
 
