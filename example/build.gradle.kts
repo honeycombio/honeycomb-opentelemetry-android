@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.bytebuddy)
     alias(libs.plugins.spotless)
     alias(libs.plugins.compose.compiler)
+    id("io.honeycomb.proguard-uuid") version "0.0.15"
 }
 
 android {
@@ -25,11 +26,12 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {

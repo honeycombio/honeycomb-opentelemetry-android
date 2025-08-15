@@ -81,6 +81,8 @@ private fun getProguardUuid(app: Application): String? {
 
 class Honeycomb {
     companion object {
+        private var proguardUuid: String? = null
+
         /**
          * Automatically configures OpenTelemetryRum based on values stored in the app's resources.
          */
@@ -91,6 +93,8 @@ class Honeycomb {
             if (options.debug) {
                 configureDebug(options)
             }
+
+            proguardUuid = getProguardUuid(app)
 
             val traceExporter = buildSpanExporter(options)
             val metricsExporter = buildMetricsExporter(options)
@@ -118,7 +122,7 @@ class Honeycomb {
                     .putAll(createAttributes(options.resourceAttributes))
                     .putAll(getDeviceAttributes(app))
                     .apply {
-                        getProguardUuid(app)?.let { uuid ->
+                        proguardUuid?.let { uuid ->
                             put("app.debug.proguard_uuid", uuid)
                         }
                     }.build()
@@ -180,6 +184,11 @@ class Honeycomb {
                     .builder()
                     .put(EXCEPTION_STACKTRACE, stackTraceToString(throwable))
                     .put(EXCEPTION_TYPE, throwable.javaClass.name)
+
+            // Add ProGuard UUID if available, should have been set during `configure` stage
+            proguardUuid?.let { uuid ->
+                attributesBuilder.put("app.debug.proguard_uuid", uuid)
+            }
 
             attributes?.let {
                 attributesBuilder.putAll(it)

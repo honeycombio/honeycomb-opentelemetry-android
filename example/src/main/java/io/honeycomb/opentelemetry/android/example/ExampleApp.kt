@@ -49,13 +49,11 @@ class ExampleApp : Application() {
         val options =
             HoneycombOptions
                 .builder(this)
-                .setApiKey("test-key")
-                .setApiEndpoint("http://10.0.2.2:4318")
-                .setServiceName("android-test")
-                .setServiceVersion("0.0.1")
-                .setMetricsDataset("android-test-metrics")
+                .setServiceName("chateaux-bufeaux-android")
                 .setSpanProcessor(SimpleSpanProcessor())
                 .setLogRecordProcessor(SimpleLogRecordProcessor())
+                .setServiceVersion("0.0.1")
+                .setApiEndpoint("http://10.0.2.2:4318")
                 .setDebug(true)
                 .build()
 

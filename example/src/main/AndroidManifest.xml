@@ -9,6 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HoneycombOpenTelemetryAndroid">
+        <meta-data
+            android:name="io.honeycomb.proguard.uuid"
+            android:value="${PROGUARD_UUID}" />
+
         <activity
             android:name=".ClassicActivity"
             android:exported="false" />
