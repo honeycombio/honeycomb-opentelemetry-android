@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "io.honeycomb.opentelemetry.android.example"
-        minSdk = 21
+        minSdk = 26
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -33,7 +33,6 @@ android {
         }
     }
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -62,9 +61,6 @@ android {
 }
 
 dependencies {
-    // This is required by opentelemetry-android.
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
-
     implementation(libs.opentelemetry.android.agent)
     implementation(libs.opentelemetry.android.core)
     implementation(libs.opentelemetry.api)
