@@ -25,6 +25,7 @@ opentelemetryBaggageProcessor = "1.46.0-alpha"
 opentelemetryInstrumentation = "2.15.0"
 opentelemetrySemConv = "1.32.0"
 opentelemetrySemConvAlpha = "1.30.0-alpha"
+proguardUUID = "0.0.16"
 publish = "2.0.0"
 spotless = "7.2.1"
 uiautomator = "2.4.0-alpha05"
@@ -77,5 +78,6 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 bytebuddy = { id = "net.bytebuddy.byte-buddy-gradle-plugin",  version.ref = "bytebuddy" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+proguard-uuid = { id = "io.honeycomb.proguard-uuid", version.ref = "proguardUUID" }
 publish-plugin = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "publish" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
