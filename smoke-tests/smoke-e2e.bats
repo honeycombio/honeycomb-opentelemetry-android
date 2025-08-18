@@ -19,7 +19,8 @@ teardown_file() {
 
 @test "SDK sends correct resource attributes" {
   result=$(resource_attributes_received | sort | uniq)
-  assert_equal "$result" '"device.id"
+  assert_equal "$result" '"app.debug.proguard_uuid"
+"device.id"
 "device.manufacturer"
 "device.model.identifier"
 "device.model.name"
@@ -141,6 +142,9 @@ teardown_file() {
   assert_not_empty "$result"
 
   result=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.lines" "longArray")
+  assert_not_empty "$result"
+
+  result=$(attribute_for_log_key "io.honeycomb.crash" "app.debug.proguard_uuid" "string")
   assert_not_empty "$result"
 
   classes_count=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.classes" "stringArray" | jq 'length')
