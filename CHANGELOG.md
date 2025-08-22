@@ -2,13 +2,24 @@
 
 ## Unreleased
 
+## v0.0.17
+
+* feat: add proguard uuid attr to logs (#157)
+* chore(deps): bump androidx.test.espresso:espresso-core from 3.6.1 to 3.7.0 (#151)
+* chore(deps): bump androidx.test.ext:junit from 1.2.1 to 1.3.0 (#150)
+* chore(deps): bump com.android.tools.build:gradle from 8.11.1 to 8.12.0 (#149)
+* chore(deps): bump org.mockito.kotlin:mockito-kotlin from 5.4.0 to 6.0.0 (#148)
+* chore(deps): bump agp from 8.11.1 to 8.12.0 (#147)
+* chore(deps): bump androidx.lifecycle:lifecycle-runtime-ktx from 2.9.1 to 2.9.2 (#146)
+* chore(deps): bump androidx.compose:compose-bom from 2025.06.01 to 2025.07.00 (#145)
+
 ## v0.0.16
 
-* fix: revert kotlin version to maintain compatibility with React Native
+* fix: revert kotlin version to maintain compatibility with React Native (#154)
 
 ## v0.0.15
 
-* feat: Make `HoneycombOptions` Builder extendable
+* feat: Make `HoneycombOptions` Builder extendable (#152)
 
 ## v0.0.14
 
