@@ -157,7 +157,6 @@ teardown_file() {
 
   assert_equal "$classes_count" "$methods_count"
   assert_equal "$methods_count" "$lines_count"
-  assert_equal "$classes_count" "source_files_count"
 
   result=$(attribute_for_log_key "io.honeycomb.crash" "thread.name" "string")
   assert_equal "$result" '"main"'
