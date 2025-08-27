@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* feat: emit source files as a structured stacktrace attribute (#166)
+
 ## v0.0.17
 
 * feat: add proguard uuid attr to logs (#157)

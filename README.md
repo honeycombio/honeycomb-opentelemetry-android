@@ -331,6 +331,7 @@ Additionally, you will receive the exception broken down into classes, methods, 
 - `exception.structured_stacktrace.classes` - Array of class names from each stack frame
 - `exception.structured_stacktrace.methods` - Array of method names from each stack frame
 - `exception.structured_stacktrace.lines` - Array of line numbers from each stack frame
+- `exception.structured_stacktrace.source_files` - Array of source files from each stack frame
 
 ### Android Compose
 #### Setup

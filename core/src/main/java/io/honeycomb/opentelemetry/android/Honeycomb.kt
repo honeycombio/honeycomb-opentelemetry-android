@@ -203,11 +203,13 @@ class Honeycomb {
             val classes = stackFrames.map { it.className }
             val methods = stackFrames.map { it.methodName }
             val lines = stackFrames.map { it.lineNumber.toLong() }
+            val sourceFiles = stackFrames.map { it.fileName }
 
             attributesBuilder
                 .put(AttributeKey.stringArrayKey("exception.structured_stacktrace.classes"), classes)
                 .put(AttributeKey.stringArrayKey("exception.structured_stacktrace.methods"), methods)
                 .put(AttributeKey.longArrayKey("exception.structured_stacktrace.lines"), lines)
+                .put(AttributeKey.stringArrayKey("exception.structured_stacktrace.source_files"), sourceFiles)
 
             thread?.let {
                 attributesBuilder

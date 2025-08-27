@@ -144,12 +144,16 @@ teardown_file() {
   result=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.lines" "longArray")
   assert_not_empty "$result"
 
+  result=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.source_files" "stringArray")
+  assert_not_empty "$result"
+
   result=$(attribute_for_log_key "io.honeycomb.crash" "app.debug.proguard_uuid" "string")
   assert_not_empty "$result"
 
   classes_count=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.classes" "stringArray" | jq 'length')
   methods_count=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.methods" "stringArray" | jq 'length')
   lines_count=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.lines" "longArray" | jq 'length')
+  source_files_count=$(attribute_for_log_key "io.honeycomb.crash" "exception.structured_stacktrace.source_files" "stringArray" | jq 'length')
 
   assert_equal "$classes_count" "$methods_count"
   assert_equal "$methods_count" "$lines_count"
