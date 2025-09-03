@@ -72,6 +72,74 @@ To manually send a span:
     span?.end()
 ```
 
+### Error Symbolication
+Use our gradle plugin:
+
+in `libs.versions.toml`:
+```toml
+proguardUuid = { id = "io.honeycomb.proguard-uuid", version.ref = "honeycombAndroidSdk" }
+```
+
+in `build.gradle.kts`:
+```
+plugins {
+    ...
+    alias(libs.plugins.proguardUuid)
+}
+```
+
+finally, in `AndroidManifest.xml`:
+```xml
+<application ...>
+    <meta-data
+        android:name="io.honeycomb.proguard.uuid"
+        android:value="${PROGUARD_UUID}" />
+</application>
+```
+
+The plugin generates a UUID for each build, embeds it in the Android manifest for the application to use, and stores the UUID in a file for our use to correlate mapping files. Our symbolicator plugin expects a proguard file with the name `<uuid>.txt` in order to symbolicate crashes and stack traces.
+
+The following script pulls the UUID out, uses it to rename the proguard file, and then uploads that file to S3. For more details on the symbolication process, see [our documentation here](https://docs.honeycomb.io/send-data/android/symbolicate/).
+
+```sh
+BUILD_DIR="app/build"
+
+# Check if the build directory exists
+if [[ ! -d "$BUILD_DIR" ]]; then
+  echo "❌ Build directory not found: $BUILD_DIR"
+  exit 1
+fi
+echo "📂 Using build directory: $BUILD_DIR"
+
+# Get the uuid of the latest build
+UUID_PROPS_FILE="$BUILD_DIR/generated/honeycomb/proguard-uuid.properties"
+if [[ ! -f "$UUID_PROPS_FILE" ]]; then
+  echo "❌ UUID properties file not found: $UUID_PROPS_FILE"
+  exit 1
+fi
+echo "📝 Found UUID properties file: $UUID_PROPS_FILE"
+
+UUID=$(grep "^io\.honeycomb\.proguard\.uuid=" "$UUID_PROPS_FILE" | cut -d'=' -f2)
+if [[ -z "$UUID" ]]; then
+  echo "❌ UUID not found in properties file"
+  exit 1
+fi
+echo "🔑 Found UUID: $UUID"
+
+# Check for the ProGuard mapping file
+PROGUARD_MAPPING_FILE="$BUILD_DIR/outputs/mapping/release/mapping.txt"
+if [[ ! -f "$PROGUARD_MAPPING_FILE" ]]; then
+  echo "❌ ProGuard mapping file not found: $PROGUARD_MAPPING_FILE"
+  exit 1
+fi
+echo "📝 Found ProGuard mapping file: $PROGUARD_MAPPING_FILE"
+
+# Upload the mapping file to S3 with the UUID as the file name
+aws s3 cp "$PROGUARD_MAPPING_FILE" s3://my-app-artifacts/android/$UUID.txt
+```
+
+Run this in your CI or as part of your build process, as relevant.
+
 ## Configuration Options
 
 | Option                  | Type                                            | Required? | Description                                                                                                                                                                              |
