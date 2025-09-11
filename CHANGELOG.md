@@ -4,6 +4,15 @@
 
 * feat: expose configured resource as public property on Honeycomb class
 * feat: emit source files as a structured stacktrace attribute (#166)
+* chore(deps): bump org.mockito:mockito-core from 5.18.0 to 5.19.0
+* chore(deps): bump androidx.compose.runtime:runtime-android from 1.8.3 to 1.9.0 
+* chore(deps): bump androidx.lifecycle:lifecycle-runtime-ktx from 2.9.2 to 2.9.3
+* chore(deps): bump com.google.android.material:material from 1.12.0 to 1.13.0
+* chore(deps): bump com.android.tools.build:gradle from 8.12.1 to 8.13.0
+* chore(deps): bump agp from 8.12.1 to 8.13.0
+* chore(deps): bump androidx.compose:compose-bom from 2025.08.00 to 2025.08.01
+* chore(deps): bump io.honeycomb.proguard-uuid from 0.0.16 to 0.0.17
+* chore(deps): bump net.bytebuddy.byte-buddy-gradle-plugin from 1.17.6 to 1.17.7
 
 ## v0.0.17
 
