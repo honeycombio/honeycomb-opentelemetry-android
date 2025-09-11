@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.0.18
+
 * feat: expose configured resource as public property on Honeycomb class
 * feat: emit source files as a structured stacktrace attribute (#166)
 * chore(deps): bump org.mockito:mockito-core from 5.18.0 to 5.19.0
