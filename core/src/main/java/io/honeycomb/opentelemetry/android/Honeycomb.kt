@@ -84,6 +84,14 @@ class Honeycomb {
         private var proguardUuid: String? = null
 
         /**
+         * The OpenTelemetry Resource that was configured when [configure] was called.
+         * Contains all resource attributes including service name, version, device attributes,
+         * and any custom attributes provided via [HoneycombOptions.resourceAttributes].
+         */
+        var resource: Resource = Resource.getDefault()
+            private set
+
+        /**
          * Automatically configures OpenTelemetryRum based on values stored in the app's resources.
          */
         fun configure(
@@ -115,9 +123,8 @@ class Honeycomb {
                         .build()
                 }
 
-            val resource =
-                Resource
-                    .getDefault()
+            resource =
+                resource
                     .toBuilder()
                     .putAll(createAttributes(options.resourceAttributes))
                     .putAll(getDeviceAttributes(app))

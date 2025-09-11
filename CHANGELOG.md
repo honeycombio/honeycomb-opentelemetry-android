@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* feat: expose configured resource as public property on Honeycomb class
 * feat: emit source files as a structured stacktrace attribute (#166)
 
 ## v0.0.17
