@@ -48,7 +48,6 @@ import io.opentelemetry.semconv.incubating.ThreadIncubatingAttributes.THREAD_ID
 import io.opentelemetry.semconv.incubating.ThreadIncubatingAttributes.THREAD_NAME
 import java.io.PrintWriter
 import java.io.StringWriter
-import java.util.function.Supplier
 import kotlin.time.toJavaDuration
 
 private const val CRASH_INSTRUMENTATION_NAME = "io.honeycomb.crash"
@@ -128,7 +127,9 @@ class Honeycomb {
                         .build()
                 }
 
-            resource = AndroidResource.createDefault(app)
+            resource =
+                AndroidResource
+                    .createDefault(app)
                     .toBuilder()
                     .putAll(createAttributes(options.resourceAttributes))
                     .putAll(getDeviceAttributes(app))
@@ -335,7 +336,7 @@ class Honeycomb {
 // Based on: io/opentelemetry/android/AndroidResource.java
 internal object AndroidResource {
     fun createDefault(application: Application): Resource {
-        val appName : String = getAppName(application)
+        val appName: String = getAppName(application)
         val resourceBuilder = Resource.getDefault().toBuilder()
 
         return resourceBuilder
@@ -351,11 +352,11 @@ internal object AndroidResource {
             .build()
     }
 
-    private fun getAppName(application: Application ): String {
+    private fun getAppName(application: Application): String {
         try {
-            val stringId =  application.getApplicationContext().getApplicationInfo().labelRes
+            val stringId = application.getApplicationContext().getApplicationInfo().labelRes
             return application.getApplicationContext().getString(stringId)
-        }  catch (e: Exception) {
+        } catch (e: Exception) {
             return "unknown_service:android"
         }
     }
