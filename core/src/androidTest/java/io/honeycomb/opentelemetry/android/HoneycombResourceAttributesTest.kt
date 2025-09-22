@@ -15,7 +15,7 @@ import org.junit.runner.RunWith
 
 /**
  *
- * These tests are intended to exercise SKD initialization.
+ * These tests are intended to exercise SDK initialization.
  */
 @RunWith(AndroidJUnit4::class)
 class HoneycombResourceAttributesTest {
