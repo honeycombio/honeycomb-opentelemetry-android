@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings.Secure
-import io.honeycomb.opentelemetry.android.Honeycomb.Companion.configure
 import io.opentelemetry.android.BuildConfig
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.OpenTelemetryRumBuilder
