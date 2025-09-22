@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings.Secure
+import io.opentelemetry.android.BuildConfig
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.OpenTelemetryRumBuilder
 import io.opentelemetry.android.config.OtelRumConfig
@@ -36,9 +37,12 @@ import io.opentelemetry.sdk.trace.export.SpanExporter
 import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_MESSAGE
 import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_STACKTRACE
 import io.opentelemetry.semconv.ExceptionAttributes.EXCEPTION_TYPE
+import io.opentelemetry.semconv.ServiceAttributes
+import io.opentelemetry.semconv.incubating.DeviceIncubatingAttributes
 import io.opentelemetry.semconv.incubating.DeviceIncubatingAttributes.DEVICE_ID
 import io.opentelemetry.semconv.incubating.DeviceIncubatingAttributes.DEVICE_MANUFACTURER
 import io.opentelemetry.semconv.incubating.EventIncubatingAttributes.EVENT_NAME
+import io.opentelemetry.semconv.incubating.OsIncubatingAttributes
 import io.opentelemetry.semconv.incubating.ThreadIncubatingAttributes.THREAD_ID
 import io.opentelemetry.semconv.incubating.ThreadIncubatingAttributes.THREAD_NAME
 import java.io.PrintWriter
@@ -60,7 +64,6 @@ private fun getDeviceAttributes(app: Application): Attributes {
     val builder = Attributes.builder()
 
     builder.put(DEVICE_ID, Secure.getString(app.applicationContext.contentResolver, Secure.ANDROID_ID))
-    builder.put(DEVICE_MANUFACTURER, Build.MANUFACTURER)
 
     return builder.build()
 }
@@ -124,7 +127,8 @@ class Honeycomb {
                 }
 
             resource =
-                resource
+                AndroidResource
+                    .createDefault(app)
                     .toBuilder()
                     .putAll(createAttributes(options.resourceAttributes))
                     .putAll(getDeviceAttributes(app))
@@ -325,5 +329,47 @@ class Honeycomb {
             }
             return CompletableResultCode.ofAll(codes)
         }
+    }
+}
+
+// Based on: io/opentelemetry/android/AndroidResource.java
+internal object AndroidResource {
+    fun createDefault(application: Application): Resource {
+        val appName: String = getAppName(application)
+        val resourceBuilder = Resource.getDefault().toBuilder()
+
+        return resourceBuilder
+            .put(ServiceAttributes.SERVICE_NAME, appName)
+            .put("rum.sdk.version", BuildConfig.OTEL_ANDROID_VERSION)
+            .put(DeviceIncubatingAttributes.DEVICE_MODEL_NAME, Build.MODEL)
+            .put(DeviceIncubatingAttributes.DEVICE_MODEL_IDENTIFIER, Build.MODEL)
+            .put(DEVICE_MANUFACTURER, Build.MANUFACTURER)
+            .put(OsIncubatingAttributes.OS_NAME, "Android")
+            .put(OsIncubatingAttributes.OS_TYPE, "linux")
+            .put(OsIncubatingAttributes.OS_VERSION, Build.VERSION.RELEASE)
+            .put(OsIncubatingAttributes.OS_DESCRIPTION, getOSDescription())
+            .build()
+    }
+
+    private fun getAppName(application: Application): String {
+        try {
+            val stringId = application.getApplicationContext().getApplicationInfo().labelRes
+            return application.getApplicationContext().getString(stringId)
+        } catch (e: Exception) {
+            return "unknown_service:android"
+        }
+    }
+
+    private fun getOSDescription(): String {
+        val osDescriptionBuilder = StringBuilder()
+        return osDescriptionBuilder
+            .append("Android Version ")
+            .append(Build.VERSION.RELEASE)
+            .append(" (Build ")
+            .append(Build.ID)
+            .append(" API level ")
+            .append(Build.VERSION.SDK_INT)
+            .append(")")
+            .toString()
     }
 }
