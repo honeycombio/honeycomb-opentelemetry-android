@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.0.19
+
+* feat: add inline AndroidResource implementation for comprehensive resource attributes (#185)
+
 ## v0.0.18
 
 * feat: expose configured resource as public property on Honeycomb class
