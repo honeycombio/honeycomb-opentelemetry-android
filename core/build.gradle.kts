@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "io.honeycomb.opentelemetry.android"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21
@@ -59,6 +59,7 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.auto.service.annotations)
+    api(platform(libs.opentelemetry.android.bom))
     implementation(libs.opentelemetry.android.core)
     implementation(libs.opentelemetry.api)
     implementation(libs.opentelemetry.sdk)

@@ -20,12 +20,12 @@ mockitoCore = "5.19.0"
 mockitoKotlin = "6.0.0"
 okhttp = "5.1.0"
 opentelemetry = "1.49.0"
-opentelemetryAndroid = "0.11.0-alpha"
-opentelemetryBaggageProcessor = "1.46.0-alpha"
-opentelemetryInstrumentation = "2.15.0"
-opentelemetrySemConv = "1.32.0"
+opentelemetryAndroid = "0.15.0-alpha"
+opentelemetryBaggageProcessor = "1.49.0-alpha"
+opentelemetryInstrumentation = "2.20.1"
+opentelemetrySemConv = "1.37.0"
 opentelemetrySemConvAlpha = "1.30.0-alpha"
-proguardUUID = "0.0.17"
+proguardUUID = "0.0.18"
 publish = "2.0.0"
 spotless = "7.2.1"
 uiautomator = "2.4.0-alpha05"
@@ -58,19 +58,21 @@ material = { group = "com.google.android.material", name = "material", version.r
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
-okhttp-agent = { module = "io.opentelemetry.android.instrumentation:okhttp3-agent", version.ref = "opentelemetryAndroid" }
-okhttp-library = { module = "io.opentelemetry.android.instrumentation:okhttp3-library", version.ref = "opentelemetryAndroid" }
-opentelemetry-android-agent = { module = "io.opentelemetry.android:android-agent", version.ref = "opentelemetryAndroid" }
-opentelemetry-android-core = { module = "io.opentelemetry.android:core", version.ref = "opentelemetryAndroid" }
-opentelemetry-android-instrumentation = { module = "io.opentelemetry.android.instrumentation:android-instrumentation", version.ref = "opentelemetryAndroid" }
-opentelemetry-api = { module = "io.opentelemetry:opentelemetry-api", version.ref = "opentelemetry"  }
-opentelemetry-baggage-processor = { module = "io.opentelemetry.contrib:opentelemetry-baggage-processor", version.ref = "opentelemetryBaggageProcessor"  }
-opentelemetry-sdk = { module = "io.opentelemetry:opentelemetry-sdk", version.ref = "opentelemetry"  }
-opentelemetry-exporter-logging-otlp = { module = "io.opentelemetry:opentelemetry-exporter-logging-otlp", version.ref = "opentelemetry" }
-opentelemetry-exporter-otlp = { module = "io.opentelemetry:opentelemetry-exporter-otlp", version.ref = "opentelemetry"  }
-opentelemetry-instrumentation-api = { module = "io.opentelemetry.instrumentation:opentelemetry-instrumentation-api", version.ref = "opentelemetryInstrumentation"  }
-opentelemetry-semconv = { module = "io.opentelemetry.semconv:opentelemetry-semconv", version.ref = "opentelemetrySemConv"  }
-opentelemetry-semconv-incubating = { module = "io.opentelemetry.semconv:opentelemetry-semconv-incubating", version.ref = "opentelemetrySemConvAlpha"  }
+#okhttp-agent = { module = "io.opentelemetry.android.instrumentation:okhttp3-agent", version.ref = "opentelemetryAndroid" }
+#okhttp-library = { module = "io.opentelemetry.android.instrumentation:okhttp3-library", version.ref = "opentelemetryAndroid" }
+opentelemetry-android-agent = { module = "io.opentelemetry.android:android-agent" }
+opentelemetry-android-core = { module = "io.opentelemetry.android:core" }
+opentelemetry-android-instrumentation = { module = "io.opentelemetry.android.instrumentation:android-instrumentation" }
+opentelemetry-api = { module = "io.opentelemetry:opentelemetry-api" }
+opentelemetry-baggage-processor = { module = "io.opentelemetry.contrib:opentelemetry-baggage-processor", version.ref = "opentelemetryBaggageProcessor" }
+opentelemetry-instrumentation-okhttp = { module = "io.opentelemetry.instrumentation:opentelemetry-okhttp-3.0" }
+opentelemetry-sdk = { module = "io.opentelemetry:opentelemetry-sdk" }
+opentelemetry-exporter-logging-otlp = { module = "io.opentelemetry:opentelemetry-exporter-logging-otlp" }
+opentelemetry-exporter-otlp = { module = "io.opentelemetry:opentelemetry-exporter-otlp" }
+opentelemetry-instrumentation-api = { module = "io.opentelemetry.instrumentation:opentelemetry-instrumentation-api" }
+opentelemetry-semconv = { module = "io.opentelemetry.semconv:opentelemetry-semconv" }
+opentelemetry-semconv-incubating = { module = "io.opentelemetry.semconv:opentelemetry-semconv-incubating" }
+opentelemetry-android-bom = { module = "io.opentelemetry.android:opentelemetry-android-bom", version.ref = "opentelemetryAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
