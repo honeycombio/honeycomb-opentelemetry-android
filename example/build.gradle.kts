@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace = "io.honeycomb.opentelemetry.android.example"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "io.honeycomb.opentelemetry.android.example"
@@ -66,6 +66,7 @@ dependencies {
     // This is required by opentelemetry-android.
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
+    api(platform(libs.opentelemetry.android.bom))
     implementation(libs.opentelemetry.android.agent)
     implementation(libs.opentelemetry.android.core)
     implementation(libs.opentelemetry.api)
@@ -101,9 +102,9 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.okhttp)
-    implementation(libs.okhttp.library)
+    // implementation(libs.opentelemetry.instrumentation.okhttp)
 
-    byteBuddy(libs.okhttp.agent)
+    // byteBuddy(libs.okhttp.agent)
 }
 
 apply("${project.rootDir}/spotless.gradle")
