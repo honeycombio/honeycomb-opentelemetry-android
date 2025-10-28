@@ -47,6 +47,7 @@ import io.opentelemetry.semconv.incubating.ThreadIncubatingAttributes.THREAD_ID
 import io.opentelemetry.semconv.incubating.ThreadIncubatingAttributes.THREAD_NAME
 import java.io.PrintWriter
 import java.io.StringWriter
+import java.util.concurrent.TimeUnit
 import kotlin.time.toJavaDuration
 
 private const val CRASH_INSTRUMENTATION_NAME = "io.honeycomb.crash"
@@ -231,6 +232,7 @@ class Honeycomb {
             attributesBuilder.put(EVENT_NAME, "device.crash")
             logger
                 .logRecordBuilder()
+                .setTimestamp(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .setAllAttributes(attributesBuilder.build())
                 .emit()
         }

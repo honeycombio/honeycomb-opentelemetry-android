@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* fix: set timestamp on log records in logException method
+
 ## v0.0.19
 
 * feat: add inline AndroidResource implementation for comprehensive resource attributes (#185)
