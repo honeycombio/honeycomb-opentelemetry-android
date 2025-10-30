@@ -4,6 +4,7 @@
 
 * fix: set timestamp on log records in logException method
 * fix: downgrade Kotlin and avoid future dependabot Kotlin upgrades
+* fix: upgrade to compile version 36 
 
 ## v0.0.19
 
