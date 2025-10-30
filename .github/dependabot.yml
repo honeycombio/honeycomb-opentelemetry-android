@@ -8,3 +8,5 @@ updates:
     ignore:
       # While OTel Android is experimental and has frequent breaking changes, don't upgrade it.
       - dependency-name: "io.opentelemetry*"
+      # Our RN SDK doesn't work with the latest versions of the Kotlin compiler
+      - dependency-name: "org.jetbrains.kotlin*"
