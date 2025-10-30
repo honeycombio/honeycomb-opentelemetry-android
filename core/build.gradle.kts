@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "io.honeycomb.opentelemetry.android"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21
@@ -42,9 +42,9 @@ android {
     testOptions {
         managedDevices {
             localDevices {
-                create("pixel8api35") {
+                create("pixel8api36") {
                     device = "Pixel 8"
-                    apiLevel = 35
+                    apiLevel = 36
                     systemImageSource = "google"
                 }
             }
