@@ -41,7 +41,7 @@ android-test: android-emulator
 	@echo ""
 	@echo "+++ Running Android tests."
 	@echo ""
-	./gradlew :example:pixel8api35debugAndroidTest --rerun
+	./gradlew :example:pixel8api36debugAndroidTest --rerun
 
 smoke-bats: smoke-tests/collector/data.json
 	@echo ""

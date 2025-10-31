@@ -9,8 +9,8 @@ else
     # ABI="x86_64"
     ABI="arm64-v8a"
 fi
-SYSTEM_IMAGE="system-images;android-35;google_apis;$ABI"
-DEVICE_NAME="Pixel_8_API_35"
+SYSTEM_IMAGE="system-images;android-36;google_apis;$ABI"
+DEVICE_NAME="Pixel_8_API_36"
 
 #
 # Verify the Android SDK Command-line Tools are properly installed.
