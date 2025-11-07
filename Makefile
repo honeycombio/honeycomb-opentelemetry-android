@@ -49,7 +49,7 @@ smoke-bats: smoke-tests/collector/data.json
 	@echo ""
 	cd smoke-tests && bats ./smoke-e2e.bats --report-formatter junit --output ./
 
-smoke: smoke-docker android-test smoke-bats
+smoke: unsmoke clean-smoke-tests smoke-docker android-test smoke-bats
 
 unsmoke:
 	@echo ""
