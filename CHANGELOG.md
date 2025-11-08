@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.0.20
+
 * fix: set timestamp on log records in logException method
 * fix: downgrade Kotlin and avoid future dependabot Kotlin upgrades
 * fix: upgrade to compile version 36 
