@@ -63,7 +63,7 @@ class ExampleApp : Application() {
     }
 
     fun flush() {
-        val otel = otelRum?.openTelemetry as OpenTelemetrySdk
+        val otel = otelRum?.getOpenTelemetry() as OpenTelemetrySdk
         otel.sdkTracerProvider.forceFlush()
         otel.sdkLoggerProvider.forceFlush()
         otel.shutdown()

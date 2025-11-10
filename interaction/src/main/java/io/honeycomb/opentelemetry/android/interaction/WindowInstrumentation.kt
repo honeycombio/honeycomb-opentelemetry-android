@@ -315,6 +315,6 @@ class WindowInstrumentation : AndroidInstrumentation {
     override val name: String = "interaction"
 
     override fun install(ctx: InstallationContext) {
-        ctx.application.registerActivityLifecycleCallbacks(InteractionLifecycleCallbacks(ctx.openTelemetry))
+        ctx.application?.registerActivityLifecycleCallbacks(InteractionLifecycleCallbacks(ctx.openTelemetry))
     }
 }
