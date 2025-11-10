@@ -28,35 +28,34 @@ fun HoneycombInstrumentedComposable(
 
     val otelRum = LocalOpenTelemetryRum.current!!.openTelemetry
     val tracer = otelRum.tracerProvider.tracerBuilder("io.honeycomb.view").build()
-    val span =
+    val renderSpan =
         tracer
             .spanBuilder("View Render")
             .setAttribute("view.name", name)
             .startSpan()
 
-    span.makeCurrent().use {
+    renderSpan.makeCurrent().use {
         val bodySpan =
             tracer
                 .spanBuilder("View Body")
                 .setAttribute("view.name", name)
                 .startSpan()
 
+        val start = markNow()
         bodySpan.makeCurrent().use {
-            val start = markNow()
             composable()
-            val endTime = System.currentTimeMillis()
+        }
+        bodySpan.end()
 
-            val bodyDuration = start.elapsedNow()
-            // bodyDuration is in seconds
-            // calling duration.inWholeSeconds would lose precision
-            span.setAttribute("view.renderDuration", bodyDuration.toDouble(DurationUnit.SECONDS))
+        val bodyDuration = start.elapsedNow()
+        // bodyDuration is in seconds
+        // calling duration.inWholeSeconds would lose precision
+        renderSpan.setAttribute("view.renderDuration", bodyDuration.toDouble(DurationUnit.SECONDS))
 
-            SideEffect {
-                bodySpan.end(endTime, TimeUnit.MILLISECONDS)
-                val renderDuration = start.elapsedNow()
-                span.setAttribute("view.totalDuration", renderDuration.toDouble(DurationUnit.SECONDS))
-                span.end()
-            }
+        SideEffect {
+            val renderDuration = start.elapsedNow()
+            renderSpan.setAttribute("view.totalDuration", renderDuration.toDouble(DurationUnit.SECONDS))
+            renderSpan.end()
         }
     }
 }
