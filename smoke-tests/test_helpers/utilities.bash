@@ -72,6 +72,12 @@ attribute_for_log_key() {
 		jq ".${3}Value"
 }
 
+# Event name for a log event
+# Arguments: $1 - scope name
+event_name_for_log() {
+	logs_from_scope_named $1 | jq -r ".eventName" | sort -u
+}
+
 # All attributes from a span
 # Arguments:
 #   $1 - scope

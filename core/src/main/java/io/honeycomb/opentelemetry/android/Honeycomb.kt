@@ -187,7 +187,7 @@ class Honeycomb {
             // However, that might require changing this into an entire separate instrumentation
             // package. So for now, just do this.
 
-            val sdk = otel.openTelemetry as OpenTelemetrySdk
+            val sdk = otel.getOpenTelemetry() as OpenTelemetrySdk
             val loggerProvider = sdk.sdkLoggerProvider
             val logger: Logger = loggerProvider.loggerBuilder(CRASH_INSTRUMENTATION_NAME).build()
 

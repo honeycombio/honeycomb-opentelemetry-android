@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* maint: update OpenTelemetry Android SDK from 0.11.0-alpha to 0.16.0-alpha
+
 ## v0.0.20
 
 * fix: set timestamp on log records in logException method
