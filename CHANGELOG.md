@@ -2,12 +2,15 @@
 
 ## Unreleased
 
+## v0.0.21
+
+* fix: fix a subtle bug with incorrect timestamps in Compose render instrumentation
+
 ## v0.0.20
 
 * fix: set timestamp on log records in logException method
 * fix: downgrade Kotlin and avoid future dependabot Kotlin upgrades
 * fix: upgrade to compile version 36 
-* fix: fix a subtle bug with incorrect timestamps in Compose render instrumentation
 
 ## v0.0.19
 
