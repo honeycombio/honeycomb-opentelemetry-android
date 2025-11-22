@@ -59,9 +59,9 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.auto.service.annotations)
-    implementation(libs.opentelemetry.android.core)
-    implementation(libs.opentelemetry.api)
-    implementation(libs.opentelemetry.sdk)
+    api(libs.opentelemetry.android.core)
+    api(libs.opentelemetry.api)
+    api(libs.opentelemetry.sdk)
     implementation(libs.opentelemetry.semconv)
     implementation(libs.opentelemetry.semconv.incubating)
     implementation(libs.opentelemetry.exporter.logging.otlp)
