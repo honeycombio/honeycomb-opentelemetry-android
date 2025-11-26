@@ -32,7 +32,7 @@ For a complete list of tested dependencies and versions, see
 Add the following dependencies to your `build.gradle.kts`:
 ```kotlin
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.20")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.21")
 }
 ```
 
@@ -406,7 +406,7 @@ Additionally, you will receive the exception broken down into classes, methods, 
 Android Compose instrumentation is included in a standalone library. Add the following to your dependencies in `build.gradle.kts`:
 ```
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android-compose:0.0.20")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android-compose:0.0.21")
 }
 ```
 
