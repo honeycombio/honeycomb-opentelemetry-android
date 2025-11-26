@@ -26,7 +26,7 @@ fun HoneycombInstrumentedComposable(
         return
     }
 
-    val otelRum = LocalOpenTelemetryRum.current!!.getOpenTelemetry()
+    val otelRum = LocalOpenTelemetryRum.current!!.openTelemetry
     val tracer = otelRum.tracerProvider.tracerBuilder("io.honeycomb.view").build()
     val renderSpan =
         tracer

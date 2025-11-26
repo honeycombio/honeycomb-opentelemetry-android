@@ -19,7 +19,7 @@ import io.opentelemetry.api.logs.Logger
 import io.opentelemetry.sdk.OpenTelemetrySdk
 
 private fun onSendSpan(otelRum: OpenTelemetryRum?) {
-    val otel = otelRum?.getOpenTelemetry()
+    val otel = otelRum?.openTelemetry
     val tracer = otel?.getTracer("io.honeycomb.smoke-test")
     val baggage =
         Baggage
@@ -34,7 +34,7 @@ private fun onSendSpan(otelRum: OpenTelemetryRum?) {
 }
 
 private fun onSendLog(otelRum: OpenTelemetryRum?) {
-    val sdk = otelRum?.getOpenTelemetry() as OpenTelemetrySdk
+    val sdk = otelRum?.openTelemetry as OpenTelemetrySdk
     val loggerProvider = sdk.sdkLoggerProvider
     val logger: Logger = loggerProvider.loggerBuilder("io.honeycomb.smoke-test").build()
     val baggage =
@@ -48,7 +48,7 @@ private fun onSendLog(otelRum: OpenTelemetryRum?) {
 }
 
 private fun onSendMetrics(otelRum: OpenTelemetryRum?) {
-    val otel = otelRum?.getOpenTelemetry()
+    val otel = otelRum?.openTelemetry
     val meter = otel?.getMeter("io.honeycomb.smoke-test")
     val counter = meter?.counterBuilder("smoke-test.metric.int")?.build()
 

@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* maint: update OpenTelemetry Android SDK from 0.11.0-alpha to 0.16.0-alpha
+* maint: update OpenTelemetry Android SDK from 0.11.0-alpha to 1.0.0-rc.1-alpha
 
 ## v0.0.20
 

@@ -20,7 +20,7 @@ mockitoCore = "5.20.0"
 mockitoKotlin = "6.1.0"
 okhttp = "5.2.1"
 opentelemetry = "1.49.0"
-opentelemetryAndroid = "0.16.0-alpha"
+opentelemetryAndroid = "1.0.0-rc.1-alpha"
 opentelemetryBaggageProcessor = "1.46.0-alpha"
 opentelemetryInstrumentation = "2.15.0"
 opentelemetrySemConv = "1.32.0"
@@ -61,6 +61,7 @@ okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-agent = { module = "io.opentelemetry.android.instrumentation:okhttp3-agent", version.ref = "opentelemetryAndroid" }
 okhttp-library = { module = "io.opentelemetry.android.instrumentation:okhttp3-library", version.ref = "opentelemetryAndroid" }
 opentelemetry-android-agent = { module = "io.opentelemetry.android:android-agent", version.ref = "opentelemetryAndroid" }
+opentelemetry-android-agent-api = { module = "io.opentelemetry.android:agent-api", version.ref = "opentelemetryAndroid" }
 opentelemetry-android-core = { module = "io.opentelemetry.android:core", version.ref = "opentelemetryAndroid" }
 opentelemetry-android-instrumentation = { module = "io.opentelemetry.android.instrumentation:android-instrumentation", version.ref = "opentelemetryAndroid" }
 opentelemetry-api = { module = "io.opentelemetry:opentelemetry-api", version.ref = "opentelemetry"  }
