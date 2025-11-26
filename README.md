@@ -17,7 +17,7 @@ These are the current versions of libraries we have tested for compatibility:
 
   | Dependency                                             | Version            |
   |--------------------------------------------------------|--------------------|
-  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `0.0.20`           |
+  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `0.0.21`           |
   | `io.opentelemetry.android:core`                        | `1.0.0-rc.1-alpha` |
   | `io.opentelemetry.android:android-agent`               | `1.0.0-rc.1-alpha` |
   | `io.opentelemetry:opentelemetry-api`                   | `1.49.0`           |
