@@ -108,12 +108,27 @@ teardown_file() {
 }
 
 @test "SDK detects ANRs" {
-  result=$(unique_span_names_for "io.opentelemetry.anr")
-  assert_equal "$result" '"ANR"'
+  # ANRs are now log events, not spans (changed in v0.14.0)
+  # Check that ANR logs were captured
+  result=$(logs_from_scope_named "io.opentelemetry.anr" | jq 'length')
+  assert_not_empty "$result"
 
-  stacktrace=$(attribute_for_span_key "io.opentelemetry.anr" "ANR" "exception.stacktrace" "string" \
+  # Verify the eventName field is set correctly
+  event_name=$(event_name_for_log "io.opentelemetry.anr")
+  assert_equal "$event_name" "device.anr"
+
+  # Verify the ANR contains the expected stacktrace (from Thread.sleep in the test)
+  stacktrace=$(attribute_for_log_key "io.opentelemetry.anr" "exception.stacktrace" "string" \
     | grep "java.lang.Thread.sleep")
   assert_not_empty "$stacktrace"
+
+  # Verify ANR was on the main thread (ANRs always happen on main thread)
+  thread_name=$(attribute_for_log_key "io.opentelemetry.anr" "thread.name" "string")
+  assert_equal "$thread_name" '"main"'
+
+  # Verify thread ID exists
+  thread_id=$(attribute_for_log_key "io.opentelemetry.anr" "thread.id" "int")
+  assert_not_empty "$thread_id"
 }
 
 @test "SDK adds baggage to logs" {
@@ -172,6 +187,10 @@ teardown_file() {
 }
 
 @test "SDK can log unhandled exceptions" {
+  # Verify the eventName field is set correctly
+  event_name=$(event_name_for_log "io.opentelemetry.crash")
+  assert_equal "$event_name" "device.crash"
+
   result=$(attribute_for_log_key "io.opentelemetry.crash" "exception.type" "string")
   assert_equal "$result" '"io.honeycomb.opentelemetry.android.example.SmokeTestException"'
 
@@ -190,9 +209,33 @@ teardown_file() {
 }
 
 @test "SDK detects slow renders" {
-  result=$(unique_span_names_for "io.opentelemetry.slow-rendering")
-  assert_equal "$result" '"frozenRenders"
-"slowRenders"'
+  # Jank/slow rendering are now log events in "app.jank" scope, not spans (changed in v0.15.0)
+  # Check that jank logs were captured
+  result=$(logs_from_scope_named "app.jank" | jq 'length')
+  assert_not_empty "$result"
+
+  # Verify the eventName field is set correctly
+  event_name=$(event_name_for_log "app.jank")
+  assert_equal "$event_name" "app.jank"
+
+  # Verify both slow (16ms/0.016s) and frozen (700ms/0.7s) thresholds are present
+  thresholds=$(logs_from_scope_named "app.jank" | \
+    jq -r '.attributes[] | select(.key == "app.jank.threshold") | .value.doubleValue' | \
+    sort -u)
+  assert_equal "$thresholds" "0.016
+0.7"
+
+  # Verify frame count exists
+  frame_count=$(attribute_for_log_key "app.jank" "app.jank.frame_count" "int")
+  assert_not_empty "$frame_count"
+
+  # Verify screen name is captured (to know where jank occurred)
+  screen_name=$(attribute_for_log_key "app.jank" "screen.name" "string")
+  assert_not_empty "$screen_name"
+
+  # Verify the jank period exists (sampling period in seconds)
+  period=$(attribute_for_log_key "app.jank" "app.jank.period" "double")
+  assert_not_empty "$period"
 }
 
 @test "Network auto-instrumentation sends spans" {
