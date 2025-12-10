@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+* deps: update minSdk to 23, required for:
+  * chore(deps): bump androidx.compose.runtime:runtime-android from 1.9.4 to 1.10.0
+  * chore(deps): bump androidx.compose:compose-bom from 2025.10.01 to 2025.12.00
+  * chore(deps): bump androidx.activity:activity from 1.11.0 to 1.12.1
+  * chore(deps): bump androidx.activity:activity-compose from 1.11.0 to 1.12.1
+  * chore(deps): bump androidx.test.uiautomator:uiautomator from 2.4.0-alpha05 to 2.4.0-alpha07
+
 ## v0.0.21
 
 * fix: fix a subtle bug with incorrect timestamps in Compose render instrumentation
@@ -10,7 +17,7 @@
 
 * fix: set timestamp on log records in logException method
 * fix: downgrade Kotlin and avoid future dependabot Kotlin upgrades
-* fix: upgrade to compile version 36 
+* fix: upgrade to compile version 36
 
 ## v0.0.19
 
@@ -21,7 +28,7 @@
 * feat: expose configured resource as public property on Honeycomb class
 * feat: emit source files as a structured stacktrace attribute (#166)
 * chore(deps): bump org.mockito:mockito-core from 5.18.0 to 5.19.0
-* chore(deps): bump androidx.compose.runtime:runtime-android from 1.8.3 to 1.9.0 
+* chore(deps): bump androidx.compose.runtime:runtime-android from 1.8.3 to 1.9.0
 * chore(deps): bump androidx.lifecycle:lifecycle-runtime-ktx from 2.9.2 to 2.9.3
 * chore(deps): bump com.google.android.material:material from 1.12.0 to 1.13.0
 * chore(deps): bump com.android.tools.build:gradle from 8.12.1 to 8.13.0
