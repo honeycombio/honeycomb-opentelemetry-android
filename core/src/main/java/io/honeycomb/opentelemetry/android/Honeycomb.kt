@@ -143,6 +143,11 @@ class Honeycomb {
             val diskBufferingConfig = DiskBufferingConfig.create(options.offlineCachingEnabled)
             rumConfig.setDiskBufferingConfig(diskBufferingConfig)
 
+            // Suppress any disabled instrumentations
+            for (instrumentationName in options.disabledInstrumentation) {
+                rumConfig.suppressInstrumentation(instrumentationName)
+            }
+
             return OpenTelemetryRumBuilder
                 .create(app, rumConfig)
                 .mergeResource(resource)
