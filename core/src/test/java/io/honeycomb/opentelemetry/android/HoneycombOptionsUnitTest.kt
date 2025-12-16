@@ -94,6 +94,7 @@ class HoneycombOptionsUnitTest {
         assertFalse(options.debug)
 
         assertFalse(options.offlineCachingEnabled)
+        assertEquals(emptyList<String>(), options.disabledInstrumentation)
     }
 
     @Test
@@ -322,6 +323,7 @@ class HoneycombOptionsUnitTest {
                 .setMetricsProtocol(OtlpProtocol.HTTP_JSON)
                 .setLogsProtocol(OtlpProtocol.HTTP_JSON)
                 .setOfflineCachingEnabled(true)
+                .setDisabledInstrumentation(listOf("crash", "anr"))
                 .build()
 
         assertEquals("service", options.serviceName)
@@ -383,6 +385,7 @@ class HoneycombOptionsUnitTest {
         assertEquals(42, options.sampleRate)
         assertTrue(options.debug)
         assertTrue(options.offlineCachingEnabled)
+        assertEquals(listOf("crash", "anr"), options.disabledInstrumentation)
     }
 
     @Test
