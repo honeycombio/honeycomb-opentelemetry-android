@@ -397,7 +397,8 @@ try {
             AttributeKey.stringKey("user.name"), "bufo",
             AttributeKey.longKey("user.id"), 1
         ),
-        Thread.currentThread())
+        Thread.currentThread(),
+        Severity.ERROR)
 }
 ```
 
@@ -407,6 +408,7 @@ try {
 | exception  | Throwable        | true        | The exception itself. Attributes will be automatically added to the log record.   |
 | attributes | Attributes?      | false       | Additional attributes you would like to log along with the default ones provided. |
 | thread     | Thread?          | false       | Thread where the error occurred. Add this to include the thread as attributes.    |
+| severity   | Severity         | false       | Severity of the exception. Defaults to `ERROR`.                                   |
 
 
 The following attributes are automatically attached to the log entry.
