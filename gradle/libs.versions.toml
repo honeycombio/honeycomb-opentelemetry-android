@@ -1,6 +1,6 @@
 [versions]
 activity = "1.11.0"
-activityCompose = "1.11.0"
+activityCompose = "1.12.2"
 agp = "8.13.1"
 appcompat = "1.7.1"
 autoService = "1.1.1"
