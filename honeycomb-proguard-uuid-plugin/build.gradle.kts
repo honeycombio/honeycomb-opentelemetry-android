@@ -12,7 +12,7 @@ version = project.version.toString()
 
 dependencies {
     compileOnly(gradleApi())
-    compileOnly("com.android.tools.build:gradle:8.13.1")
+    compileOnly("com.android.tools.build:gradle:8.13.2")
 }
 
 gradlePlugin {
