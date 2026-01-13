@@ -146,6 +146,10 @@ teardown_file() {
   result=$(attribute_for_log_key "io.honeycomb.crash" "exception.message" "string")
   assert_equal "$result" '"This exception was intentional."'
 
+  result=$(logs_from_scope_named "io.honeycomb.crash" \
+    | jq 'select(.attributes[].value.stringValue == "java.lang.RuntimeException") | .severityText')
+  assert_equal "$result" '"ERROR"'
+
   result=$(attribute_for_log_key "io.honeycomb.crash" "exception.stacktrace" "string" \
     | grep "example.CorePlaygroundKt.onLogException")
   assert_not_empty "$result"
