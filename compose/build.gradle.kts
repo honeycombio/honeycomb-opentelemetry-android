@@ -62,6 +62,7 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.auto.service.annotations)
+    implementation(libs.opentelemetry.android.agent.api)
     implementation(libs.opentelemetry.android.core)
     implementation(libs.opentelemetry.api)
     implementation(libs.opentelemetry.sdk)

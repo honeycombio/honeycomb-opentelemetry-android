@@ -15,12 +15,12 @@ encounter breaking changes in other dependencies.
 
 These are the current versions of libraries we have tested for compatibility:
 
-  | Dependency                                             | Version        |
-  |--------------------------------------------------------|----------------|
-  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `0.0.21`       |
-  | `io.opentelemetry.android:core`                        | `0.11.0-alpha` |
-  | `io.opentelemetry.android:android-agent`               | `0.11.0-alpha` |
-  | `io.opentelemetry:opentelemetry-api`                   | `1.49.0`       |
+  | Dependency                                             | Version  |
+  |--------------------------------------------------------|----------|
+  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `0.0.21` |
+  | `io.opentelemetry.android:core`                        | `1.0.1`  |
+  | `io.opentelemetry.android:android-agent`               | `1.0.1`  |
+  | `io.opentelemetry:opentelemetry-api`                   | `1.57.0` |
 
 For a complete list of tested dependencies and versions, see
 [libs.versions.toml](gradle/libs.versions.toml).
@@ -205,14 +205,34 @@ To enable all OpenTelemetry auto-instrumentation, simply include `android-agent`
 * [`io.opentelemetry.android:android-agent`](https://github.com/open-telemetry/opentelemetry-android/tree/main)
 
 If you want to pick and choose which auto-instrumentation to include, you can instead add dependencies for whichever components you would like:
-* [`io.opentelemetry.android:instrumentation-activity`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/activity)
-* [`io.opentelemetry.android:instrumentation-anr`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/anr)
-* [`io.opentelemetry.android:instrumentation-crash`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/crash)
-* [`io.opentelemetry.android:instrumentation-fragment`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/fragment)
-* [`io.opentelemetry.android:instrumentation-slowrendering`](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/slowrendering)
+
+| Module              | Instrumentation Name   | Included in Agent | Description                                              | Source                                                                                                       |
+|---------------------|------------------------|-------------------|----------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| activity            | `"activity"`           | Yes               | Activity lifecycle tracking (AppStart, Created, etc.)    | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/activity)        |
+| anr                 | `"anr"`                | Yes               | Application Not Responding detection (~5s threshold)     | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/anr)             |
+| crash               | `"crash"`              | Yes               | Uncaught exception reporting                             | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/crash)           |
+| fragment            | `"fragment"`           | Yes               | Fragment lifecycle tracking                              | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/fragment)        |
+| network             | `"network"`            | Yes               | Network connectivity change detection                    | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/network)         |
+| screen-orientation  | `"screen_orientation"` | Yes               | Device orientation change tracking                       | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/screen-orientation) |
+| sessions            | `"session"`            | Yes               | User session lifecycle tracking                          | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/sessions)        |
+| slowrendering       | `"slowrendering"`      | Yes               | Slow (>16ms) and frozen (>700ms) frame detection         | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/slowrendering)   |
+| startup             | `"startup"`            | Yes               | Application startup performance tracking                 | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/startup)         |
+| android-log         | `"android-log"`        | No                | Generates OTel log records from Android Log.x() calls    | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/android-log)     |
+| compose/click       | `"compose.click"`      | No                | Jetpack Compose click event tracking                     | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/compose/click)   |
+| httpurlconnection   | `"httpurlconnection"`  | No                | HttpURLConnection HTTP client tracing                    | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/httpurlconnection) |
+| okhttp3             | `"okhttp"`             | No                | OkHttp HTTP client tracing                               | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/okhttp3)         |
+| okhttp3-websocket   | `"okhttp-websocket"`   | No                | OkHttp WebSocket tracing                                 | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/okhttp3-websocket) |
+| view-click          | `"view.click"`         | No                | View click event tracking for Android Views              | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/view-click)      |
 
 The following additional auto-instrumentation is implemented in this library:
-* `honeycomb-opentelemetry-android-interaction` &mdash; UI interaction in XML-based Activities.
+
+| Module      | Instrumentation Name | Included in Agent | Description                                     | Source                                                                                       |
+|-------------|----------------------|-------------------|-------------------------------------------------|----------------------------------------------------------------------------------------------|
+| interaction | `"interaction"`      | No                | UI interaction tracking in XML-based Activities | [source](https://github.com/honeycombio/honeycomb-opentelemetry-android/tree/main/interaction) |
+
+### Disabling Auto-Instrumentation
+
+To disable specific auto-instrumentation, use the `setDisabledInstrumentation()` method with a list of instrumentation names from the tables above. For example, to disable crash and ANR reporting: `.setDisabledInstrumentation(listOf("crash", "anr"))`.
 
 ### Activity Lifecycle Instrumentation
 
@@ -377,7 +397,8 @@ try {
             AttributeKey.stringKey("user.name"), "bufo",
             AttributeKey.longKey("user.id"), 1
         ),
-        Thread.currentThread())
+        Thread.currentThread(),
+        Severity.ERROR)
 }
 ```
 
@@ -387,6 +408,7 @@ try {
 | exception  | Throwable        | true        | The exception itself. Attributes will be automatically added to the log record.   |
 | attributes | Attributes?      | false       | Additional attributes you would like to log along with the default ones provided. |
 | thread     | Thread?          | false       | Thread where the error occurred. Add this to include the thread as attributes.    |
+| severity   | Severity         | false       | Severity of the exception. Defaults to `ERROR`.                                   |
 
 
 The following attributes are automatically attached to the log entry.

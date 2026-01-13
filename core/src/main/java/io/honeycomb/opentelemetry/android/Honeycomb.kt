@@ -13,6 +13,7 @@ import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.api.common.AttributesBuilder
 import io.opentelemetry.api.logs.Logger
+import io.opentelemetry.api.logs.Severity
 import io.opentelemetry.contrib.baggage.processor.BaggageLogRecordProcessor
 import io.opentelemetry.contrib.baggage.processor.BaggageSpanProcessor
 import io.opentelemetry.exporter.logging.otlp.OtlpJsonLoggingMetricExporter
@@ -143,6 +144,11 @@ class Honeycomb {
             val diskBufferingConfig = DiskBufferingConfig.create(options.offlineCachingEnabled)
             rumConfig.setDiskBufferingConfig(diskBufferingConfig)
 
+            // Suppress any disabled instrumentations
+            for (instrumentationName in options.disabledInstrumentation) {
+                rumConfig.suppressInstrumentation(instrumentationName)
+            }
+
             return OpenTelemetryRumBuilder
                 .create(app, rumConfig)
                 .mergeResource(resource)
@@ -181,6 +187,7 @@ class Honeycomb {
             throwable: Throwable,
             attributes: Attributes? = null,
             thread: Thread? = null,
+            severity: Severity = Severity.ERROR,
         ) {
             // TODO: It would be nice to include the common RuntimeDetailsExtractor, in order to
             // augment the event with additional metadata, such as memory usage and battery percentage.
@@ -234,6 +241,8 @@ class Honeycomb {
                 .logRecordBuilder()
                 .setTimestamp(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .setAllAttributes(attributesBuilder.build())
+                .setSeverity(severity)
+                .setSeverityText(severity.toString())
                 .emit()
         }
 

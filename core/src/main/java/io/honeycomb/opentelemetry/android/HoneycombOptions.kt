@@ -201,6 +201,7 @@ data class HoneycombOptions(
     val metricsProtocol: OtlpProtocol,
     val logsProtocol: OtlpProtocol,
     val offlineCachingEnabled: Boolean,
+    val disabledInstrumentation: List<String>,
 ) {
     open class Builder private constructor() {
         private var serviceVersion: String? = null
@@ -241,6 +242,7 @@ data class HoneycombOptions(
         private var logsProtocol: OtlpProtocol? = null
 
         private var offlineCachingEnabled: Boolean = false
+        private var disabledInstrumentation: MutableList<String> = mutableListOf()
 
         constructor(context: Context) : this(HoneycombOptionsResourceSource(context)) {}
 
@@ -456,6 +458,11 @@ data class HoneycombOptions(
             return this
         }
 
+        fun setDisabledInstrumentation(instrumentation: List<String>): Builder {
+            disabledInstrumentation = instrumentation.toMutableList()
+            return this
+        }
+
         fun build(): HoneycombOptions {
             // Collect the non-exporter-specific values.
             val resourceAttributes = resourceAttributes.toMutableMap()
@@ -597,6 +604,7 @@ data class HoneycombOptions(
                 metricsProtocol ?: protocol,
                 logsProtocol ?: protocol,
                 offlineCachingEnabled,
+                disabledInstrumentation.toList(),
             )
         }
     }

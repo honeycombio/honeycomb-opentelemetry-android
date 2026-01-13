@@ -54,6 +54,7 @@ dependencies {
 
     implementation(libs.opentelemetry.android.core)
     implementation(libs.opentelemetry.android.instrumentation)
+    implementation(libs.opentelemetry.api)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
