@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+* maint: update OpenTelemetry Android SDK from 0.11.0-alpha to 1.0.1
+* feat: add `setDisabledInstrumentation()` API to selectively disable auto-instrumentation
+* feat: add optional `severity` parameter to `logException` method
+
 ## v0.0.21
 
 * fix: fix a subtle bug with incorrect timestamps in Compose render instrumentation
