@@ -5,19 +5,11 @@
 
 Honeycomb wrapper for [OpenTelemetry](https://opentelemetry.io) on Android.
 
-**STATUS: this library is in BETA.**
-We are actively seeking feedback to ensure usability.
-
-Honeycomb APIs and data shapes are stable and safe for production.
-However, this SDK depends on the OpenTelemetry Android SDK, which is still
-experimental and subject to change. Therefore, when updating, it is possible to
-encounter breaking changes in other dependencies.
-
 These are the current versions of libraries we have tested for compatibility:
 
   | Dependency                                             | Version  |
   |--------------------------------------------------------|----------|
-  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `0.0.21` |
+  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `1.0.0`  |
   | `io.opentelemetry.android:core`                        | `1.0.1`  |
   | `io.opentelemetry.android:android-agent`               | `1.0.1`  |
   | `io.opentelemetry:opentelemetry-api`                   | `1.57.0` |
@@ -32,7 +24,7 @@ For a complete list of tested dependencies and versions, see
 Add the following dependencies to your `build.gradle.kts`:
 ```kotlin
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:0.0.21")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:1.0.0")
 }
 ```
 
@@ -428,7 +420,7 @@ Additionally, you will receive the exception broken down into classes, methods, 
 Android Compose instrumentation is included in a standalone library. Add the following to your dependencies in `build.gradle.kts`:
 ```
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android-compose:0.0.21")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android-compose:1.0.0")
 }
 ```
 
