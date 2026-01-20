@@ -34,7 +34,7 @@ android {
         }
     }
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
+        // isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -64,7 +64,7 @@ android {
 
 dependencies {
     // This is required by opentelemetry-android.
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
+    // coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(libs.opentelemetry.android.agent)
     implementation(libs.opentelemetry.android.core)
