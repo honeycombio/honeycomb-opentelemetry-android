@@ -13,6 +13,19 @@ make test
 make clean
 ```
 
+## Testing against Android 11's `java.time.Duration`
+
+Unit tests run on a desktop JDK, whose `java.time.Duration` has methods that older Android versions lack.
+For example, `Duration.toSeconds()` does not exist before Android 12 (API 31), and calling it throws `NoSuchMethodError`.
+Android 11's `Duration` matches Java 8's, so to catch that kind of bug, run the unit tests with Java 8's `Duration` in place of the JDK's:
+
+```sh
+# JDK_8 is the path to any JDK 8 installation
+mkdir -p /tmp/android11-duration
+unzip -qo "$JDK_8/jre/lib/rt.jar" 'java/time/Duration*.class' -d /tmp/android11-duration
+./gradlew :core:testDebugUnitTest -Pandroid11Duration=/tmp/android11-duration
+```
+
 ## Smoke Tests
 
 Smoke tests use Android Command-line Tools and Docker using `docker-compose`, exporting telemetry to a local collector.

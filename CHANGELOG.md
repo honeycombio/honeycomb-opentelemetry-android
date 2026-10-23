@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* fix: avoid a `NoSuchMethodError` crash from the slow rendering instrumentation on Android 7 - 11 (API 24 - 30)
+
 ## v1.0.0
 
 * maint: update OpenTelemetry Android SDK from 0.11.0-alpha to 1.0.1

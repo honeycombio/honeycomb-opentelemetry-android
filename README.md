@@ -226,6 +226,13 @@ The following additional auto-instrumentation is implemented in this library:
 
 To disable specific auto-instrumentation, use the `setDisabledInstrumentation()` method with a list of instrumentation names from the tables above. For example, to disable crash and ANR reporting: `.setDisabledInstrumentation(listOf("crash", "anr"))`.
 
+### Slow Rendering on Android 7 - 11
+
+The upstream `slowrendering` instrumentation in `io.opentelemetry.android:android-agent` 1.0.1 calls `Duration.toSeconds()`, which does not exist before Android 12 (API 31), so it crashes the app with a `NoSuchMethodError` when an activity pauses.
+On Android 7 - 11 (API 24 - 30), `Honeycomb.configure()` therefore replaces it with an equivalent built into this library.
+It emits the same `app.jank` events, and it is skipped if you add `"slowrendering"` to `setDisabledInstrumentation()`.
+This replacement will be removed once an upstream release fixes the bug.
+
 ### Activity Lifecycle Instrumentation
 
 A trace is emitted before, during, and after each stage of the [Android Activity Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle).

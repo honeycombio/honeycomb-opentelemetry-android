@@ -149,8 +149,14 @@ class Honeycomb {
                 rumConfig.suppressInstrumentation(instrumentationName)
             }
 
-            return OpenTelemetryRumBuilder
-                .create(app, rumConfig)
+            val rumBuilder = OpenTelemetryRumBuilder.create(app, rumConfig)
+            // Work around upstream slow rendering crashing on Android 7 - 11 (see SlowRenderingCompat.kt).
+            if (shouldReplaceUpstreamSlowRendering(Build.VERSION.SDK_INT, options.disabledInstrumentation)) {
+                rumConfig.suppressInstrumentation(UPSTREAM_SLOW_RENDERING_NAME)
+                rumBuilder.addInstrumentation(SlowRenderingCompatInstrumentation())
+            }
+
+            return rumBuilder
                 .mergeResource(resource)
                 .addSpanExporterCustomizer { traceExporter }
                 .addTracerProviderCustomizer { builder, _ ->
