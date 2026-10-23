@@ -229,6 +229,8 @@ To disable specific auto-instrumentation, use the `setDisabledInstrumentation()`
 ### Slow Rendering on Android 7 - 11
 
 The upstream `slowrendering` instrumentation in `io.opentelemetry.android:android-agent` 1.0.1 calls `Duration.toSeconds()`, which does not exist before Android 12 (API 31), so it crashes the app with a `NoSuchMethodError` when an activity pauses.
+Apps that enable [core library desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring) are not affected, because the build rewrites the call to a backport.
+Apps that do not enable it are affected.
 On Android 7 - 11 (API 24 - 30), `Honeycomb.configure()` therefore replaces it with an equivalent built into this library.
 It emits the same `app.jank` events, and it is skipped if you add `"slowrendering"` to `setDisabledInstrumentation()`.
 This replacement will be removed once an upstream release fixes the bug.
