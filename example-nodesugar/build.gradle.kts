@@ -41,6 +41,7 @@ dependencies {
     implementation(project(":core"))
 
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.test.runner)
 }
 
 apply("${project.rootDir}/spotless.gradle")
