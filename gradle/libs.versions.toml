@@ -28,6 +28,7 @@ opentelemetrySemConv = "1.37.0"
 opentelemetrySemConvAlpha = "1.37.0-alpha"
 proguardUUID = "0.0.21"
 publish = "2.0.0"
+robolectric = "4.16"
 spotless = "8.1.0"
 uiautomator = "2.4.0-alpha05"
 
@@ -62,6 +63,7 @@ mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-agent = { module = "io.opentelemetry.android.instrumentation:okhttp3-agent", version.ref = "opentelemetryAndroidAlpha" }
 okhttp-library = { module = "io.opentelemetry.android.instrumentation:okhttp3-library", version.ref = "opentelemetryAndroidAlpha" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 opentelemetry-android-agent = { module = "io.opentelemetry.android:android-agent", version.ref = "opentelemetryAndroid" }
 opentelemetry-android-agent-api = { module = "io.opentelemetry.android:agent-api", version.ref = "opentelemetryAndroidAlpha" }
 opentelemetry-android-core = { module = "io.opentelemetry.android:core", version.ref = "opentelemetryAndroidAlpha" }

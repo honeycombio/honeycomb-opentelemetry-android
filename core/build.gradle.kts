@@ -40,6 +40,14 @@ android {
         jvmToolchain(21)
     }
     testOptions {
+        unitTests {
+            all { test ->
+                // Opt-in, see DEVELOPING.md: run unit tests with Android 11's java.time.Duration.
+                (project.findProperty("android11Duration") as String?)?.let {
+                    test.jvmArgs("--patch-module", "java.base=$it")
+                }
+            }
+        }
         managedDevices {
             localDevices {
                 create("pixel8api36") {
@@ -61,6 +69,7 @@ dependencies {
     implementation(libs.auto.service.annotations)
     implementation(libs.opentelemetry.android.agent.api)
     implementation(libs.opentelemetry.android.core)
+    implementation(libs.opentelemetry.android.instrumentation)
     implementation(libs.opentelemetry.api)
     implementation(libs.opentelemetry.sdk)
     implementation(libs.opentelemetry.semconv)
@@ -72,6 +81,8 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.opentelemetry.android.agent)
+    testImplementation(libs.robolectric)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

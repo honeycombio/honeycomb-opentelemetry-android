@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+* fix: avoid a `NoSuchMethodError` crash from the upstream slow rendering instrumentation on Android 7 - 11 (API 24 - 30).
+  It calls `Duration.toSeconds()`, which only exists on Android 12+, so apps without
+  [core library desugaring](https://developer.android.com/studio/write/java8-support#library-desugaring) crash when an activity pauses.
+  On those versions `Honeycomb.configure()` now replaces it with an equivalent built into this library that emits the same `app.jank` events.
+  It is skipped if `"slowrendering"` is in `setDisabledInstrumentation()`, and will be removed once an upstream release fixes the bug.
+
 ## v1.0.0
 
 * maint: update OpenTelemetry Android SDK from 0.11.0-alpha to 1.0.1
