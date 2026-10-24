@@ -31,3 +31,18 @@ nexusPublishing {
     }
 }
 
+
+// EXPERIMENT: upstream 1.8.0 pulls kotlin-stdlib 2.4.x transitively; pin it back so the
+// project's Kotlin 2.1.20 compiler can still read the metadata.
+allprojects {
+    configurations.all {
+        resolutionStrategy.force("org.jetbrains.kotlin:kotlin-stdlib:2.1.20")
+        // upstream 1.8.0 constrains androidx.core to 1.19.1, which needs AGP 9.1+ and compileSdk 37.
+        resolutionStrategy.force("androidx.core:core:1.17.0", "androidx.core:core-ktx:1.17.0")
+        // ...and the same for lifecycle-runtime-compose and okhttp (both want compileSdk 37 / AGP 9.1+).
+        resolutionStrategy.eachDependency {
+            if (requested.group == "androidx.lifecycle") useVersion("2.9.4")
+            if (requested.group == "com.squareup.okhttp3") useVersion("5.3.2")
+        }
+    }
+}

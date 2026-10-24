@@ -24,7 +24,6 @@ import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter
 import io.opentelemetry.exporter.otlp.logs.OtlpGrpcLogRecordExporter
 import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter
-import io.opentelemetry.sdk.OpenTelemetrySdk
 import io.opentelemetry.sdk.common.CompletableResultCode
 import io.opentelemetry.sdk.logs.LogRecordProcessor
 import io.opentelemetry.sdk.metrics.InstrumentType
@@ -194,9 +193,9 @@ class Honeycomb {
             // However, that might require changing this into an entire separate instrumentation
             // package. So for now, just do this.
 
-            val sdk = otel.openTelemetry as OpenTelemetrySdk
-            val loggerProvider = sdk.sdkLoggerProvider
-            val logger: Logger = loggerProvider.loggerBuilder(CRASH_INSTRUMENTATION_NAME).build()
+            // Upstream 1.8.0 wraps the SDK in DisableableOpenTelemetry, so casting to
+            // OpenTelemetrySdk throws ClassCastException. The API is all that is needed.
+            val logger: Logger = otel.openTelemetry.logsBridge.loggerBuilder(CRASH_INSTRUMENTATION_NAME).build()
 
             val attributesBuilder: AttributesBuilder =
                 Attributes

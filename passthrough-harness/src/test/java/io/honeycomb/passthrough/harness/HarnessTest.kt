@@ -10,7 +10,6 @@ import io.honeycomb.opentelemetry.android.Honeycomb
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.api.baggage.Baggage
 import io.opentelemetry.api.common.Attributes
-import io.opentelemetry.sdk.OpenTelemetrySdk
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -19,7 +18,6 @@ import org.robolectric.Shadows.shadowOf
 import org.robolectric.annotation.Config
 import java.io.File
 import java.time.Duration
-import java.util.concurrent.TimeUnit
 
 class SmokeTestException(
     message: String?,
@@ -114,13 +112,19 @@ class HarnessTest {
             .add(1)
 
         // Handled exception through the SDK's own API (only the current SDK has one).
-        if (setup == "current") {
-            Honeycomb.logException(
-                rum,
-                RuntimeException("This exception was intentional."),
-                Attributes.builder().put("user.name", "bufo").build(),
-                Thread.currentThread(),
-            )
+        if (setup != "upstream") {
+            try {
+                Honeycomb.logException(
+                    rum,
+                    RuntimeException("This exception was intentional."),
+                    Attributes.builder().put("user.name", "bufo").build(),
+                    Thread.currentThread(),
+                )
+            } catch (e: Throwable) {
+                // A finding, not a harness failure: record it next to the telemetry.
+                File(System.getProperty("harness.out", "build/harness"), "$setup.errors.txt")
+                    .appendText("Honeycomb.logException: $e\n")
+            }
         }
 
         // Unhandled exception: invoke the handler the crash instrumentation installed. The
@@ -140,10 +144,9 @@ class HarnessTest {
         controller.pause().stop().destroy()
         shadowOf(Looper.getMainLooper()).idle()
 
-        val sdk = otel as OpenTelemetrySdk
-        sdk.sdkTracerProvider.forceFlush().join(10, TimeUnit.SECONDS)
-        sdk.sdkLoggerProvider.forceFlush().join(10, TimeUnit.SECONDS)
-        sdk.sdkMeterProvider.forceFlush().join(10, TimeUnit.SECONDS)
+        // rum.openTelemetry is not an OpenTelemetrySdk on every upstream version, so flush by
+        // shutting the whole SDK down.
+        rum.shutdown()
     }
 
     @Test
