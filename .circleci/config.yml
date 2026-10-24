@@ -57,7 +57,7 @@ jobs:
           java-version: << pipeline.parameters.java-version >>
       - android/start-emulator-and-run-tests:
           system-image: system-images;android-30;google_apis;x86
-          test-command: ./gradlew :example:connectedDebugAndroidTest
+          test-command: ./gradlew :example:connectedDebugAndroidTest :example-nodesugar:connectedDebugAndroidTest
           max-tries: 1
       - store_artifacts:
           path: example/build/outputs/connected_android_test_additional_output
