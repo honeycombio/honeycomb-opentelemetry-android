@@ -75,6 +75,7 @@ okhttp-agent = { module = "io.opentelemetry.android.instrumentation:okhttp3-agen
 okhttp-library = { module = "io.opentelemetry.android.instrumentation:okhttp3-library", version.ref = "opentelemetryAndroidAlpha" }
 opentelemetry-android-agent = { module = "io.opentelemetry.android:android-agent", version.ref = "opentelemetryAndroid" }
 opentelemetry-android-agent-api = { module = "io.opentelemetry.android:agent-api", version.ref = "opentelemetryAndroidAlpha" }
+opentelemetry-android-semconv = { module = "io.opentelemetry.android:semconv", version.ref = "opentelemetryAndroidAlpha" }
 opentelemetry-android-core = { module = "io.opentelemetry.android:core", version.ref = "opentelemetryAndroidAlpha" }
 opentelemetry-android-instrumentation = { module = "io.opentelemetry.android.instrumentation:android-instrumentation", version.ref = "opentelemetryAndroidAlpha" }
 opentelemetry-api = { module = "io.opentelemetry:opentelemetry-api", version.ref = "opentelemetry"  }

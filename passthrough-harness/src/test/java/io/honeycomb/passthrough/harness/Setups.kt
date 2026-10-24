@@ -36,6 +36,20 @@ fun startSetup(
                     .setLogRecordProcessor(MetadataLogRecordProcessor())
                     .build(),
             )
+        // Experimental pass-through: upstream instrumentation plus shaping processors.
+        "shaped" ->
+            Honeycomb.configurePassthrough(
+                app,
+                HoneycombOptions
+                    .builder(app)
+                    .setApiKey(FAKE_API_KEY)
+                    .setApiEndpoint(endpoint)
+                    .setServiceName("harness")
+                    .setServiceVersion("0.0.1")
+                    .setSpanProcessor(MetadataSpanProcessor())
+                    .setLogRecordProcessor(MetadataLogRecordProcessor())
+                    .build(),
+            )
         // Upstream only: the stock OpenTelemetryRumInitializer from android-agent. The only
         // concession is the header that carries the (fake) key and the sink address.
         "upstream" ->
