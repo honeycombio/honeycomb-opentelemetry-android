@@ -16,7 +16,6 @@ import io.opentelemetry.api.baggage.Baggage
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.api.logs.Logger
-import io.opentelemetry.sdk.OpenTelemetrySdk
 
 private fun onSendSpan(otelRum: OpenTelemetryRum?) {
     val otel = otelRum?.openTelemetry
@@ -34,9 +33,12 @@ private fun onSendSpan(otelRum: OpenTelemetryRum?) {
 }
 
 private fun onSendLog(otelRum: OpenTelemetryRum?) {
-    val sdk = otelRum?.openTelemetry as OpenTelemetrySdk
-    val loggerProvider = sdk.sdkLoggerProvider
-    val logger: Logger = loggerProvider.loggerBuilder("io.honeycomb.smoke-test").build()
+    // Not an OpenTelemetrySdk on upstream 1.8.0; the logs bridge is all that is needed.
+    val logger: Logger =
+        otelRum!!
+            .openTelemetry.logsBridge
+            .loggerBuilder("io.honeycomb.smoke-test")
+            .build()
     val baggage =
         Baggage
             .builder()

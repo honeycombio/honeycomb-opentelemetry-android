@@ -4,7 +4,6 @@ import android.app.Application
 import io.honeycomb.opentelemetry.android.Honeycomb
 import io.honeycomb.opentelemetry.android.HoneycombOptions
 import io.opentelemetry.android.OpenTelemetryRum
-import io.opentelemetry.sdk.OpenTelemetrySdk
 import java.lang.Thread.UncaughtExceptionHandler
 
 // An exception that won't crash the app if it isn't caught.
@@ -63,10 +62,9 @@ class ExampleApp : Application() {
     }
 
     fun flush() {
-        val otel = otelRum?.openTelemetry as OpenTelemetrySdk
-        otel.sdkTracerProvider.forceFlush()
-        otel.sdkLoggerProvider.forceFlush()
-        otel.shutdown()
+        // On upstream 1.8.0, openTelemetry is no longer an OpenTelemetrySdk, so it cannot be cast
+        // to flush the providers; shutting the RUM instance down flushes them.
+        otelRum?.shutdown()
         this.otelRum = null
         // Theoretically, flushing and shutting down should be sufficient.
         // But empirically, if we don't sleep, sometimes the traces don't show up.
