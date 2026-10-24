@@ -3,8 +3,9 @@
 //
 //   ./gradlew :passthrough-harness:testDebugUnitTest -Psetup=current|upstream|shaped
 //
-// -PwithInteraction puts this repo's :interaction module on the classpath (it does not compile
-// against upstream 1.8.0). -PwithClicks puts upstream's view-click instrumentation on it.
+// -PwithClicks puts upstream's view-click instrumentation on the classpath. The :interaction
+// module this harness used to take with -PwithInteraction was deleted on this branch; see the
+// first commit for the baseline (current SDK on upstream 1.0.1).
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -37,9 +38,6 @@ dependencies {
     // Opt-in upstream click instrumentation (discovered through ServiceLoader once on the classpath).
     if (providers.gradleProperty("withClicks").isPresent) {
         runtimeOnly(libs.opentelemetry.android.view.click)
-    }
-    if (providers.gradleProperty("withInteraction").isPresent) {
-        runtimeOnly(project(":interaction"))
     }
 
     testImplementation(libs.junit)

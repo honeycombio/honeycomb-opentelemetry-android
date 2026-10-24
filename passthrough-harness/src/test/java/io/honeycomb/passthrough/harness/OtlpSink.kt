@@ -30,9 +30,6 @@ class OtlpSink(
         server.dispatcher =
             object : Dispatcher() {
                 override fun dispatch(request: RecordedRequest): MockResponse {
-                    System.err.println(
-                        "sink: ${request.method} ${request.url.encodedPath} ${request.headers["Content-Encoding"]}",
-                    )
                     val raw = request.body?.toByteArray() ?: ByteArray(0)
                     val bytes =
                         if (request.headers["Content-Encoding"] == "gzip") {

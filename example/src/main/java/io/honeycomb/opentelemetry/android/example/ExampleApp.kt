@@ -59,7 +59,7 @@ class ExampleApp : Application() {
                 .setDebug(true)
                 .build()
 
-        otelRum = Honeycomb.configure(this, options)
+        otelRum = Honeycomb.configurePassthrough(this, options)
     }
 
     fun flush() {

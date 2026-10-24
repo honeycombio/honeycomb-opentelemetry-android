@@ -87,7 +87,7 @@ dependencies {
 
     implementation(project(":compose"))
     implementation(project(":core"))
-    implementation(project(":interaction"))
+    implementation(libs.opentelemetry.android.view.click)
 
     testImplementation(libs.junit)
 
