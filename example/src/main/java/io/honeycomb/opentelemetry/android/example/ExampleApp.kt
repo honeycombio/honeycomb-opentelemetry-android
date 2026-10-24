@@ -1,10 +1,14 @@
 package io.honeycomb.opentelemetry.android.example
 
 import android.app.Application
+import android.os.Handler
+import android.os.Looper
 import io.honeycomb.opentelemetry.android.Honeycomb
 import io.honeycomb.opentelemetry.android.HoneycombOptions
 import io.opentelemetry.android.OpenTelemetryRum
 import java.lang.Thread.UncaughtExceptionHandler
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 // An exception that won't crash the app if it isn't caught.
 // This is used for testing crash instrumentation.
@@ -63,8 +67,15 @@ class ExampleApp : Application() {
 
     fun flush() {
         // On upstream 1.8.0, openTelemetry is no longer an OpenTelemetrySdk, so it cannot be cast
-        // to flush the providers; shutting the RUM instance down flushes them.
-        otelRum?.shutdown()
+        // to flush the providers; shutting the RUM instance down flushes them. shutdown() removes a
+        // lifecycle observer, so it must run on the main thread (CI caught this when called from
+        // the instrumentation thread).
+        val done = CountDownLatch(1)
+        Handler(Looper.getMainLooper()).post {
+            otelRum?.shutdown()
+            done.countDown()
+        }
+        done.await(5, TimeUnit.SECONDS)
         this.otelRum = null
         // Theoretically, flushing and shutting down should be sufficient.
         // But empirically, if we don't sleep, sometimes the traces don't show up.
