@@ -13,7 +13,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
 
         aarMetadata {
             minCompileSdk = 21
@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.auto.service.annotations)
     implementation(libs.opentelemetry.android.agent.api)
     implementation(libs.opentelemetry.android.core)
+    implementation(libs.opentelemetry.android.semconv)
     implementation(libs.opentelemetry.api)
     implementation(libs.opentelemetry.sdk)
     implementation(libs.opentelemetry.semconv)

@@ -216,12 +216,6 @@ If you want to pick and choose which auto-instrumentation to include, you can in
 | okhttp3-websocket   | `"okhttp-websocket"`   | No                | OkHttp WebSocket tracing                                 | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/okhttp3-websocket) |
 | view-click          | `"view.click"`         | No                | View click event tracking for Android Views              | [source](https://github.com/open-telemetry/opentelemetry-android/tree/main/instrumentation/view-click)      |
 
-The following additional auto-instrumentation is implemented in this library:
-
-| Module      | Instrumentation Name | Included in Agent | Description                                     | Source                                                                                       |
-|-------------|----------------------|-------------------|-------------------------------------------------|----------------------------------------------------------------------------------------------|
-| interaction | `"interaction"`      | No                | UI interaction tracking in XML-based Activities | [source](https://github.com/honeycombio/honeycomb-opentelemetry-android/tree/main/interaction) |
-
 ### Disabling Auto-Instrumentation
 
 To disable specific auto-instrumentation, use the `setDisabledInstrumentation()` method with a list of instrumentation names from the tables above. For example, to disable crash and ANR reporting: `.setDisabledInstrumentation(listOf("crash", "anr"))`.

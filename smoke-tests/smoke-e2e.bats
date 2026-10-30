@@ -303,3 +303,39 @@ teardown_file() {
     result=$(attribute_for_log_key "otel.initialization.events" "app.metadata" "string" | uniq)
     assert_equal "$result" '"extra metadata"'
 }
+
+# ---- Added by the pass-through experiment: assertions for the shaping processors on a real device.
+
+@test "EXPERIMENT: session.id is a non-empty string (today it is always empty)" {
+  result=$(sessions_started | head -1)
+  assert_not_empty_string "$result"
+  # An empty session id serializes as "".
+  [ "$result" != '""' ]
+}
+
+@test "EXPERIMENT: ANR and crash events carry structured stack traces from real ART frames" {
+  for scope in io.opentelemetry.anr io.opentelemetry.crash; do
+    classes=$(attribute_for_log_key "$scope" "exception.structured_stacktrace.classes" "array" | jq '.values | length' | head -1)
+    methods=$(attribute_for_log_key "$scope" "exception.structured_stacktrace.methods" "array" | jq '.values | length' | head -1)
+    lines=$(attribute_for_log_key "$scope" "exception.structured_stacktrace.lines" "array" | jq '.values | length' | head -1)
+    files=$(attribute_for_log_key "$scope" "exception.structured_stacktrace.source_files" "array" | jq '.values | length' | head -1)
+    [ "$classes" -gt 0 ]
+    assert_equal "$classes" "$methods"
+    assert_equal "$methods" "$lines"
+    assert_equal "$lines" "$files"
+  done
+
+  # The first frame has a method name.
+  result=$(attribute_for_log_key "io.opentelemetry.crash" "exception.structured_stacktrace.methods" "array" \
+    | jq -r '.values[0].stringValue' | head -1)
+  assert_not_empty_string "$result"
+}
+
+@test "EXPERIMENT: app.widget.click is turned into a span and not also exported as a log" {
+  names=$(event_name_for_log "io.opentelemetry.android.instrumentation.view.click")
+  echo "$names" | grep -q "app.screen.click"
+  if echo "$names" | grep -q "app.widget.click"; then
+    echo "app.widget.click was exported as a log: $names"
+    false
+  fi
+}

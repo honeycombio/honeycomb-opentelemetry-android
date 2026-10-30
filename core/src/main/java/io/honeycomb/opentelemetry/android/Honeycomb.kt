@@ -4,11 +4,17 @@ import android.app.Application
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings.Secure
+import io.honeycomb.opentelemetry.android.shape.ConsumedEventsLogRecordExporter
+import io.honeycomb.opentelemetry.android.shape.ForegroundActivity
+import io.honeycomb.opentelemetry.android.shape.HoneycombSessionProvider
+import io.honeycomb.opentelemetry.android.shape.StructuredStacktraceLogRecordProcessor
+import io.honeycomb.opentelemetry.android.shape.WidgetClickSpanLogRecordProcessor
 import io.opentelemetry.android.BuildConfig
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.OpenTelemetryRumBuilder
 import io.opentelemetry.android.config.OtelRumConfig
 import io.opentelemetry.android.features.diskbuffering.DiskBufferingConfig
+import io.opentelemetry.android.semconv.internal.SemconvCompat
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.api.common.AttributesBuilder
@@ -24,7 +30,6 @@ import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter
 import io.opentelemetry.exporter.otlp.logs.OtlpGrpcLogRecordExporter
 import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter
-import io.opentelemetry.sdk.OpenTelemetrySdk
 import io.opentelemetry.sdk.common.CompletableResultCode
 import io.opentelemetry.sdk.logs.LogRecordProcessor
 import io.opentelemetry.sdk.metrics.InstrumentType
@@ -102,6 +107,22 @@ class Honeycomb {
         fun configure(
             app: Application,
             options: HoneycombOptions,
+        ): OpenTelemetryRum = configure(app, options, passthrough = false)
+
+        /**
+         * EXPERIMENT: like [configure], but with no instrumentation of its own on the telemetry
+         * path. Upstream instrumentation runs as shipped and processors reshape its output
+         * into the shapes this SDK has always emitted.
+         */
+        fun configurePassthrough(
+            app: Application,
+            options: HoneycombOptions,
+        ): OpenTelemetryRum = configure(app, options, passthrough = true)
+
+        private fun configure(
+            app: Application,
+            options: HoneycombOptions,
+            passthrough: Boolean,
         ): OpenTelemetryRum {
             if (options.debug) {
                 configureDebug(options)
@@ -141,6 +162,12 @@ class Honeycomb {
                     }.build()
 
             val rumConfig = OtelRumConfig()
+            if (passthrough) {
+                // Keep the names this SDK has always emitted (device.crash, screen.name, ...).
+                SemconvCompat.useLatestExperimental = false
+                // Upstream turned these events off by default; the smoke tests rely on them.
+                rumConfig.enableSdkInitializationEvents()
+            }
             val diskBufferingConfig = DiskBufferingConfig.create(options.offlineCachingEnabled)
             rumConfig.setDiskBufferingConfig(diskBufferingConfig)
 
@@ -149,10 +176,21 @@ class Honeycomb {
                 rumConfig.suppressInstrumentation(instrumentationName)
             }
 
+            val foreground = ForegroundActivity()
+            val widgetClicks = WidgetClickSpanLogRecordProcessor(foreground)
+            if (passthrough) {
+                app.registerActivityLifecycleCallbacks(foreground)
+            }
+
             return OpenTelemetryRumBuilder
                 .create(app, rumConfig)
                 .mergeResource(resource)
-                .addSpanExporterCustomizer { traceExporter }
+                .apply {
+                    if (passthrough) {
+                        setSessionProvider(HoneycombSessionProvider(app))
+                        addOtelReadyListener { widgetClicks.setOpenTelemetry(it) }
+                    }
+                }.addSpanExporterCustomizer { traceExporter }
                 .addTracerProviderCustomizer { builder, _ ->
                     val spanProcessors = ArrayList<SpanProcessor>()
                     spanProcessors.add(BaggageSpanProcessor.allowAllBaggageKeys())
@@ -163,10 +201,15 @@ class Honeycomb {
                     val spanProcessor = SpanProcessor.composite(spanProcessors)
                     builder.addSpanProcessor(spanProcessor)
                     builder.setSampler(HoneycombDeterministicSampler(options.sampleRate))
-                }.addLogRecordExporterCustomizer { logsExporter }
-                .addLoggerProviderCustomizer { builder, _ ->
+                }.addLogRecordExporterCustomizer {
+                    if (passthrough) ConsumedEventsLogRecordExporter(logsExporter) else logsExporter
+                }.addLoggerProviderCustomizer { builder, _ ->
                     val logRecordProcessors = ArrayList<LogRecordProcessor>()
                     logRecordProcessors.add(BaggageLogRecordProcessor.allowAllBaggageKeys())
+                    if (passthrough) {
+                        logRecordProcessors.add(StructuredStacktraceLogRecordProcessor { proguardUuid })
+                        logRecordProcessors.add(widgetClicks)
+                    }
                     options.logRecordProcessor?.let {
                         logRecordProcessors.add(it)
                     }
@@ -194,9 +237,12 @@ class Honeycomb {
             // However, that might require changing this into an entire separate instrumentation
             // package. So for now, just do this.
 
-            val sdk = otel.openTelemetry as OpenTelemetrySdk
-            val loggerProvider = sdk.sdkLoggerProvider
-            val logger: Logger = loggerProvider.loggerBuilder(CRASH_INSTRUMENTATION_NAME).build()
+            // Upstream 1.8.0 wraps the SDK in DisableableOpenTelemetry, so casting to
+            // OpenTelemetrySdk throws ClassCastException. The API is all that is needed.
+            val logger: Logger =
+                otel.openTelemetry.logsBridge
+                    .loggerBuilder(CRASH_INSTRUMENTATION_NAME)
+                    .build()
 
             val attributesBuilder: AttributesBuilder =
                 Attributes

@@ -1,4 +1,8 @@
 [versions]
+androidxFragment = "1.8.9"
+androidxTestCore = "1.7.0"
+protobuf = "4.36.2"
+robolectric = "4.17"
 activity = "1.11.0"
 activityCompose = "1.11.0"
 agp = "8.13.1"
@@ -19,11 +23,11 @@ material = "1.13.0"
 mockitoCore = "5.21.0"
 mockitoKotlin = "6.1.0"
 okhttp = "5.3.2"
-opentelemetry = "1.57.0"
-opentelemetryAndroid = "1.0.1"
-opentelemetryAndroidAlpha = "1.0.1-alpha"
-opentelemetryBaggageProcessor = "1.46.0-alpha"
-opentelemetryInstrumentation = "2.23.0"
+opentelemetry = "1.66.0"
+opentelemetryAndroid = "1.8.0"
+opentelemetryAndroidAlpha = "1.8.0-alpha"
+opentelemetryBaggageProcessor = "1.61.0-alpha"
+opentelemetryInstrumentation = "2.32.0"
 opentelemetrySemConv = "1.37.0"
 opentelemetrySemConvAlpha = "1.37.0-alpha"
 proguardUUID = "0.0.21"
@@ -32,6 +36,13 @@ spotless = "8.1.0"
 uiautomator = "2.4.0-alpha05"
 
 [libraries]
+androidx-fragment = { group = "androidx.fragment", name = "fragment", version.ref = "androidxFragment" }
+androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
+opentelemetry-android-compose-click = { module = "io.opentelemetry.android.instrumentation:compose-click", version.ref = "opentelemetryAndroidAlpha" }
+opentelemetry-android-view-click = { module = "io.opentelemetry.android.instrumentation:view-click", version.ref = "opentelemetryAndroidAlpha" }
+opentelemetry-proto = { module = "io.opentelemetry.proto:opentelemetry-proto", version = "1.11.1-alpha" }
+protobuf-java-util = { module = "com.google.protobuf:protobuf-java-util", version.ref = "protobuf" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -58,11 +69,13 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
 mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
+okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver3", version.ref = "okhttp" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-agent = { module = "io.opentelemetry.android.instrumentation:okhttp3-agent", version.ref = "opentelemetryAndroidAlpha" }
 okhttp-library = { module = "io.opentelemetry.android.instrumentation:okhttp3-library", version.ref = "opentelemetryAndroidAlpha" }
 opentelemetry-android-agent = { module = "io.opentelemetry.android:android-agent", version.ref = "opentelemetryAndroid" }
-opentelemetry-android-agent-api = { module = "io.opentelemetry.android:agent-api", version.ref = "opentelemetryAndroidAlpha" }
+opentelemetry-android-agent-api = { module = "io.opentelemetry.android:agent-api", version.ref = "opentelemetryAndroid" }
+opentelemetry-android-semconv = { module = "io.opentelemetry.android:semconv", version.ref = "opentelemetryAndroidAlpha" }
 opentelemetry-android-core = { module = "io.opentelemetry.android:core", version.ref = "opentelemetryAndroidAlpha" }
 opentelemetry-android-instrumentation = { module = "io.opentelemetry.android.instrumentation:android-instrumentation", version.ref = "opentelemetryAndroidAlpha" }
 opentelemetry-api = { module = "io.opentelemetry:opentelemetry-api", version.ref = "opentelemetry"  }
