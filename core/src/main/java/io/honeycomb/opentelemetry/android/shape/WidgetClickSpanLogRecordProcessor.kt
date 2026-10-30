@@ -70,7 +70,6 @@ class WidgetClickSpanLogRecordProcessor internal constructor(
         val data = logRecord.toLogRecordData()
         if (data.eventName != "app.widget.click") return
         val tracer = otel.get()?.getTracer(UI_SCOPE) ?: return
-        val name = logRecord.getAttribute(AttributeKey.stringKey("app.widget.name"))
         val id = logRecord.getAttribute(AttributeKey.stringKey("app.widget.id"))?.toIntOrNull()
         val activity = foreground.current?.get()
         val view: View? = if (id != null && id != View.NO_ID) activity?.findViewById(id) else null
@@ -82,6 +81,7 @@ class WidgetClickSpanLogRecordProcessor internal constructor(
                 .setNoParent()
                 .setStartTimestamp(timestamp, TimeUnit.NANOSECONDS)
                 .startSpan()
+        var entry: String? = null
         if (id != null && id != View.NO_ID) {
             span.setAttribute("view.id", id.toLong())
             activity?.resources?.let { res ->
@@ -90,13 +90,17 @@ class WidgetClickSpanLogRecordProcessor internal constructor(
                         id,
                     )
                 }.getOrNull()?.let { span.setAttribute("view.id.package", it) }
-                runCatching { res.getResourceEntryName(id) }.getOrNull()?.let { span.setAttribute("view.id.entry", it) }
+                entry = runCatching { res.getResourceEntryName(id) }.getOrNull()
+                entry?.let { span.setAttribute("view.id.entry", it) }
             }
         }
+        val text = (view as? TextView)?.text?.toString()
         view?.javaClass?.canonicalName?.let { span.setAttribute("view.class", it) }
-        (view as? TextView)?.text?.toString()?.let { span.setAttribute("view.text", it) }
+        text?.let { span.setAttribute("view.text", it) }
         view?.accessibilityClassName?.toString()?.let { span.setAttribute("view.accessibilityClassName", it) }
-        (name ?: (view as? TextView)?.text?.toString())?.let { span.setAttribute("view.name", it) }
+        // Same rule as the old interaction module. The event's own app.widget.name is the numeric
+        // id for views without a resource entry, which is not a useful name.
+        (entry ?: text)?.let { span.setAttribute("view.name", it) }
         span.end(timestamp, TimeUnit.NANOSECONDS)
     }
 }

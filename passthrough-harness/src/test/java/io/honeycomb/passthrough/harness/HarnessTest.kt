@@ -88,7 +88,11 @@ class HarnessTest {
         shadowOf(Looper.getMainLooper()).idle()
 
         // A tap on the button.
-        tap(activity, 100f, 100f)
+        tap(activity, 100f, 40f)
+        // A tap on a clickable view that has no resource id.
+        tap(activity, 100f, 140f)
+        // ...and one whose id is not a resource.
+        tap(activity, 100f, 240f)
 
         // Manual telemetry: span with baggage, log, metric.
         val otel = rum.openTelemetry
