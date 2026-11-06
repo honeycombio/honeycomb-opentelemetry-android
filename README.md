@@ -10,9 +10,9 @@ These are the current versions of libraries we have tested for compatibility:
   | Dependency                                             | Version  |
   |--------------------------------------------------------|----------|
   | `io.honeycomb.android:honeycomb-opentelemetry-android` | `1.0.0`  |
-  | `io.opentelemetry.android:core`                        | `1.0.1`  |
-  | `io.opentelemetry.android:android-agent`               | `1.0.1`  |
-  | `io.opentelemetry:opentelemetry-api`                   | `1.57.0` |
+  | `io.opentelemetry.android:core`                        | `1.8.1-alpha` |
+  | `io.opentelemetry.android:android-agent`               | `1.8.1`  |
+  | `io.opentelemetry:opentelemetry-api`                   | `1.66.0` |
 
 For a complete list of tested dependencies and versions, see
 [libs.versions.toml](gradle/libs.versions.toml).
