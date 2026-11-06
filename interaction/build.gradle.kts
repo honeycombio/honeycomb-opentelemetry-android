@@ -26,7 +26,9 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
     publishing {
-        singleVariant("release")
+        singleVariant("release") {
+            withSourcesJar()
+        }
     }
     buildFeatures {
         buildConfig = true
