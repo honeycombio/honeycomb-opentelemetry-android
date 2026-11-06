@@ -24,5 +24,6 @@ rootProject.name = "Honeycomb OpenTelemetry Android"
 include(":compose")
 include(":core")
 include(":example")
+include(":example-nodesugar")
 include(":interaction")
 include(":honeycomb-proguard-uuid-plugin")

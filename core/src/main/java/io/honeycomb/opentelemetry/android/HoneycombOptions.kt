@@ -52,6 +52,7 @@ private const val OTEL_EXPORTER_OTLP_METRICS_PROTOCOL_KEY = "OTEL_EXPORTER_OTLP_
 private const val OTEL_EXPORTER_OTLP_LOGS_PROTOCOL_KEY = "OTEL_EXPORTER_OTLP_LOGS_PROTOCOL"
 
 private const val OFFLINE_CACHING_ENABLED = "OFFLINE_CACHING_ENABLED"
+private const val USE_LATEST_SEMANTIC_CONVENTIONS = "USE_LATEST_SEMANTIC_CONVENTIONS"
 
 /** The protocol for OTLP to use when talking to its backend. */
 enum class OtlpProtocol {
@@ -202,6 +203,7 @@ data class HoneycombOptions(
     val logsProtocol: OtlpProtocol,
     val offlineCachingEnabled: Boolean,
     val disabledInstrumentation: List<String>,
+    val useLatestSemanticConventions: Boolean,
 ) {
     open class Builder private constructor() {
         private var serviceVersion: String? = null
@@ -243,6 +245,7 @@ data class HoneycombOptions(
 
         private var offlineCachingEnabled: Boolean = false
         private var disabledInstrumentation: MutableList<String> = mutableListOf()
+        private var useLatestSemanticConventions: Boolean = false
 
         constructor(context: Context) : this(HoneycombOptionsResourceSource(context)) {}
 
@@ -294,6 +297,8 @@ data class HoneycombOptions(
             metricsProtocol = source.getOtlpProtocol(OTEL_EXPORTER_OTLP_METRICS_PROTOCOL_KEY)
             logsProtocol = source.getOtlpProtocol(OTEL_EXPORTER_OTLP_LOGS_PROTOCOL_KEY)
             offlineCachingEnabled = source.getBoolean(OFFLINE_CACHING_ENABLED) ?: offlineCachingEnabled
+            useLatestSemanticConventions =
+                source.getBoolean(USE_LATEST_SEMANTIC_CONVENTIONS) ?: useLatestSemanticConventions
         }
 
         fun setApiKey(apiKey: String): Builder {
@@ -463,6 +468,20 @@ data class HoneycombOptions(
             return this
         }
 
+        /**
+         * Chooses which names the OpenTelemetry Android instrumentations use for telemetry.
+         *
+         * By default (false) they use the names this SDK has always emitted: `screen.name`,
+         * `last.screen.name`, `device.crash` and `network.status`. Set this to true to use the
+         * latest OpenTelemetry names instead: `app.screen.name`, `app.screen.previous.name`,
+         * `app.crash` and `network.connection.type`. Only one set is emitted. This setting
+         * applies to the whole process, so it should be the same for every call to configure.
+         */
+        fun setUseLatestSemanticConventions(enabled: Boolean): Builder {
+            useLatestSemanticConventions = enabled
+            return this
+        }
+
         fun build(): HoneycombOptions {
             // Collect the non-exporter-specific values.
             val resourceAttributes = resourceAttributes.toMutableMap()
@@ -605,6 +624,7 @@ data class HoneycombOptions(
                 logsProtocol ?: protocol,
                 offlineCachingEnabled,
                 disabledInstrumentation.toList(),
+                useLatestSemanticConventions,
             )
         }
     }

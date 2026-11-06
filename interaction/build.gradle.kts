@@ -5,18 +5,17 @@ plugins {
     `signing`
 
     alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.spotless)
 
-    id("kotlin-kapt")
+    alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "io.honeycomb.opentelemetry.android.interaction"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
         aarMetadata {
             minCompileSdk = 21
         }
@@ -25,6 +24,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+    }
+    publishing {
+        singleVariant("release")
     }
     buildFeatures {
         buildConfig = true
@@ -39,14 +41,16 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+        }
     }
 }
 
 dependencies {
-    kapt(libs.auto.service.processor)
-    compileOnly(libs.auto.service.processor)
+    ksp(libs.auto.service.ksp)
+    compileOnly(libs.auto.service.annotations)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

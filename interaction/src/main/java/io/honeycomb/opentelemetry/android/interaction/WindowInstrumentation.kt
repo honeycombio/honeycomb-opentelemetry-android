@@ -2,6 +2,7 @@ package io.honeycomb.opentelemetry.android.interaction
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
 import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
@@ -21,8 +22,8 @@ import android.view.accessibility.AccessibilityEvent
 import android.widget.TextView
 import androidx.core.view.children
 import com.google.auto.service.AutoService
+import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.instrumentation.AndroidInstrumentation
-import io.opentelemetry.android.instrumentation.InstallationContext
 import io.opentelemetry.api.OpenTelemetry
 import io.opentelemetry.api.trace.Span
 import kotlin.math.roundToInt
@@ -314,7 +315,12 @@ private class InteractionLifecycleCallbacks(
 class WindowInstrumentation : AndroidInstrumentation {
     override val name: String = "interaction"
 
-    override fun install(ctx: InstallationContext) {
-        ctx.application?.registerActivityLifecycleCallbacks(InteractionLifecycleCallbacks(ctx.openTelemetry))
+    override fun install(
+        context: Context,
+        openTelemetryRum: OpenTelemetryRum,
+    ) {
+        (context as? Application)?.registerActivityLifecycleCallbacks(
+            InteractionLifecycleCallbacks(openTelemetryRum.openTelemetry),
+        )
     }
 }

@@ -9,6 +9,7 @@ import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.OpenTelemetryRumBuilder
 import io.opentelemetry.android.config.OtelRumConfig
 import io.opentelemetry.android.features.diskbuffering.DiskBufferingConfig
+import io.opentelemetry.android.semconv.internal.SemconvCompat
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.api.common.AttributesBuilder
@@ -24,7 +25,6 @@ import io.opentelemetry.exporter.otlp.http.trace.OtlpHttpSpanExporter
 import io.opentelemetry.exporter.otlp.logs.OtlpGrpcLogRecordExporter
 import io.opentelemetry.exporter.otlp.metrics.OtlpGrpcMetricExporter
 import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter
-import io.opentelemetry.sdk.OpenTelemetrySdk
 import io.opentelemetry.sdk.common.CompletableResultCode
 import io.opentelemetry.sdk.logs.LogRecordProcessor
 import io.opentelemetry.sdk.metrics.InstrumentType
@@ -107,6 +107,10 @@ class Honeycomb {
                 configureDebug(options)
             }
 
+            // OpenTelemetry Android 1.5.0 and newer renamed some attributes and events by default.
+            // Keep the names this SDK has always emitted, unless the app asks for the new ones.
+            SemconvCompat.useLatestExperimental = options.useLatestSemanticConventions
+
             proguardUuid = getProguardUuid(app)
 
             val traceExporter = buildSpanExporter(options)
@@ -143,6 +147,10 @@ class Honeycomb {
             val rumConfig = OtelRumConfig()
             val diskBufferingConfig = DiskBufferingConfig.create(options.offlineCachingEnabled)
             rumConfig.setDiskBufferingConfig(diskBufferingConfig)
+
+            // OpenTelemetry Android turned SDK initialization events off by default in 1.8.0.
+            // Keep emitting them so that this SDK's telemetry does not change.
+            rumConfig.enableSdkInitializationEvents()
 
             // Suppress any disabled instrumentations
             for (instrumentationName in options.disabledInstrumentation) {
@@ -194,9 +202,12 @@ class Honeycomb {
             // However, that might require changing this into an entire separate instrumentation
             // package. So for now, just do this.
 
-            val sdk = otel.openTelemetry as OpenTelemetrySdk
-            val loggerProvider = sdk.sdkLoggerProvider
-            val logger: Logger = loggerProvider.loggerBuilder(CRASH_INSTRUMENTATION_NAME).build()
+            // Upstream wraps the SDK in an internal class, so openTelemetry cannot be cast to
+            // OpenTelemetrySdk. The logs API is all that is needed.
+            val logger: Logger =
+                otel.openTelemetry.logsBridge
+                    .loggerBuilder(CRASH_INSTRUMENTATION_NAME)
+                    .build()
 
             val attributesBuilder: AttributesBuilder =
                 Attributes

@@ -19,13 +19,16 @@ teardown_file() {
 
 @test "SDK sends correct resource attributes" {
   result=$(resource_attributes_received | sort | uniq)
-  assert_equal "$result" '"app.debug.proguard_uuid"
+  assert_equal "$result" '"android.os.api_level"
+"app.debug.proguard_uuid"
+"app.installation.id"
 "device.id"
 "device.manufacturer"
 "device.model.identifier"
 "device.model.name"
 "honeycomb.distro.runtime_version"
 "honeycomb.distro.version"
+"os.build_id"
 "os.description"
 "os.name"
 "os.type"

@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+* maint: update OpenTelemetry Android SDK from 1.0.1 to 1.8.1. This fixes a `NoSuchMethodError` crash from the slow rendering instrumentation on Android 8 - 11 (API 26 - 30) in apps without core library desugaring (it called `Duration.toSeconds()`, which only exists from Android 12), and moves OpenTelemetry Java to 1.66.0.
+* maint: raise the minimum `minSdk` to 23 (was 21) to match OpenTelemetry Android.
+* maint: build with Kotlin 2.4.21, Android Gradle Plugin 9.1.1 and `compileSdk` 37. Apps that use this SDK need a Kotlin compiler that can read Kotlin 2.4 metadata (Kotlin 2.3 or newer), Android Gradle Plugin 9.1 or newer, and `compileSdk` 37 or newer, because OpenTelemetry Android 1.8.1 depends on `kotlin-stdlib` 2.4.21 and `androidx.core` 1.19.1.
+* feat: add the `useLatestSemanticConventions` option (default false). OpenTelemetry Android 1.5.0 and newer renamed `screen.name` to `app.screen.name`, `last.screen.name` to `app.screen.previous.name`, the crash event `device.crash` to `app.crash`, and `network.status` to `network.connection.type`. This SDK keeps emitting the previous names by default so telemetry does not change; set the option to `true` to get the new ones.
+* maint: the resource now also includes `android.os.api_level`, `app.installation.id` and `os.build_id`, which OpenTelemetry Android adds in 1.8.1.
+* fix: `Honeycomb.logException` no longer fails with a `ClassCastException` on OpenTelemetry Android 1.8.1, which wraps the SDK instance.
+* maint: the `interaction` module uses the `AndroidInstrumentation.install(context, openTelemetryRum)` signature from OpenTelemetry Android 1.3.0 and newer.
+
 ## v1.0.0
 
 * maint: update OpenTelemetry Android SDK from 0.11.0-alpha to 1.0.1
