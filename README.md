@@ -9,7 +9,7 @@ These are the current versions of libraries we have tested for compatibility:
 
   | Dependency                                             | Version  |
   |--------------------------------------------------------|----------|
-  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `1.0.0`  |
+  | `io.honeycomb.android:honeycomb-opentelemetry-android` | `1.1.0`  |
   | `io.opentelemetry.android:core`                        | `1.8.1-alpha` |
   | `io.opentelemetry.android:android-agent`               | `1.8.1`  |
   | `io.opentelemetry:opentelemetry-api`                   | `1.66.0` |
@@ -24,7 +24,7 @@ For a complete list of tested dependencies and versions, see
 Add the following dependencies to your `build.gradle.kts`:
 ```kotlin
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:1.0.0")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android:1.1.0")
 }
 ```
 
@@ -421,7 +421,7 @@ Additionally, you will receive the exception broken down into classes, methods, 
 Android Compose instrumentation is included in a standalone library. Add the following to your dependencies in `build.gradle.kts`:
 ```
 dependencies {
-  implementation("io.honeycomb.android:honeycomb-opentelemetry-android-compose:1.0.0")
+  implementation("io.honeycomb.android:honeycomb-opentelemetry-android-compose:1.1.0")
 }
 ```
 
