@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.bytebuddy)
     alias(libs.plugins.spotless)
     alias(libs.plugins.compose.compiler)
@@ -9,11 +8,11 @@ plugins {
 
 android {
     namespace = "io.honeycomb.opentelemetry.android.example"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "io.honeycomb.opentelemetry.android.example"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -38,8 +37,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+        }
     }
     testOptions {
         managedDevices {

@@ -4,16 +4,15 @@ plugins {
     `maven-publish`
     `signing`
     alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.spotless)
 }
 
 android {
     namespace = "io.honeycomb.opentelemetry.android"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
 
         aarMetadata {
             minCompileSdk = 21
@@ -23,6 +22,9 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+    }
+    publishing {
+        singleVariant("release")
     }
     buildFeatures {
         buildConfig = true
