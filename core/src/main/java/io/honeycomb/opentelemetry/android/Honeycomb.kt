@@ -143,6 +143,10 @@ class Honeycomb {
             val diskBufferingConfig = DiskBufferingConfig.create(options.offlineCachingEnabled)
             rumConfig.setDiskBufferingConfig(diskBufferingConfig)
 
+            // OpenTelemetry Android turned SDK initialization events off by default in 1.8.0.
+            // Keep emitting them so that this SDK's telemetry does not change.
+            rumConfig.enableSdkInitializationEvents()
+
             // Suppress any disabled instrumentations
             for (instrumentationName in options.disabledInstrumentation) {
                 rumConfig.suppressInstrumentation(instrumentationName)
