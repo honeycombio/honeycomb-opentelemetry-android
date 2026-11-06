@@ -65,6 +65,7 @@ okhttp-library = { module = "io.opentelemetry.android.instrumentation:okhttp3-li
 opentelemetry-android-agent = { module = "io.opentelemetry.android:android-agent", version.ref = "opentelemetryAndroid" }
 opentelemetry-android-agent-api = { module = "io.opentelemetry.android:agent-api", version.ref = "opentelemetryAndroid" }
 opentelemetry-android-core = { module = "io.opentelemetry.android:core", version.ref = "opentelemetryAndroidAlpha" }
+opentelemetry-android-semconv = { module = "io.opentelemetry.android:semconv", version.ref = "opentelemetryAndroidAlpha" }
 opentelemetry-android-instrumentation = { module = "io.opentelemetry.android.instrumentation:android-instrumentation", version.ref = "opentelemetryAndroid" }
 opentelemetry-api = { module = "io.opentelemetry:opentelemetry-api", version.ref = "opentelemetry"  }
 opentelemetry-baggage-processor = { module = "io.opentelemetry.contrib:opentelemetry-baggage-processor", version.ref = "opentelemetryBaggageProcessor"  }

@@ -95,6 +95,7 @@ class HoneycombOptionsUnitTest {
 
         assertFalse(options.offlineCachingEnabled)
         assertEquals(emptyList<String>(), options.disabledInstrumentation)
+        assertFalse(options.useLatestSemanticConventions)
     }
 
     @Test
@@ -231,6 +232,7 @@ class HoneycombOptionsUnitTest {
                 "OTEL_EXPORTER_OTLP_LOGS_TIMEOUT" to 60000,
                 "OTEL_EXPORTER_OTLP_LOGS_PROTOCOL" to "http/json",
                 "OFFLINE_CACHING_ENABLED" to true,
+                "USE_LATEST_SEMANTIC_CONVENTIONS" to true,
             )
         val options = HoneycombOptions.Builder(HoneycombOptionsMapSource(data)).build()
 
@@ -293,6 +295,7 @@ class HoneycombOptionsUnitTest {
         assertEquals(42, options.sampleRate)
         assertTrue(options.debug)
         assertTrue(options.offlineCachingEnabled)
+        assertTrue(options.useLatestSemanticConventions)
     }
 
     @Test
@@ -324,6 +327,7 @@ class HoneycombOptionsUnitTest {
                 .setLogsProtocol(OtlpProtocol.HTTP_JSON)
                 .setOfflineCachingEnabled(true)
                 .setDisabledInstrumentation(listOf("crash", "anr"))
+                .setUseLatestSemanticConventions(true)
                 .build()
 
         assertEquals("service", options.serviceName)
@@ -386,6 +390,7 @@ class HoneycombOptionsUnitTest {
         assertTrue(options.debug)
         assertTrue(options.offlineCachingEnabled)
         assertEquals(listOf("crash", "anr"), options.disabledInstrumentation)
+        assertTrue(options.useLatestSemanticConventions)
     }
 
     @Test

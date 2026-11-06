@@ -9,6 +9,7 @@ import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.OpenTelemetryRumBuilder
 import io.opentelemetry.android.config.OtelRumConfig
 import io.opentelemetry.android.features.diskbuffering.DiskBufferingConfig
+import io.opentelemetry.android.semconv.internal.SemconvCompat
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.api.common.AttributesBuilder
@@ -105,6 +106,10 @@ class Honeycomb {
             if (options.debug) {
                 configureDebug(options)
             }
+
+            // OpenTelemetry Android 1.5.0 and newer renamed some attributes and events by default.
+            // Keep the names this SDK has always emitted, unless the app asks for the new ones.
+            SemconvCompat.useLatestExperimental = options.useLatestSemanticConventions
 
             proguardUuid = getProguardUuid(app)
 

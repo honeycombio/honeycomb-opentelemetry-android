@@ -166,6 +166,7 @@ Run this in your CI or as part of your build process, as relevant.
 | `metricsProtocol`       | io.honeycomb.opentelemetry.android.OtlpProtocol | No        | Overrides `protocol` for metrics data.                                                                                                                                                   |
 | `logsProtocol`          | io.honeycomb.opentelemetry.android.OtlpProtocol | No        | Overrides `protocol` for logs data.                                                                                                                                                      |
 | `offlineCachingEnabled` | Boolean                                         | No        | Whether to enable offline caching for telemetry (default: false). Warning: this feature is still in alpha and may be unstable. For more details, see [Offline Caching](#offline-caching) |
+| `useLatestSemanticConventions` | Boolean                                    | No        | Which names the OpenTelemetry Android instrumentations use (default: false). By default they use the names this SDK has always emitted: `screen.name`, `last.screen.name`, `device.crash` and `network.status`. Set to `true` for the latest OpenTelemetry names: `app.screen.name`, `app.screen.previous.name`, `app.crash` and `network.connection.type`. Only one set is emitted, and the setting applies to the whole process. |
 
 ## Standard Attributes
 All telemetry emitted will have the following resource attributes attached:
