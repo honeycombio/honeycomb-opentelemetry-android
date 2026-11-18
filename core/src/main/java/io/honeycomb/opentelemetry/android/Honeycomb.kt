@@ -165,7 +165,7 @@ class Honeycomb {
 
             return OpenTelemetryRumBuilder
                 .create(app, rumConfig)
-                .setSessionProvider(createSessionProvider(app))
+                .setSessionProvider(options.sessionProvider ?: createSessionProvider(app))
                 .mergeResource(resource)
                 .addSpanExporterCustomizer { traceExporter }
                 .addTracerProviderCustomizer { builder, _ ->

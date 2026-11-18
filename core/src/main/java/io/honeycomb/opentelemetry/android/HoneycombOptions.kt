@@ -2,6 +2,7 @@ package io.honeycomb.opentelemetry.android
 
 import android.content.Context
 import android.os.Build
+import io.opentelemetry.android.session.SessionProvider
 import io.opentelemetry.sdk.logs.LogRecordProcessor
 import io.opentelemetry.sdk.trace.SpanProcessor
 import io.opentelemetry.semconv.incubating.TelemetryIncubatingAttributes
@@ -204,6 +205,7 @@ data class HoneycombOptions(
     val offlineCachingEnabled: Boolean,
     val disabledInstrumentation: List<String>,
     val useLatestSemanticConventions: Boolean,
+    val sessionProvider: SessionProvider? = null,
 ) {
     open class Builder private constructor() {
         private var serviceVersion: String? = null
@@ -222,6 +224,7 @@ data class HoneycombOptions(
 
         private var spanProcessor: SpanProcessor? = null
         private var logRecordProcessor: LogRecordProcessor? = null
+        private var sessionProvider: SessionProvider? = null
         private var sampleRate: Int = 1
         private var debug: Boolean = false
 
@@ -358,6 +361,11 @@ data class HoneycombOptions(
 
         fun setSpanProcessor(spanProcessor: SpanProcessor): Builder {
             this.spanProcessor = spanProcessor
+            return this
+        }
+
+        fun setSessionProvider(sessionProvider: SessionProvider): Builder {
+            this.sessionProvider = sessionProvider
             return this
         }
 
@@ -625,6 +633,7 @@ data class HoneycombOptions(
                 offlineCachingEnabled,
                 disabledInstrumentation.toList(),
                 useLatestSemanticConventions,
+                sessionProvider,
             )
         }
     }

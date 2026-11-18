@@ -71,6 +71,35 @@ class HoneycombSessionTest {
     }
 
     @Test
+    fun usesTheConfiguredSessionProvider() {
+        val app = RuntimeEnvironment.getApplication() as Application
+        val spans = InMemorySpanExporter.create()
+        val options =
+            HoneycombOptions
+                .builder(app)
+                .setApiKey("test-key")
+                .setServiceName("session-test")
+                .setSpanProcessor(SimpleSpanProcessor.create(spans))
+                .setSessionProvider { "custom-session" }
+                .build()
+
+        Honeycomb
+            .configure(app, options)
+            .openTelemetry
+            .getTracer("session-test")
+            .spanBuilder("custom")
+            .startSpan()
+            .end()
+
+        val sessionId =
+            spans.finishedSpanItems
+                .single { it.name == "custom" }
+                .attributes
+                .get(SESSION_ID)
+        assertEquals("custom-session", sessionId)
+    }
+
+    @Test
     fun sessionIdChangesAfterTheBackgroundTimeout() {
         val clock = FakeClock()
         val config = SessionConfig(backgroundInactivityTimeout = 15.minutes)

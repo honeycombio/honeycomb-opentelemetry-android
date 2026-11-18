@@ -68,7 +68,7 @@ dependencies {
     implementation(libs.opentelemetry.android.core)
     implementation(libs.opentelemetry.android.semconv)
     implementation(libs.opentelemetry.android.services)
-    implementation(libs.opentelemetry.android.session)
+    api(libs.opentelemetry.android.session)
     implementation(libs.opentelemetry.api)
     implementation(libs.opentelemetry.sdk)
     implementation(libs.opentelemetry.semconv)
