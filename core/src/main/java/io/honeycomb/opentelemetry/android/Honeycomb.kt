@@ -4,12 +4,18 @@ import android.app.Application
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings.Secure
+import io.honeycomb.opentelemetry.android.session.SessionConfig
+import io.honeycomb.opentelemetry.android.session.SessionIdTimeoutHandler
+import io.honeycomb.opentelemetry.android.session.SessionManager
 import io.opentelemetry.android.BuildConfig
 import io.opentelemetry.android.OpenTelemetryRum
 import io.opentelemetry.android.OpenTelemetryRumBuilder
+import io.opentelemetry.android.OtelAndroidClock
 import io.opentelemetry.android.config.OtelRumConfig
 import io.opentelemetry.android.features.diskbuffering.DiskBufferingConfig
+import io.opentelemetry.android.internal.services.Services
 import io.opentelemetry.android.semconv.internal.SemconvCompat
+import io.opentelemetry.android.session.SessionProvider
 import io.opentelemetry.api.common.AttributeKey
 import io.opentelemetry.api.common.Attributes
 import io.opentelemetry.api.common.AttributesBuilder
@@ -159,6 +165,7 @@ class Honeycomb {
 
             return OpenTelemetryRumBuilder
                 .create(app, rumConfig)
+                .setSessionProvider(createSessionProvider(app))
                 .mergeResource(resource)
                 .addSpanExporterCustomizer { traceExporter }
                 .addTracerProviderCustomizer { builder, _ ->
@@ -186,6 +193,17 @@ class Honeycomb {
                         PeriodicMetricReader.builder(metricsExporter).build(),
                     )
                 }.build()
+        }
+
+        // OpenTelemetry Android 0.12.0 moved session handling from OpenTelemetryRumBuilder into
+        // its agent module, so the builder alone sets an empty session.id. This matches what the
+        // agent's OpenTelemetryRumInitializer does.
+        private fun createSessionProvider(app: Application): SessionProvider {
+            val sessionConfig = SessionConfig.withDefaults()
+            val clock = OtelAndroidClock()
+            val timeoutHandler = SessionIdTimeoutHandler(sessionConfig, clock)
+            Services.get(app).appLifecycle.registerListener(timeoutHandler)
+            return SessionManager.create(timeoutHandler, sessionConfig, clock)
         }
 
         // This code is adapted from the OpenTelemetry crash auto-instrumentation, and should match

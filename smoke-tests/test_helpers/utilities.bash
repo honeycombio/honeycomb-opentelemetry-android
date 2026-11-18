@@ -12,7 +12,7 @@ spans_on_view_named() {
 # Session IDs associated with a cold start.
 sessions_started() {
 	spans_with_attribute_value "io.opentelemetry.lifecycle" "AppStart" "start.type" "cold" \
-	    | jq ".attributes?[]? | select(.key? == \"session.id\").value.stringValue"
+	    | jq ".attributes?[]? | select(.key? == \"session.id\" and .value.stringValue != \"\").value.stringValue"
 }
 
 # Spans matching a particular attribute.
