@@ -44,6 +44,7 @@ android {
         jvmToolchain(21)
     }
     testOptions {
+        unitTests.isIncludeAndroidResources = true
         managedDevices {
             localDevices {
                 create("pixel8api36") {
@@ -66,6 +67,8 @@ dependencies {
     implementation(libs.opentelemetry.android.agent.api)
     implementation(libs.opentelemetry.android.core)
     implementation(libs.opentelemetry.android.semconv)
+    implementation(libs.opentelemetry.android.services)
+    api(libs.opentelemetry.android.session)
     implementation(libs.opentelemetry.api)
     implementation(libs.opentelemetry.sdk)
     implementation(libs.opentelemetry.semconv)
@@ -77,6 +80,8 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.opentelemetry.sdk.testing)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

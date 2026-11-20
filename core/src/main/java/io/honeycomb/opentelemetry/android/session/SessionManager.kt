@@ -1,0 +1,153 @@
+/*
+ * Copyright The OpenTelemetry Authors
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+// Copied from opentelemetry-android v1.8.1, where it is internal to the agent module:
+// https://github.com/open-telemetry/opentelemetry-android/blob/v1.8.1/android-agent/src/main/kotlin/io/opentelemetry/android/agent/session/SessionManager.kt
+// Keep it in step with upstream until upstream exposes a session provider we can use.
+// Upstream's @Incubating opt-in markers are removed, as they live in the agent module.
+
+package io.honeycomb.opentelemetry.android.session
+
+import io.opentelemetry.android.session.Session
+import io.opentelemetry.android.session.SessionObserver
+import io.opentelemetry.android.session.SessionProvider
+import io.opentelemetry.android.session.SessionPublisher
+import io.opentelemetry.sdk.common.Clock
+import java.util.concurrent.CopyOnWriteArrayList
+import kotlin.random.Random
+import kotlin.time.Duration
+
+internal class SessionManager(
+    private val clock: Clock,
+    private val sessionStorage: SessionStorage = InMemorySessionStorage(),
+    private val timeoutHandler: SessionIdTimeoutHandler,
+    private val idGenerator: SessionIdGenerator = DefaultSessionIdGenerator(Random.Default),
+    private val maxSessionLifetime: Duration,
+) : SessionProvider,
+    SessionPublisher,
+    SessionUserInteractionRecorder {
+    private val lock = Any()
+
+    @Volatile
+    private var session: Session = invalidSession
+
+    private var transitionInProgress = false
+
+    private val observers = CopyOnWriteArrayList<SessionObserver>()
+
+    override fun addObserver(observer: SessionObserver) {
+        observers.add(observer)
+    }
+
+    // Lookup still creates or rotates a session, but never extends an existing session's inactivity.
+    override fun getSessionId(): String = updateSession(recordUserInteraction = false) ?: invalidSession.id
+
+    override fun recordUserInteraction() {
+        val current = session
+        // Active input only refreshes its deadline; creation and rotation still use the manager lock.
+        if (current !== invalidSession &&
+            clock.now() - current.startTimestamp < maxSessionLifetime.inWholeNanoseconds &&
+            timeoutHandler.bumpIfActive()
+        ) {
+            return
+        }
+        updateSession(recordUserInteraction = true)
+    }
+
+    /**
+     * Starts a linked session. Returns false while another transition is being delivered, so
+     * callers can retry after it finishes, not from within the callback that is still running.
+     * A storage or observer exception propagates after the in-memory session has changed.
+     */
+    internal fun resetSession(): Boolean = updateSession(recordUserInteraction = false, reset = true) != null
+
+    private fun updateSession(
+        recordUserInteraction: Boolean,
+        reset: Boolean = false,
+    ): String? {
+        val currentSession: Session
+        val newSession: Session
+        var startedTransition = false
+        try {
+            synchronized(lock) {
+                currentSession = session
+                if (!reset && !recordUserInteraction && !sessionHasExpired(currentSession)) {
+                    return currentSession.id
+                }
+                if (!reset && !sessionHasExpired(currentSession)) {
+                    if (recordUserInteraction) {
+                        timeoutHandler.bump()
+                    }
+                    return currentSession.id
+                }
+                // Finish the current notification sequence before allowing another rotation.
+                if (transitionInProgress) {
+                    return if (reset) null else currentSession.id
+                }
+                newSession = SessionImpl(idGenerator.generateSessionId(), clock.now())
+                startedTransition = true
+                transitionInProgress = true
+                session = newSession
+                timeoutHandler.bump()
+            }
+            val previousSession =
+                if (currentSession === invalidSession) {
+                    readPreviousSession()
+                } else {
+                    currentSession
+                }
+            sessionStorage.save(newSession)
+            notifyObserversOfSessionUpdate(currentSession, newSession, previousSession)
+            return newSession.id
+        } finally {
+            if (startedTransition) {
+                synchronized(lock) {
+                    transitionInProgress = false
+                }
+            }
+        }
+    }
+
+    private fun notifyObserversOfSessionUpdate(
+        currentSession: Session,
+        newSession: Session,
+        previousSession: Session,
+    ) {
+        observers.forEach {
+            it.onSessionEnded(currentSession)
+            it.onSessionStarted(newSession, previousSession)
+        }
+    }
+
+    private fun readPreviousSession(): Session {
+        val previous = sessionStorage.getPreviousSession() ?: return invalidSession
+        val id = previous.id
+        return if (id.isEmpty()) invalidSession else SessionImpl(id, previous.startTimestamp)
+    }
+
+    private fun sessionHasExpired(session: Session): Boolean {
+        if (session === invalidSession) {
+            return true
+        }
+        val elapsedTime = clock.now() - session.startTimestamp
+        return elapsedTime >= maxSessionLifetime.inWholeNanoseconds || timeoutHandler.hasTimedOut()
+    }
+
+    companion object {
+        @JvmStatic
+        fun create(
+            timeoutHandler: SessionIdTimeoutHandler,
+            sessionConfig: SessionConfig,
+            clock: Clock,
+            sessionStorage: SessionStorage = InMemorySessionStorage(),
+        ): SessionManager =
+            SessionManager(
+                timeoutHandler = timeoutHandler,
+                maxSessionLifetime = sessionConfig.maxLifetime,
+                clock = clock,
+                sessionStorage = sessionStorage,
+            )
+    }
+}
