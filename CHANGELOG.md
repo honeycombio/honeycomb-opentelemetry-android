@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.1.1
+
 * fix: spans and logs carry a `session.id` again. Since v1.0.0 they carried an empty `session.id`, because OpenTelemetry Android 0.12.0 moved session handling out of `OpenTelemetryRumBuilder` and this SDK did not set a session provider. Sessions use OpenTelemetry Android's defaults: a new session after 15 minutes in the background, or after 4 hours.
 * feat: add the `sessionProvider` option to supply your own `SessionProvider` instead of the default one.
 
